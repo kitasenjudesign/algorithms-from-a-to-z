@@ -1,0 +1,33 @@
+{
+  "name": "dig_shibuya",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/opentype.js": "^1.3.8",
+    "lil-gui": "^0.17.0",
+    "raw-loader": "^4.0.2",
+    "ts-loader": "9.4.1",
+    "typescript": "^4.7.4n",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.0"
+  },
+  "dependencies": {
+    "@types/p5": "^1.4.3",
+    "@types/three": "^0.144.0",
+    "gsap": "^3.11.0",
+    "opentype.js": "^1.3.4",
+    "p5": "^1.5.0",
+    "three": "^0.145.0",
+    "glsl-random": "^0.0.5",
+    "glslify": "^7.1.1",
+    "glslify-import": "^3.1.0"    
+  }
+}

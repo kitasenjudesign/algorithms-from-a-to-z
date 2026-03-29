@@ -1,0 +1,129 @@
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        :root{
+            --font-size: 14px;
+            --font-sizeL: 18px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            background: #000;
+            font-family: Helvetica, sans-serif;
+            color: #fff;
+            font-size: var(--font-size);        
+        }
+
+        /* wrapper: center when there's space, but don't crop when content is taller than viewport */
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+        }
+        /* content box is centered by margin:auto; when content taller than viewport margins collapse so top is visible */
+        .content {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 40px 20px;
+            max-width: 1200px;
+        }
+        rt{
+            color: #ccc;
+            margin-bottom: 2px;
+        }
+
+
+        h1{
+            margin: 0 0 10px 0;
+            font-size: var(--font-sizeL);     
+            text-align: center;
+            font-weight: normal;
+            max-width: 1200px;
+            width: 100%;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;/* 最大幅を決めて中央に収まるように */
+            font-size: var(--font-size);
+            margin-bottom: 200px;
+        }
+
+        /* 2列目だけ左寄せ */
+        table td:nth-child(2), table td:nth-child(3){
+            text-align: left;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+        }
+        th{
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        td{
+            padding: 8px;
+            text-align: center;
+        }
+     </style>
+
+    </head>
+    <body>
+
+        <div class="wrap">
+            <div class="content">
+                <h1><ruby>Algorithms Used in This Work<rt>作品で使用したアルゴリズム一覧</rt></ruby></h1>
+
+                <table>
+                <thead>
+                    <tr>
+                    <th></th>
+                    <th><ruby>Name<rt>名前</rt></ruby></th>
+                    <th><ruby>Primary Inventor<rt>主要発明者</rt></ruby></th>
+                    <th><ruby>Year<rt>年</rt></ruby></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>A</td><td>Ascii Art</td><td>Kenneth Knowlton</td><td>1966</td></tr>
+                    <tr><td>B</td><td>Boids</td><td>Craig Reynolds</td><td>1986</td></tr>
+                    <tr><td>C</td><td>Cellular Automaton (Wolfram Code)</td><td>Stephen Wolfram</td><td>1983</td></tr>
+                    <tr><td>D</td><td>Differential Growth</td><td>Andy Lomas</td><td>2014</td></tr>
+                    <tr><td>E</td><td>Error Diffusion (Floyd-Steinberg)</td><td>Robert W. Floyd and Louis Steinberg</td><td>1976</td></tr>
+                    <tr><td>F</td><td>Fourier Transform</td><td>Joseph Fourier</td><td>1807</td></tr>
+                    <tr><td>G</td><td>Game of Life</td><td>John Conway</td><td>1970</td></tr>
+                    <tr><td>H</td><td>Hilbert Curve</td><td>David Hilbert</td><td>1891</td></tr>
+                    <tr><td>I</td><td>Invert kinematics</td><td>Michael Girard and Anthony Maciejewski</td><td>1985</td></tr>
+                    <tr><td>J</td><td>Jarvis March (Convex Hull)</td><td>R. A. Jarvis</td><td>1973</td></tr>
+                    <tr><td>K</td><td>K-d Tree</td><td>Jon Louis Bentley</td><td>1975</td></tr>
+                    <tr><td>L</td><td>L-system</td><td>Aristid Lindenmayer</td><td>1968</td></tr>
+                    <tr><td>M</td><td>Maze Generation (Recursive Backtracker)</td><td>Charles Pierre Trémaux</td><td>1882</td></tr>
+                    <tr><td>N</td><td>Navier-Stokes Equations</td><td>Claude-Louis Navier and George Gabriel Stokes</td><td>1845</td></tr>
+                    <tr><td>O</td><td>Opentypejs</td><td>Frederik De Bleser</td><td>2014</td></tr>
+                    <tr><td>P</td><td>Perlin Noise</td><td>Ken Perlin</td><td>1982</td></tr>
+                    <tr><td>Q</td><td>Quadtree</td><td>Raphael Finkel and J.L. Bentley</td><td>1974</td></tr>
+                    <tr><td>R</td><td>Reaction Diffusion (Gray-Scott Model)</td><td>Peter Gray and Stephen K. Scott</td><td>1984</td></tr>
+                    <tr><td>S</td><td>Sprirograph</td><td>Denys Fisher</td><td>1960</td></tr>
+                    <tr><td>T</td><td>Ten Print (10 Print)</td><td>Unknown</td><td>1982</td></tr>
+                    <tr><td>U</td><td>Unsharp Mask</td><td>Unknown</td><td>1930s</td></tr>
+                    <tr><td>V</td><td>Verlet Integration</td><td>Loup Verlet</td><td>1967</td></tr>
+                    <tr><td>W</td><td>Wave Equation</td><td>Jean le Rond d'Alembert</td><td>1747</td></tr>
+                    <tr><td>X</td><td>XOR Blending</td><td>Thomas Porter and Tom Duff</td><td>1982</td></tr>
+                    <tr><td>Y</td><td>YUV Color Space</td><td>Walter Bruch</td><td>1960s</td></tr>
+                    <tr><td>Z</td><td>Z-fighting</td><td>Unknown</td><td>1980s</td></tr>
+                </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </body>
+</html>
