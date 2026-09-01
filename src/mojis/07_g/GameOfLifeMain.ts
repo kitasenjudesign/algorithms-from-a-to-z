@@ -9,13 +9,14 @@ export class GameOfLifeMain extends WorkBase{
     constructor(){
 
         super(InfoData.G);
-
+        this.showTitle();
     }
 
     init(){
 
         this._gameOfLife = new MainGameOfLife();
         this._gameOfLife.init();
+        
 
     }
 

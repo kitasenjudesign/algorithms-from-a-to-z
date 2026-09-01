@@ -1,5 +1,6 @@
 import { InfoData } from "../../data/InfoData";
 import { Stage } from "../../data/Stage";
+import { TitleView } from "../../html/TitleView";
 import { TextAnim } from "../00_base/TextAnim";
 import { WorkBase } from "../00_base/WorkBase";
 
@@ -12,44 +13,58 @@ export class TitleMain extends WorkBase{
 
         super(InfoData.TITLE);
 
-        setTimeout(() => {
-            //console.log("speak:",data.alphabet+":"+data.title);
-            let utterance = new SpeechSynthesisUtterance("Algorithms from A to Z by Kitasenju Design");  
-            utterance.lang = "en-US"
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);            
-        }, 500);
+        //this.createRandomTitleWords();
+        this.showTitle();
+        this._loop();
 
-        this.init();
+    }
 
-        document.getElementById("about").style.display = "flex";
-        document.getElementById("about").style.width = Stage.width + "px";
+    private _loop(){
 
-        let animA1 = new TextAnim("a1");
-        let animA2 = new TextAnim("a2");
-        let animA3 = new TextAnim("a3");
+        this._setPosition();
+        setTimeout(()=>{
+            this._loop();
+        },3000);
 
-        let animB1 = new TextAnim("b1");
-        let animB2 = new TextAnim("b2");
-        let animB3 = new TextAnim("b3");
+    }
+
+    private _setPosition(){
 
 
-        let ww = document.getElementById("a1").getBoundingClientRect().width;
-
-        console.log("W"+ww+","+Stage.width/2);
-
-        let space = (Stage.width-ww*2)/3;
-
-        document.getElementById("centerCon1").style.marginLeft = (space)+"px";
-        document.getElementById("centerCon2").style.marginLeft = (space/2)+"px";
-
-        animA1.play(document.getElementById("a1").innerHTML);
-        animA2.play(document.getElementById("a2").innerHTML,0.3);
-        animA3.play(document.getElementById("a3").innerHTML,0.6);
+        TitleView.setBasePosition(
+            Stage.width/2+Stage.width/4*(Math.random()-0.5),
+            Stage.height/2+Stage.height/4*(-Math.random())
+        );
+        TitleView.setPosition();
         
-        animB1.play(document.getElementById("b1").innerHTML);
-        animB2.play(document.getElementById("b2").innerHTML,0.3);
-        animB3.play(document.getElementById("b3").innerHTML,0.6);        
+        let xx = Stage.width/2  +Stage.width/4*(Math.random()-0.5);
+        let yy = Stage.height/2 +Stage.height/4*(Math.random());
+
+        document.getElementById("year").style.position = "fixed";
+        document.getElementById("year").style.left = xx+"px";
+        document.getElementById("year").style.top = yy+"px";
+
+    }
+
+
+
+
+    private createRandomTitleWords(){
+
+        const texts = ["Algorithms", "from", "A to Z","by Kitasenju Design"];
+        let idx=0;
+        for(const text of texts){
+
+            const div = document.createElement("div");
+            div.className = "titleWord shadow";
+            div.textContent = text;
+            document.body.appendChild(div);
+            //div.style.rotate = (Math.random()*60-30) + "deg";
+            div.style.left = (200+idx*200) + "px";
+            div.style.top  = (200+Math.random() * (Stage.height-400)) + "px";
+            idx++;
+
+        }
 
     }
 

@@ -10,7 +10,7 @@ export class KDTreeMain extends WorkBase{
     constructor(){
         
         super(InfoData.K);
-        
+        this.showTitle();
     }
 
     init(){
@@ -18,7 +18,7 @@ export class KDTreeMain extends WorkBase{
         
         this._kd = new p5MainKD();
         this._kd.init(()=>{
-
+            
         });
 
     }

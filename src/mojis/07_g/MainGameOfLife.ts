@@ -8,6 +8,7 @@ import { CAMain } from './lifegame/CAMain';
 import { BitmapData } from './myP5/BitmapData';
 import { GameOfLifeP5src } from './GameOfLifeP5src';
 import { Stage } from '../../data/Stage';
+import { Params } from '../../data/Params';
 
 export class MainGameOfLife{
 
@@ -31,8 +32,13 @@ export class MainGameOfLife{
             this.onInit();
         });*/
         this.src = new GameOfLifeP5src();
+
+        let letter = Params.alphabet;
+        if(letter=="") letter = "G";
+        console.log("letter = ",letter);
+        
         this.src.start(
-            "G",
+            letter,
             ParamsG.resolution,
             ParamsG.resolution,
             ()=>{
@@ -127,8 +133,8 @@ export class MainGameOfLife{
         let ww:number = Stage.width;
         let hh:number = Stage.height;
 
-        let cw = ww*0.05;
-        let ch = hh*0.05;
+        let cw = ww*0.044;
+        let ch = hh*0.044;
 
         this.oCamera.left=-cw;
         this.oCamera.right=cw;

@@ -7,6 +7,7 @@ export class JavisPointControl{
 
     private _points: JavisPoint[] = [];
     private _main: JarvisMarchP5;
+    private _flag:boolean = true;
     //public _noiseAmp:number = 0;
 
     constructor(main:JarvisMarchP5){
@@ -35,18 +36,35 @@ export class JavisPointControl{
     }
 
     public loopA(){
+        this._flag = !this._flag;
         this.playA();
 
         gsap.delayedCall(1, () => {
             this.playB();
+            
         });
 
+        if(this._flag){
+            gsap.delayedCall(3, () => {
+                this._main.setFreeMode(true);
+            });
+        }
+
+
         gsap.delayedCall(5, () => {
+            
             this.playD();
         });
 
+        if(this._flag){
+            gsap.delayedCall(6, () => {
+                this._main.setFreeMode(false);
+            });
+        }
+
         gsap.delayedCall(8, () => {
             this.playA();
+
         });        
 
         gsap.delayedCall(11, () => {
@@ -60,8 +78,10 @@ export class JavisPointControl{
 
         console.log("playA");
         
+        //this._main.setBlink(255);
+
         //this._main._noiseAmp = 0;
-        //gsap.to(this._main, { duration: 1, _noiseAmp: 50 });
+        gsap.to(this._main, { duration: 1, _noiseAmp: 50 });
         //gsap.to(this._main, { duration: 1, _noiseAmp: 0, delay: 1 });
 
         for(let i=0;i<this._points.length;i++){
@@ -79,7 +99,7 @@ export class JavisPointControl{
         //this._main._noiseAmp = 0;
         //gsap.to(this._main, { duration: 1, _noiseAmp: 50 });
         //gsap.to(this._main, { duration: 1, _noiseAmp: 0, delay: 1 });  
-
+        this._main.setBlink(255);
         let nn = 3;//Math.floor(Math.random()*3+2);
 
         for(let i=0;i<this._points.length;i++){
@@ -93,7 +113,8 @@ export class JavisPointControl{
     }
 
     public playC(){
-
+        
+        this._main.setBlink(255);
         for(let i=0;i<this._points.length;i++){
             gsap.to(this._points[i], {
                 duration: 2,
@@ -106,6 +127,7 @@ export class JavisPointControl{
 
     public playD(){
 
+        //this._main.setBlink(255);
         let num = 5;
         let targets:number[] = [];
         for(let i=0;i<num;i++){

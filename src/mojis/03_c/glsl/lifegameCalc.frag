@@ -1,24 +1,19 @@
 // "uniform vec2 resolution" is automatically added by GPUComputationRenderer as texture size
       uniform vec2 planeSize;
-      uniform sampler2D ruleTex;
       uniform sampler2D areaTex;
-      uniform vec2 ruleTexSize;
       uniform float counter;
       uniform float rule;
       vec2 textureSize = resolution;
 
 
-      vec3 getRuleValue(vec3 ruleIndex, float keta){     
-        float value1 = step(0.5,
-          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.x/ruleTexSize.y)).r
-        );
-        float value2 = step(0.5,
-          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.y/ruleTexSize.y)).r
-        );
-        float value3 = step(0.5,
-          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.z/ruleTexSize.y)).r
-        );
-        return vec3(value1,value2,value3);      
+      //ウルフラムコード(0〜255)から、keta桁目のビットを取り出す。
+      //ruleTexの参照(row=ruleIndex, col=keta のテーブル引き)をやめ、2進数への変換を直接計算する。
+      //RuleTex.tsは8桁の2進数文字列を先頭(MSB=パターン111)から順にketa列へ詰めていたため、
+      //keta=0が最上位ビット(bit7)、keta=7が最下位ビット(bit0)に対応する
+      //(x,y,z)は3チャンネル分のルール番号(areaTexのRGBそれぞれに対応)をまとめて処理する
+      vec3 getRuleValue(vec3 ruleIndex, float keta){
+        float p = pow(2.0, 7.0 - keta);
+        return mod(floor(ruleIndex / p), 2.0);
       }
 
       float random(vec2 co){
@@ -125,11 +120,11 @@
             vec3 ruleA = getRuleValue(rule1,0.0);
             vec3 ruleB = getRuleValue(rule1,1.0);
             vec3 ruleC = getRuleValue(rule1,2.0);
-            vec3 ruleD = getRuleValue(rule1,2.0);
-            vec3 ruleE = getRuleValue(rule1,3.0);
-            vec3 ruleF = getRuleValue(rule1,4.0);
-            vec3 ruleG = getRuleValue(rule1,5.0);
-            vec3 ruleH = getRuleValue(rule1,6.0);
+            vec3 ruleD = getRuleValue(rule1,3.0);
+            vec3 ruleE = getRuleValue(rule1,4.0);
+            vec3 ruleF = getRuleValue(rule1,5.0);
+            vec3 ruleG = getRuleValue(rule1,6.0);
+            vec3 ruleH = getRuleValue(rule1,7.0);
             
             if(aa.x==1.0 && bb.x==1.0 && cc.x==1.0) center.x = ruleA.x;
             if(aa.x==1.0 && bb.x==1.0 && cc.x==0.0) center.x = ruleB.x;

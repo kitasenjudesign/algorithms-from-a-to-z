@@ -1,5 +1,6 @@
 import p5 from "p5";
 import { ParamsRd } from '../data/ParamsRd';
+import { Params } from "../../../data/Params";
 
 
 export class p5Circle{
@@ -105,7 +106,8 @@ export class p5Circle{
         p5.textSize(this.radius);
         p5.textAlign(p5.CENTER,p5.CENTER);
 
-        p5.text("R",this.x,this.y);
+        let letter = Params.alphabet || "R";
+        p5.text(letter,this.x,this.y);
 
         /*
         p5.fill(255,255,255,255);

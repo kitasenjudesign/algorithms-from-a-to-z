@@ -53,7 +53,10 @@ export class DifferentialGrothP5{
 
                 this._p5=p;
                 this._fontManager = new FontManager();
-                this._fontManager.init("D",(path)=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "D";
+                console.log("letter = ",letter);
+                this._fontManager.init(letter,(path)=>{
                     this._path = path;
                     this._width=Stage.width;
                     this._height=Stage.height;
@@ -108,7 +111,7 @@ export class DifferentialGrothP5{
         });
 
         
-        console.log("Params gui setup",Params.gui);
+        //console.log("Params gui setup",Params.gui);
         
         //Params.gui.add(this,"copyToClipboard").name("SVGをコピー");
         //Params.gui.add(this,"downloadSVG").name("SVGを保存");
@@ -123,7 +126,8 @@ export class DifferentialGrothP5{
         
 
         //@ts-ignore
-        console.log(" ----mode:", window.SVG);      
+        //console.log(" ----mode:", window.SVG);      
+        
         let r = this._p5.createCanvas(
             Stage.width,
             Stage.height,
@@ -181,7 +185,7 @@ export class DifferentialGrothP5{
 
         for(let i=0; i<data.length; i++){
             const path = data[i];
-            console.log("path:", path);
+            //console.log("path:", path);
             for(let j=0; j<path.length; j++){
                 const point = path[j];
                 //console.log("point:", point);

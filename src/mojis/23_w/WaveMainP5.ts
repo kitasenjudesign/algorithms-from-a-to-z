@@ -7,6 +7,7 @@ import { WaveSimulation } from "./WaveSimulation";
 import { p5Base } from "../00_base/p5Base";
 import { TitleView } from "../../html/TitleView";
 import { Stage } from "../../data/Stage";
+import { Params } from "../../data/Params";
 
 export class WaveMainP5 extends p5Base{
 
@@ -31,9 +32,12 @@ export class WaveMainP5 extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                
+                let letter = Params.alphabet;
+                if(letter=="") letter = "W";
+                console.log("letter = ",letter);
+
                 this._fontManager = new FontManager();
-                this._fontManager.init("W",(path)=>{     
+                this._fontManager.init(letter,(path)=>{
                     this.setUp(p);
 
                     this._ox = this._p5.width*0.4 * (Math.random()-0.5);
@@ -136,9 +140,10 @@ export class WaveMainP5 extends p5Base{
 
         this._path.getStrokes().forEach((stroke)=>{
 
-            for(let t=0;t<500;t++){
+            let num = 500;
+            for(let t=0;t<num;t++){
 
-                let rr = t/500 + this._p5.frameCount * 0.001;
+                let rr = t/num + this._p5.frameCount * 0.001;
 
                 let p1 = stroke.pointAt(rr%1);
                 let p2 = stroke.pointAt((rr+0.002)%1);
@@ -157,7 +162,7 @@ export class WaveMainP5 extends p5Base{
                 let cx = p1.x*scale+centerX-w/2;
                 let cy = p1.y*scale+centerY+h/2;
 
-                let amp = this._waveSimulation.pos[t%500] * 90.05
+                let amp = this._waveSimulation.pos[t%num] * 90.05
                 /*
                 this._p5.line(
                     cx,
@@ -174,7 +179,7 @@ export class WaveMainP5 extends p5Base{
 
         });
         
-        this._flowY += sum*0.0004;
+        this._flowY += sum*0.0001;
         this._flowY += (0 - this._flowY)/10;
 
     }

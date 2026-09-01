@@ -13,7 +13,12 @@ import { Stage } from '../../../data/Stage';
 export class p5MainCA extends p5Base{
 
 
-    public static RULES       :number[] = [0,18,22,30,41,45,54,62,73,86,90, 110, 124, 126,137, 193,231,184];
+    public static RULES       :number[] = [
+        150,18,22,30,41,
+        45,54,62,73,86,
+        90, 110, 122, 126,137,
+        193,231,184
+    ];
     public _width       :number = 512;
     public _height      :number = 512;
     //private _dom        :HTMLElement;
@@ -43,12 +48,16 @@ export class p5MainCA extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
 
-                this.loadFont("C",()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "C";
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
 
-                    TitleView.setPosition(
+                    TitleView.setBasePosition(
                         Stage.width-100-TitleView.getSize().width,
                         100
                     );
+                    TitleView.setPosition();
 
                     this._isInitialized=true;
                     this.setUp();                
@@ -90,24 +99,22 @@ export class p5MainCA extends p5Base{
     
         //super.setDebug(r.elt);
 
-        
-
         Params.gui.add(this,"_bgIndex",0,15).step(1).listen();
         Params.gui.add(this,"_fillIndex1",0,15).step(1).listen();
         Params.gui.add(this,"_fillIndex2",0,15).step(1).listen();
         Params.gui.add(this,"_fillIndex3",0,15).step(1).listen();
 
-       
-
+    
         this._rectA = new caRect(5,0,16,16);
         this._rectB = new caRect(12,0,5,5);
         //this._rectC = new caRect(5,0,16,16);
         
         this._rectC = new caRect(
-            12,
+            12,//126
             0,//p5MainCA.RULES.length-9,//6
-            p5MainCA.RULES.length-9,
-            p5MainCA.RULES.length-9);
+            p5MainCA.RULES.length-9,//86
+            p5MainCA.RULES.length-9
+        );//86
 
 
         this.drawCA();
@@ -135,48 +142,31 @@ export class p5MainCA extends p5Base{
 
     drawCA(){
 
-        //console.log("drawCA");
-
         this._p5.noStroke();
         this._p5.background(0,0,0);
 
-        let xx = Math.random()*255;
-        let yy = Math.random()*255;
-        /*
-        
-        this._p5.fill(
-            p5MainCA.RULES[this._bgIndex],
-            0,0
-        );
-        this._p5.rect(0,0,this._p5.width,this._p5.height);
-        */
-        //this._rectA.draw(this._p5,this);
-        //this._rectB.draw(this._p5,this);
+        //Cのみ
         if(this._rectC){
             this._rectC.draw(this._p5,this);
         }
-
-  
-
-
-       
 
     }
 
     getCanvasTex():THREE.CanvasTexture{
     
-            if( !this._isInitialized ) return null;
-    
-            if(this._canvasTex==null){
-                this._canvasTex= new THREE.CanvasTexture(this.canvasElement)
-                this._canvasTex.minFilter=THREE.NearestFilter;
-                this._canvasTex.magFilter=THREE.NearestFilter;
-            }
-            this._canvasTex.needsUpdate=true;
-            //this.uniforms.tex2.value = this._canvasTex;
-            
-            return this._canvasTex;
-        } 
+        if( !this._isInitialized ) return null;
+
+        if(this._canvasTex==null){
+            this._canvasTex= new THREE.CanvasTexture(this.canvasElement)
+            this._canvasTex.minFilter=THREE.NearestFilter;
+            this._canvasTex.magFilter=THREE.NearestFilter;
+        }
+        this._canvasTex.needsUpdate=true;
+        //this.uniforms.tex2.value = this._canvasTex;
+        
+        return this._canvasTex;
+        
+    } 
 
 }
 

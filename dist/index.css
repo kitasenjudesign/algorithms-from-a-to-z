@@ -1,0 +1,396 @@
+
+
+    :root {
+      --fontSizeL: 33px;
+      --fontSizeLja: 30px;
+      --fontSizeM: 24px;
+      --fontSizeS: 18px;
+      --fontSizeSja: 16px;
+    }
+    body{
+      margin:0;
+      padding:0;
+      color: #fff;
+      background-color: #000;
+      overflow-x: hidden;
+      /*overflow: hidden;*/
+      font-size: var(--fontSizeL);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+    canvas{
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+    }
+    #cover{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      z-index: 999;
+      animation: anim 1s linear 1 forwards;
+      pointer-events: none;
+    }
+
+    @keyframes anim {
+      0%,10%{
+        opacity: 100%;
+      }
+      100%{
+        opacity: 0;
+      }
+      
+    }
+    #ascii{
+      font-family: monospace;
+      pointer-events: none;
+      /*font-size: 33px;*/
+    }
+
+    #title{
+      z-index: 99999;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      display: inline-block;
+      background-color: #8880;
+    }
+
+    .titleWord{
+      position: fixed;
+      z-index: 99999;
+      font-size: var(--fontSizeL);
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    #mainTitle{
+      font-size: var(--fontSizeS);
+    }
+    
+    #subTitle{
+      font-weight: bold;
+    }
+    #year{
+      margin-top: 2px;
+      display: block;
+      font-size: var(--fontSizeS);
+    }
+    .shadow{
+      text-shadow: 0px 0px 5px #000;
+    }
+
+    #center,#center2,#center3{
+      width: 30px;
+      height: 30px;
+      border: #f00 1px solid;
+      position: absolute;
+      z-index: 20000;
+      font-size: 8px;
+      display: none;
+    }
+
+    #center2{}    
+    #center3{}
+
+
+
+    #about{
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      z-index: 20000;
+      display: none;
+      /*display: flex;           左右に並べる */
+    }
+
+    .aboutCon {
+      flex: 1;                /* 50% + 50% */
+      height: 100%;
+      display: flex;
+      flex-direction: column; /* 縦に並べる */
+      justify-content: center;/* 縦方向センター */
+      align-items: left;    /* 横方向センター（不要なら消す） */
+      box-sizing: border-box;
+      background: #000;
+    }
+
+    
+
+    .shibuya2{
+      font-size: var(--fontSizeS);
+      display: inline-block;
+    }
+    .shibuya1{
+      font-size: var(--fontSizeS);
+      display: inline-block;
+    }
+    .title2{
+      font-size: var(--fontSizeLja);
+      font-weight: bold;
+      height: 45px;
+      position: relative;
+      top: -2px;
+
+    }    
+
+
+    .title{
+      font-size: var(--fontSizeL);
+      font-weight: bold;
+      height: 45px;
+      position: relative;
+      top: -1px;
+    }
+    
+    .name2{
+      font-size: var(--fontSizeSja);
+      height: 30px;
+      position: relative;
+      top: -1px;            
+    }
+    .name1{
+      font-size: var(--fontSizeS);
+      height: 30px;
+      position: relative;
+      top: 0px;      
+    }
+
+    c{
+      margin-right:3px;
+    }
+    z{
+      margin-right: 3px;
+      margin-left: 3px;
+    }
+
+    #infomation{
+      display: none;
+      font-feature-settings: "palt";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      line-height: 1.1em;
+      z-index: 500;
+      background-color: #000a;
+      overflow-y: auto;
+    }
+
+    #infoContainer{
+      font-size: var(--fontSizeS);
+      max-width: 1000px;
+      margin: 0 auto;
+      height: auto;
+      position: relative;
+    }
+
+    /*aからzの文字とタイトルは画面上部に固定し、explanationだけがその下でページとして伸びる*/
+    #infoHeader{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      max-width: 1000px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    #bottomBar{
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #infoBtn{
+      margin-top: 5px;
+      font-size: var(--fontSizeS);
+      height: 40px;
+      line-height: 38px;
+      box-sizing: border-box;
+      text-align: center;
+      padding: 0 10px;
+      border: 1px solid #fff;
+      border-radius: 100px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    #infoBtn.open{
+      opacity: 1;
+    }
+
+    #infoBtn:hover{
+      opacity: 1;
+    }
+
+
+    #prevBtn,#nextBtn{
+      font-size: var(--fontSizeS);
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999999;
+      padding: 10px;
+      cursor: pointer;
+    }
+    #prevBtn{
+      left: 12px;
+      opacity: 0.7;
+    }
+    #nextBtn{
+      right: 12px;
+      opacity: 0.7;
+    }
+    #prevBtn:hover,#nextBtn:hover{
+      opacity: 1;
+    }
+
+    #alphabetInputField{
+      font-size: var(--fontSizeS);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      width: 120px;
+      height: 40px;
+      line-height: 38px;
+      box-sizing: border-box;
+      padding: 0 10px;
+      text-align: center;
+      color: #fff;
+      background-color: #0000;
+      border: 1px solid #fff;
+      border-radius: 100px;
+      outline: none;
+      opacity: 0.7;
+    }
+    #alphabetInputField:focus,
+    #alphabetInputField:hover{
+      opacity: 1;
+    }
+
+    #noEntryArea{
+      background-color: #00f8;
+      position: absolute;
+      z-index: 10003;
+      display: none;
+      pointer-events: none;
+    }
+
+    #infoTitle{
+      position: fixed;
+      top: calc(25vh - 40px);
+      line-height: 1.7em;
+    }
+    #infoMainTitle{
+      font-size: var(--fontSizeS);
+    }
+    #infoSubtitle{
+      font-weight: bold;
+      font-size: var(--fontSizeL);
+    }
+    #infoYear{
+      margin-top: 2px;
+      font-size: var(--fontSizeS);
+    }
+
+    #explanationClose{
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0px;
+      padding: 0px 10px;
+      border: 1px solid #fff;
+      border-radius: 100px;
+      background-color: #0008;
+      z-index: 1000000;
+      cursor: pointer;
+      opacity: 1;
+      outline: none;
+      height: 38px;
+    }
+    #explanationClose:hover{
+      opacity: 0.7;
+    }
+
+    #explanation{
+      margin-top: calc(50vh - 10px);
+      padding-top: 0px;
+    }
+
+    table{
+      width: 100%;
+      border-top: 1px dotted #fff;
+      border-bottom: 1px dotted #fff;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+    th{
+      text-align: left;
+      border-bottom: 1px dotted #fff;
+    }
+    tr{
+      border-bottom: 1px solid #fff;
+    }
+    tr:hover{
+    }
+    tr.selected{
+      pointer-events: none;
+    }
+
+    .copyright{
+      font-size: var(--fontSizeS);
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    .atozIndexHr{
+      margin-top: 50px;
+      margin-bottom: 50px;
+      width: 100%;
+    }
+
+    #atozIndex{
+      width: 100%;
+      text-align: justify;
+      text-align-last: justify;
+      font-size: var(--fontSizeS);
+    }
+    #atozIndex a{
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+    #atozIndex a:hover{
+      border-bottom: 1px dotted #fff;
+    }
+    #atozIndex a.selected{
+      border-bottom: 1px dotted #fff;
+      pointer-events: none;
+    }
+
+    #aboutContainer{
+      display: none;
+      font-size: var(--fontSizeS);
+      max-width: 1000px;
+      margin: 0 auto;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    img {
+  display: block;
+}
+
+::selection {
+  background-color: #ccc;
+  color: #000;
+}

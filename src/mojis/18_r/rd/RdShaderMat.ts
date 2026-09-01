@@ -6,6 +6,7 @@ import { TorusGeometry, MeshPhongMaterial, DirectionalLight, OrthographicCamera,
 import rdVert from "../glsl/rd.vert";
 import rdFrag from "../glsl/rd.frag";
 import rdDecord from "../glsl/_encode-decode.frag";
+import simplexNoise from "../glsl/simplexNoise.frag";
 
 import { ParamsRd } from '../data/ParamsRd';
 import { p5MainRd } from '../myP5/p5MainRd';
@@ -30,10 +31,6 @@ export class RdShaderMat extends THREE.ShaderMaterial{
 	
 	constructor() 
 	{
-		
-		//let loader:TextureLoader = new TextureLoader();
-		//var t:THREE.Texture = loader.load("./topimg/nuki.png");
-		//t.format = THREE.RGBAFormat;
 		
 		super({
 			vertexShader:   rdVert,

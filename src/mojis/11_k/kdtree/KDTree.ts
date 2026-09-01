@@ -257,12 +257,14 @@ export class KDTree{
 
     //}
     addImpulse(
-        power:number,rr:number, gg:number, bb:number,changeW:boolean=false):KDTreeData{  
+        power:number,rr:number, gg:number, bb:number,changeW:boolean=false
+    ):KDTreeData{  
 
         //this.tgt+=Math.floor(1+10* Math.random());
         let bottoms = this._tree.getAllBottoms();
         //this.tgt%=KDTreeData.deepChildren.length;//Math.floor(KDTreeData.deepChildren.length*Math.random());
         this.tgt=Math.floor(bottoms.length*Math.random());
+
         bottoms[this.tgt].rr=rr;
         bottoms[this.tgt].gg=gg;
         bottoms[this.tgt].bb=bb;

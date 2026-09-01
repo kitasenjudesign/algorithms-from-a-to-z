@@ -5,6 +5,7 @@ import { PathWrapper } from "../../font/PathWrapper";
 import { p5Base } from "../00_base/p5Base";
 import { FourierCircles } from "./FourierCircles";
 import { TitleView } from "../../html/TitleView";
+import { Params } from "../../data/Params";
 
 export class FourierP5 extends p5Base{
 
@@ -20,7 +21,7 @@ export class FourierP5 extends p5Base{
     }
 
     
-    init(moji:string,width:number,height:number,callback:()=>void){
+    init(width:number,height:number,callback:()=>void){
         
         this._callback=callback;
         this._width = width;
@@ -30,8 +31,10 @@ export class FourierP5 extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                
-                this.loadFont("F",()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "F";
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
                     this.setUp(this._p5);
                     this._isInitialized=true;
                     callback();
@@ -63,6 +66,7 @@ export class FourierP5 extends p5Base{
         this._p5.frameRate(60);
 
         this._circles = new FourierCircles();
+        
         let ox = this._width*0.3*(Math.random()-0.5);
         let oy = this._height*0.1*(Math.random()-0.5);
         let cx = this._width / 2+ox;

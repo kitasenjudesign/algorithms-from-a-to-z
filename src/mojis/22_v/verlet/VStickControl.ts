@@ -28,7 +28,7 @@ export class VStickControl {
         
     }
 
-    public update(p5:p5){
+    public update(p5:p5, idx:number){
 
         this.ratioS += this.v1*this.spd;
         this.ratioE += this.v2*this.spd;
@@ -40,10 +40,8 @@ export class VStickControl {
             this.ratioE = 0;
         }
 
-        let p1 = p5MainV.instance.getPosition(this.ratioS);
-        let p2 = p5MainV.instance.getPosition(this.ratioE);
-
-        
+        let p1 = p5MainV.instance.getPosition(this.ratioS, idx);
+        let p2 = p5MainV.instance.getPosition(this.ratioE, idx);
 
 
         this.start._basePos.x=p1.x;

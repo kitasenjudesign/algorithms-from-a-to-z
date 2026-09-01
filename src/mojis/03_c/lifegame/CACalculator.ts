@@ -17,12 +17,14 @@ export class CACalculator{
     counter     :number = 0;
     rule        :number = 0;
     isInit:boolean=false;
+    renderer    :WebGLRenderer;
 
     constructor(
         textureWidth:number,planeWidth:number,renderer:WebGLRenderer
     ){
 
         console.log("CACalculator!!!!!!", textureWidth, planeWidth);
+        this.renderer = renderer;
         this.gpuCompute = new GPUComputationRenderer(
             textureWidth, textureWidth, renderer
         );
@@ -80,6 +82,9 @@ export class CACalculator{
         
     }
 
+    
+
+
     public nextRule(){
         this.rule++;
         this.rule = this.rule%256;
@@ -120,11 +125,58 @@ export class CACalculator{
 
     }
 
+    /**
+     * 任意のタイミングでtextureLifeGameの特定のピクセル(x,y)だけ書き換える。
+     * GPUComputationRendererはピンポン方式で2枚のレンダーターゲットを使い回すため、
+     * 両方に書き込まないと次のcompute()で上書き/巻き戻りが起きる。
+     */
+    public setPixel(x:number, y:number, r:number, g:number, b:number, a:number=1){
+
+        const data = new Float32Array([r, g, b, a]);
+        const pixelTex = new THREE.DataTexture(
+            data, 1, 1, THREE.RGBAFormat, THREE.FloatType
+        );
+        pixelTex.needsUpdate = true;
+
+        const pos = new THREE.Vector2(x, y);
+
+        this.renderer.copyTextureToTexture(
+            pos, pixelTex,
+            this.gpuCompute.getCurrentRenderTarget(this.variableLifeGame).texture
+        );
+        this.renderer.copyTextureToTexture(
+            pos, pixelTex,
+            this.gpuCompute.getAlternateRenderTarget(this.variableLifeGame).texture
+        );
+
+    }
+
+    //生死のみで扱いたいとき用のショートカット(コンストラクタでの初期化と同じ値の付け方)
+    public setCell(x:number, y:number, alive:boolean){
+        let v = alive ? 1 : 0;
+        this.setPixel(x, y, v, v, v, 1);
+    }
+
 
     public update(){
 
         if(!this.isInit)return;
         if(this.p5MainCA.getCanvasTex()==null)return;
+
+
+        /*
+        if(this.p5MainCA._p5.frameCount>=100){
+            for(let i=0;i<ParamsC.resolution;i++){
+                this.setPixel(
+                    i,
+                    ParamsC.resolution-1,
+                    i%32==0 ? 1 : 0,
+                    i%32==0 ? 1 : 0,
+                    i%32==0 ? 1 : 0,
+                    1
+                );
+            }
+        }*/
 
         //return;
         this.variableLifeGame.material.uniforms.areaTex.value= this.p5MainCA.getCanvasTex();

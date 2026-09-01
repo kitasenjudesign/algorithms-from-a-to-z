@@ -10,6 +10,7 @@ export class JarvisMarchMain extends WorkBase{
         
         //gift wrapping 
         super(InfoData.J);
+        this.showTitle();
 
     }
 
@@ -19,7 +20,7 @@ export class JarvisMarchMain extends WorkBase{
 
         this._jarvisMarch = new JarvisMarchP5();
         this._jarvisMarch.init(()=>{
-
+            
         });
 
     }

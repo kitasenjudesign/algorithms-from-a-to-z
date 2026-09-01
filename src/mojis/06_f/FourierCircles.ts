@@ -209,7 +209,7 @@ export class FourierCircles{
             for(let i=1;i<4;i++){
               
                 const arr = this.partialPaths[i];
-                console.log(arr.length);
+                //console.log(arr.length);
                 if(!arr || arr.length===0) continue;
                 const tnorm = i / Math.max(1, terms.length-1);
 

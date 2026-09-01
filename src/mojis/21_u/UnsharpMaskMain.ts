@@ -10,7 +10,7 @@ export class UnsharpMaskMain extends WorkBase{
     constructor(){
 
         super(InfoData.U);
-        
+        this.showTitle();
     }
     
     init(){       

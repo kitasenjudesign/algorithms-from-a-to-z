@@ -7,7 +7,7 @@ import { PathWrapper } from "../../font/PathWrapper";
 export class p5Base{
 
     protected _callback   :()=>void;
-    protected _p5         :p5;
+    public _p5         :p5;
     protected _fontManager:FontManager;
     protected _path:PathWrapper;
     protected _isInitialized:boolean = false;

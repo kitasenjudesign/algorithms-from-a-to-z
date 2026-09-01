@@ -111,6 +111,7 @@ export class IK {
 
         for(let i=0;i<this._currentPos.length;i++){
 
+            
             this._currentPos[i].x+=(this._points[i].x - this._currentPos[i].x) / 2.5;
             this._currentPos[i].y+=(this._points[i].y - this._currentPos[i].y) / 2.5;
 

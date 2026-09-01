@@ -5,7 +5,14 @@ import vertYUV from "./yuv.vert";
 import fragYUV from "./yuv.frag";
 import { Stage } from "../../data/Stage";
 import { TitleView } from "../../html/TitleView";
+import { Params } from "../../data/Params";
 
+
+interface OneStrokeFont{
+    unitsPerEm:number;
+    canvasSize:number;
+    glyphs:{[letter:string]:number[][][]};
+}
 
 export class YUVp5 extends p5Base{
 
@@ -14,21 +21,28 @@ export class YUVp5 extends p5Base{
     private _shader: p5.Shader | null = null;
     private _blurAmount = 0;
     private _scale = 3.0;
+    private _font!:OneStrokeFont;
 
     constructor(){
       super();
     }
 
     start(callback:()=>void){
-        
+
         this._callback=callback;
-         
+
 
         let sketch = (p: p5)=>{
+
+            p.preload = ()=>{
+                this._font = p.loadJSON("./data/onestroke-font.json") as unknown as OneStrokeFont;
+            }
+
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                TitleView.setPosition(100,Stage.height-TitleView.getSize().height-100);
+                TitleView.setBasePosition(100,Stage.height-TitleView.getSize().height-100);
+                TitleView.setPosition();
                 this._src=new YUVp5src();
                 this._src.start(()=>{
                     this.setUp();
@@ -109,32 +123,14 @@ export class YUVp5 extends p5Base{
           this._shader.setUniform('u_scale', this._scale);
           this._shader.setUniform('u_frameCount', this._p5.frameCount);
 
+          let letter = Params.alphabet;
+          if(letter=="") letter = "Y";
 
-          let lines=[];
-
-            lines.push(
-              0,0
-            );   
-            lines.push(
-              Stage.width/2,Stage.height/2
-            );   
-            lines.push(
-              Stage.width/2,Stage.height/2
-            );              
-            lines.push(
-              Stage.width,0
-            );   
-            lines.push(
-              Stage.width/2,Stage.height/2
-            );  
-            lines.push(
-              Stage.width/2,Stage.height
-            );
-          
+          let lines = this.getStrokeLines(letter);
 
 
           this._shader.setUniform('u_lines', lines);
-          this._shader.setUniform('u_lineCount', 3);//lines.length);
+          this._shader.setUniform('u_lineCount', lines.length/4);
           this._shader.setUniform('u_image', this._src.getGraphics());
 
 
@@ -175,5 +171,40 @@ export class YUVp5 extends p5Base{
         this._scale = s;
         if(this._shader) this._shader.setUniform('u_scale', this._scale);
     }
-    
+
+    //onestroke-font.jsonのグリフ(0〜1に正規化されたストロークの折れ線)を、
+    //u_lines用のフラットな配列[x0,y0,x1,y1, ...](2点で1本の線分)に変換する。
+    //0〜1が画面いっぱい(Stage.width x Stage.height)になるように引き伸ばす(複数文字の場合は先頭の1文字のみ使用)
+    //シェーダ側は vec2 u_lines[200] (=最大100本) までしか読まないので、超えた分は切り捨てる
+    private getStrokeLines(text:string):number[]{
+
+        const lines:number[] = [];
+        if(!this._font || text.length===0) return lines;
+
+        const maxSegments = 100;
+        const strokes = this._font.glyphs[text[0].toUpperCase()];
+        if(!strokes) return lines;
+
+        for(const stroke of strokes){
+            for(let i=0; i<stroke.length-1; i++){
+
+                if(lines.length/4 >= maxSegments) return lines;
+
+                const [x0,y0] = stroke[i];
+                const [x1,y1] = stroke[i+1];
+
+                //フォントはy=0が下端・y=1が上端(数学的な向き)なので、
+                //上が0になる画面のピクセル座標に合わせて上下反転する
+                lines.push(
+                    x0*Stage.width, (1-y0)*Stage.height,
+                    x1*Stage.width, (1-y1)*Stage.height
+                );
+
+            }
+        }
+
+        return lines;
+
+    }
+
 }

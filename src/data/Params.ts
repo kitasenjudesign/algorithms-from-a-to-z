@@ -1,6 +1,7 @@
 import { GUI } from 'lil-gui'
 import { MyGUI } from './MyGUI';
 import { Stage } from './Stage';
+import { InfoData } from './InfoData';
 
 export class Params{
 
@@ -22,14 +23,29 @@ export class Params{
     public static mojiCenterX: number = 0;
     public static mojiCenterY: number = 0;
 
-    public static isStation:boolean=false;//えきモード
+    public static isStation:boolean=true;//えきモード
     public static isMobile:boolean=false;
     public static color:boolean = false;
+
+    public static currentData:InfoData;
+    public static language:string = "en";
+    public static alphabet:string = "";
 
     public static init(){
 
         if(this._initialized) return;
         this._initialized = true;
+
+        console.log(">>>>> lang = ",navigator.language);
+        const params = new URLSearchParams(window.location.search);
+
+        //言語指定
+        this.language = navigator.language.toLowerCase().indexOf("ja") == 0 ? "ja" : "en";
+        let lang = params.get("lang");
+        if(lang){
+            this.language = lang=="ja"?"ja":"en";
+        }
+
 
         console.log(window.location.hostname);
         if( window.location.hostname == 'kitasenjudesign.com' ){
@@ -42,7 +58,8 @@ export class Params{
         this.isStation = win.isStation;
         this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        const params = new URLSearchParams(window.location.search);
+        
+
         let dd = params.get("debug");
 
         if(dd && dd=="1"){
@@ -68,13 +85,42 @@ export class Params{
             this.isStation = false;
         }
 
+        let tt = params.get("t");
+        if(tt){
+            this.alphabet = String(tt);
+        }else{
+
+        }
+
+
+
         Stage.showNoEntryArea();
 
+       
+        if(this.isStation){
+             this.initCursorHide();
 
+        }
 
         MyGUI.Init();
         this.gui = MyGUI.gui;
 
+    }
+
+    private static initCursorHide(): void {
+        let timer: ReturnType<typeof setTimeout> | null = null;
+
+        const hide = () => {
+            document.body.style.cursor = 'none';
+        };
+        const show = () => {
+            document.body.style.cursor = '';
+            if (timer !== null) clearTimeout(timer);
+            timer = setTimeout(hide, 3000);
+        };
+
+        document.addEventListener('mousemove', show);
+        setTimeout(hide, 3000);
     }
 
     public static getMaxPoints(): number {

@@ -8,6 +8,7 @@ export class MazeMain extends WorkBase{
 
     constructor(){
         super(InfoData.M);
+        this.showTitle();
     }
 
     init(){
@@ -15,6 +16,7 @@ export class MazeMain extends WorkBase{
         this._mazeP5 = new MazeP5();
         this._mazeP5.init(()=>{
             console.log("MazeP5 initialized");
+           
         });
     }
 

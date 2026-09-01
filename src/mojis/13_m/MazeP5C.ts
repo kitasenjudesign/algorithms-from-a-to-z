@@ -41,8 +41,10 @@ export class MazeP5C extends p5Base{
 
             p.setup = () => {
                 this._p5 = p;
-                let str = "M";//"ABCDEFGHIHKJKOMNOPQRSTUVWXYZ"
-                this.loadFont(str[Math.floor(Math.random()*str.length)],()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "M";
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
                     this.setUp(p);
                     this.reset();
                     this.onLoad();

@@ -7,12 +7,14 @@ export class IKMain extends WorkBase {
 
     constructor() {
         super(InfoData.I);  
+        this.showTitle();
     }
 
     init(){
         let k = new IKMainP5();
         k.start(()=>{
-//            console.log("IKMainP5 started");
+            
+
         });
     }
 

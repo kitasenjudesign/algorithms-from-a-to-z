@@ -6,6 +6,7 @@ export class HilbertCurveMain extends WorkBase {
 
     constructor(){
         super(InfoData.H);
+        this.showTitle();
     }
 
     init(){
@@ -13,6 +14,7 @@ export class HilbertCurveMain extends WorkBase {
         let h = new HilbertCurveP5();
         h.init(()=>{
             // Initialization complete
+            
         });
     }
 

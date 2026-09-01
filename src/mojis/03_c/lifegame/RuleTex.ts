@@ -22,7 +22,7 @@ export class RuleTex{
         for(let i=0;i<256;i++){
             let str = "" + ParamsC.zeroPadding( ParamsC.convertToBinary(i),8 );
             list.push(str);
-            //console.log(str);
+            console.log(str);
         }
 
 
@@ -30,7 +30,8 @@ export class RuleTex{
             let output = "";
             for (let i = 0; i < ruleTexWidth; i++) {
 
-                let stride = (j*ruleTexWidth+i) * 4;
+                let idx = i;//ruleTexWidth-1-i;
+                let stride = (j*ruleTexWidth+idx) * 4;
                     //console.log( list[j].substring(i,1),parseInt( list[j].substring(i,1) ) )
                     output += "" + parseInt( list[j].substring(i,i+1) );
                     data[stride + 0] = parseInt( list[j].substring(i,i+1) );

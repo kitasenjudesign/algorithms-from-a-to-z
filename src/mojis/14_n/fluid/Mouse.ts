@@ -62,8 +62,8 @@ export class Mouse{
 
     private static motion(){
 
-        let scl = 0.5;
-        let tScl = 0.5;
+        let scl = 1.5;
+        let tScl = 1.5;
         gsap.to(this,{
             duration: 1*tScl,
             targetX: -1*scl,

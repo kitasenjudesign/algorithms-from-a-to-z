@@ -35,7 +35,10 @@ export class NMainP5 extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
                 
-                this.loadFont("Navier",()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "Navier";
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
                     this.setUp();
                     callback();
                 });

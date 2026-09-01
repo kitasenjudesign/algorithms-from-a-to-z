@@ -7,12 +7,14 @@ export class FourierMain extends WorkBase {
 
     constructor() {
         super(InfoData.F);
+        this.showTitle();
     }
 
     init(){
         let f=new FourierP5();
-        f.init("F", Stage.width,Stage.height, () => {
+        f.init(Stage.width,Stage.height, () => {
             console.log("FourierP5 initialized");
+            
         });
     }
 

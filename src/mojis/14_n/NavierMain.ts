@@ -7,7 +7,7 @@ export class NavierMain extends WorkBase{
     constructor(){
 
         super(InfoData.N);
-
+        this.showTitle();
     }
 
     init(){

@@ -24,10 +24,10 @@ export class MainCA1d{
 
         this.renderer = new THREE.WebGLRenderer({
             canvas: document.querySelector('#webgl'),
-            antialias: false,
+            antialias: true,
             preserveDrawingBuffer : true
         });
-         this.renderer.setPixelRatio(1);
+         this.renderer.setPixelRatio(2);
          this.renderer.setClearColor(new THREE.Color(0x000000));
          this.renderer.setSize(Stage.width,Stage.height);
 

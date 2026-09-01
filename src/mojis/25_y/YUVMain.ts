@@ -8,7 +8,8 @@ export class YUVMain extends WorkBase{
     constructor(){
 
         super(InfoData.Y);
-
+        this.showTitle();
+        
     }
 
     init(){

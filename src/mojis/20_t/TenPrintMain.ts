@@ -12,7 +12,7 @@ export class TenPrintMain extends WorkBase{
     constructor(){
         
         super(InfoData.T);
-
+        this.showTitle();
     }
     
     init(){       

@@ -2,6 +2,7 @@ import p5 from "p5";
 import { Params } from "../../data/Params";
 import { Stage } from "../../data/Stage";
 import { TitleView } from "../../html/TitleView";
+import { HilbertAlphabet } from "./HilbertAlphabet";
 
 export class HilbertCurveP5{
 
@@ -16,6 +17,11 @@ export class HilbertCurveP5{
     private path:p5.Vector[] = [];
     private bgColor:string = "#000";
     private strokeColor:string = "#fff"
+
+    //表示/消滅アニメーション用
+    private _phase:string = "grow";//grow:描画されていく / hold:完成状態で待機 / shrink:消えていく
+    private _animFrame:number = 0;
+    private static readonly HOLD_FRAMES:number = 300;//約5秒(60fps)
     
     public setMargins(mx: number, my: number){
         this._marginX = Math.max(0, mx);
@@ -72,27 +78,19 @@ export class HilbertCurveP5{
         this._p5.pixelDensity(1);
         this._p5.frameRate(60);
 
-        let A = 7;
-        let B = 5;
-        let C = 6;
-        this.orderMap = [
-            [A, C, B, B, B, B, A, C],
-            [C, A, B, B, B, B, C, A],
-            [A, C, B, B, B, B, A, C],
-            [C, A, C, A, C, A, C, A],
-            [A, C, A, C, A, C, A, C],
-            [C, A, B, B, B, B, C, A],
-            [A, C, B, B, B, B, A, C],
-            [C, A, B, B, B, B, C, A]
-        ];
+        let letter = Params.alphabet;
+        if(letter=="") letter = "H";
+        console.log("letter = ",letter);
+
+        this.orderMap = HilbertAlphabet.getAlphabet(letter.substring(0,1));
   
         this.generateMultiOrderHilbert();
 
-        TitleView.setPosition(
+        TitleView.setBasePosition(
             this._marginX+(Stage.width-2*this._marginX)/16*4,
             this._marginY+(Stage.height-2*this._marginY)/16*4,
         );
-        
+        TitleView.setPosition();
     }
 
     onLoad(){
@@ -116,32 +114,62 @@ export class HilbertCurveP5{
         // 描画
         
         
-        let end1 = (this._p5.frameCount*8);
-        if(end1>this.path.length/2){
-            end1=this.path.length/2;
-        }
-        let end2 = this._p5.frameCount*7;
-        if(end2>=this.path.length/2+1){
-            end2=Math.floor(this.path.length/2)+1;
-        }
-        end2 = this.path.length - end2;
+        const len = this.path.length;
+        const half1 = len/2;                    //線1の折り返し(排他)
+        const half2 = Math.floor(len/2)+1;      //線2の折り返し
+        const end2min = len - half2;            //線2の下限インデックス
 
-        //for (let v of path) {
+        this._animFrame++;
+        const f = this._animFrame;
+
+        //線1は[seg1From, seg1To)を昇順、線2は[seg2To, seg2From]を降順に描く
+        let seg1From = 0;
+        let seg1To = half1;
+        let seg2From = len-1;
+        let seg2To = end2min;
+
+        if(this._phase == "grow"){
+            //両端から中央へ描画されていく
+            seg1To = Math.min(f*8, half1);
+            seg2To = Math.max(len - f*7, end2min);
+            if(seg1To >= half1 && seg2To <= end2min){
+                this._phase = "hold";
+                this._animFrame = 0;
+            }
+        }else if(this._phase == "hold"){
+            //完成状態のまま約5秒待機
+            if(f >= HilbertCurveP5.HOLD_FRAMES){
+                this._phase = "shrink";
+                this._animFrame = 0;
+            }
+        }else{
+            //両端から中央へ消えていく
+            seg1From = Math.min(f*8, half1);
+            seg2From = Math.max(len-1 - f*7, end2min);
+            if(seg1From >= half1 && seg2From <= end2min){
+                //消え切ったらまた表示する
+                this._phase = "grow";
+                this._animFrame = 0;
+            }
+        }
+
         this._p5.beginShape();
-        for(let i=0;i<end1;i++){
+        for(let i=seg1From;i<seg1To;i++){
             let v = this.path[i];
 
             let ox = this._p5.noise(v.x+this._p5.frameCount*0.01, v.y);
             let oy = this._p5.noise(v.x, v.y+this._p5.frameCount*0.01);
 
-            this._p5.vertex(v.x+ox*5, v.y+oy*5);
+            let amp1 = 5;//Math.random()*10;
+            let amp2 = 5;//Math.random()*10;
+            this._p5.vertex(v.x+ox*amp1, v.y+oy*amp2);
             //this._p5.circle(v.x,v.y,2);
         }
         this._p5.endShape();
-  
+
 
         this._p5.beginShape();
-        for(let i=this.path.length-1;i>=end2;i--){
+        for(let i=seg2From;i>=seg2To;i--){
             let v = this.path[i];
             let ox = this._p5.noise(v.x+this._p5.frameCount*0.01, v.y);
             let oy = this._p5.noise(v.x, v.y+this._p5.frameCount*0.01);

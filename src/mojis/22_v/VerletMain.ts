@@ -14,16 +14,11 @@ export class VerletMain extends WorkBase{
     constructor(){
         
         super(InfoData.V);
-
+        this.showTitle();
         this.p5MainV = new p5MainV();
         this.p5MainV.init(()=>{
 
         });
-        /*
-        this.p5 = new VerletMainP5();
-        this.p5.init("V",()=>{
-
-        });*/
 
     }
     

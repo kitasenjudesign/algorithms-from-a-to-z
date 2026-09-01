@@ -7,11 +7,12 @@ export class ReactionDiffusionMain extends WorkBase{
 
     constructor(){
         super(InfoData.R);
+        this.showTitle();
     }
 
     public init(): void {
         // Initialization logic here
-        TitleView.hide();
+        //TitleView.hide();
         let mainRd = new MainRd();
         mainRd.init();
     }

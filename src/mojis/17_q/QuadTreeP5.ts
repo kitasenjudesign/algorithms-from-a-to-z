@@ -36,10 +36,11 @@ export class QuadTreeP5{
                 this._src = new QuadTreeThree();
                 this._src.init(()=>{
                     this.setUp(p);
-                    TitleView.setPosition(
+                    TitleView.setBasePosition(
                         Stage.width/8,
                         Stage.height/8
                     )
+                    TitleView.setPosition();
                     this._isInit=true;
                     callback();
                 });
@@ -73,7 +74,7 @@ export class QuadTreeP5{
 
         this._splitter = new QuadTreeSplitter();
         
-        this._p5.frameRate(12);
+        this._p5.frameRate(24);
         this.loopAnim();
     }
 
@@ -84,12 +85,13 @@ export class QuadTreeP5{
         this._splitter.animParams(7,2,1);
        
         this._src.rotate(4,4);
+        this._src.rotate(4,8);
+        
         //this._splitter.animColor(60,0.5,5.5);
         //this._splitter.animColor(255,0.5,8.5);
         
-        this._splitter.animParams(0,1,8.5);
-
-        gsap.delayedCall(10.5,this.loopAnim.bind(this));
+        this._splitter.animParams(0,2,12.5);
+        gsap.delayedCall(14.5,this.loopAnim.bind(this));
     }
 
     onLoad(){

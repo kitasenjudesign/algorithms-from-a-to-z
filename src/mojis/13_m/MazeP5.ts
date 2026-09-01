@@ -22,6 +22,14 @@ export class MazeP5 extends p5Base{
     private goalCell: { c: number; r: number } | null = null;
     private solutionPath: { c: number; r: number }[] = [];
 
+    //迷路生成(バックトラッキング法)の途中経過を保持し、1フレームずつ進める
+    private stack: { c: number; r: number }[] = [];
+    private generating: boolean = false;
+    private stepsPerFrame: number = 3;
+
+    //実際に動いた軌跡(行き止まりで戻った枝も含め、通った区間をすべて記録)
+    private trace: { a: { c: number; r: number }; b: { c: number; r: number } }[] = [];
+
     private _count:number=0;
 
     constructor() {
@@ -35,12 +43,16 @@ export class MazeP5 extends p5Base{
 
             p.setup = () => {
                 this._p5 = p;
-                TitleView.setPosition(
+                TitleView.setBasePosition(
                     100,
                     Stage.height/2 - TitleView.getSize().height/2
-                )
-                let str = "M";//"ABCDEFGHIHKJKOMNOPQRSTUVWXYZ"
-                this.loadFont(str[Math.floor(Math.random()*str.length)],()=>{
+                );
+                TitleView.setPosition();
+                
+                let letter = Params.alphabet;
+                if(letter=="") letter = "M";
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
                     this.setUp(p);
                     this.reset();
                     this.onLoad();
@@ -126,37 +138,72 @@ export class MazeP5 extends p5Base{
         }
     }
 
+    //生成開始:左下あたりのセルからスタートし、右下あたりのセルをゴールにする
+    //以降はdraw()からstepMaze()を毎フレーム呼んで少しずつ進める
     generateMaze() {
-        const stack: { c: number; r: number }[] = [];
-        const start = this.findAnyValidCell();
+        this.stack = [];
+        this.solutionPath = [];
+        this.trace = [];
+
+        const start = this.findBottomLeftValidCell();
         if (!start) return;
 
+        this.startCell = start;
+        this.goalCell = this.findBottomRightValidCell();
+
         this.visited[start.c][start.r] = true;
-        stack.push(start);
+        this.stack.push(start);
+        this.generating = true;
+    }
 
-        while (stack.length > 0) {
-            const cur = stack[stack.length - 1];
-            const nbs = this.getUnvisitedNeighbors(cur.c, cur.r);
+    //バックトラッキング法を1歩だけ進める
+    private stepMaze() {
+        if (this.stack.length === 0) {
+            this.generating = false;
+            return;
+        }
 
-            if (nbs.length === 0) {
-                stack.pop();
-            } else {
-                const next = this._p5.random(nbs) as typeof nbs[number];
-                this.removeWall(cur, next);
-                this.visited[next.c][next.r] = true;
-                stack.push({ c: next.c, r: next.r });
+        const cur = this.stack[this.stack.length - 1];
+        const nbs = this.getUnvisitedNeighbors(cur.c, cur.r);
+
+        if (nbs.length === 0) {
+            //行き止まり→1歩戻る
+            this.stack.pop();
+        } else {
+            //未訪問の隣接セルへランダムに1歩進む
+            const next = this._p5.random(nbs) as typeof nbs[number];
+            this.removeWall(cur, next);
+            this.visited[next.c][next.r] = true;
+            this.trace.push({ a: { c: cur.c, r: cur.r }, b: { c: next.c, r: next.r } });
+            this.stack.push({ c: next.c, r: next.r });
+
+            //ゴールに着いたら、そこまでたどってきたスタック=ルートとして確定し生成を終了
+            if (this.goalCell && next.c === this.goalCell.c && next.r === this.goalCell.r) {
+                this.solutionPath = this.stack.slice();
+                this.generating = false;
+                return;
             }
         }
 
-        // after maze generated, compute start/goal and solution path
-        this.computeSolutionPath();
+        if (this.stack.length === 0) {
+            this.generating = false;
+        }
     }
 
-    findAnyValidCell() {
-        //for (let r = 0; r < this.rows; r++) {
-        for (let r = this.rows-1; r >=0; r--) {
+    //文字の一番左の列のうち、一番下にある有効セルをスタートとして探す
+    findBottomLeftValidCell() {
+        for (let c = 0; c < this.cols; c++) {
+            for (let r = this.rows-1; r >=0; r--) {
+                if (this.valid[c][r]) return { c, r };
+            }
+        }
+        return null;
+    }
 
-            for (let c = 0; c < this.cols; c++) {
+    //文字の一番右の列のうち、一番下にある有効セルをゴールとして探す
+    findBottomRightValidCell() {
+        for (let c = this.cols-1; c >=0; c--) {
+            for (let r = this.rows-1; r >=0; r--) {
                 if (this.valid[c][r]) return { c, r };
             }
         }
@@ -184,68 +231,6 @@ export class MazeP5 extends p5Base{
         if (b.dir === "W") { wa.W = false; wb.E = false; }
     }
 
-    // compute start (some valid cell), goal (farthest reachable), and the path between them
-    private computeSolutionPath() {
-        this.solutionPath = [];
-        this.startCell = this.findAnyValidCell();
-        if (!this.startCell) {
-            this.goalCell = null;
-            return;
-        }
-
-        // BFS over the maze graph using opened walls
-        const queue: { c: number; r: number }[] = [];
-        const parent: ( { c:number; r:number } | null )[][] = Array.from({ length: this.cols }, () => Array(this.rows).fill(null));
-        const dist: number[][] = Array.from({ length: this.cols }, () => Array(this.rows).fill(-1));
-
-        queue.push(this.startCell);
-        dist[this.startCell.c][this.startCell.r] = 0;
-
-        let head = 0;
-        let farthest = this.startCell;
-        while (head < queue.length) {
-            const cur = queue[head++];
-            const d = dist[cur.c][cur.r];
-            if (d > dist[farthest.c][farthest.r]) farthest = cur;
-
-            const w = this.walls[cur.c][cur.r];
-            // neighbors where wall is removed
-            if (!w.N && cur.r > 0 && dist[cur.c][cur.r - 1] === -1) {
-                dist[cur.c][cur.r - 1] = d + 1;
-                parent[cur.c][cur.r - 1] = cur;
-                queue.push({ c: cur.c, r: cur.r - 1 });
-            }
-            if (!w.E && cur.c < this.cols - 1 && dist[cur.c + 1][cur.r] === -1) {
-                dist[cur.c + 1][cur.r] = d + 1;
-                parent[cur.c + 1][cur.r] = cur;
-                queue.push({ c: cur.c + 1, r: cur.r });
-            }
-            if (!w.S && cur.r < this.rows - 1 && dist[cur.c][cur.r + 1] === -1) {
-                dist[cur.c][cur.r + 1] = d + 1;
-                parent[cur.c][cur.r + 1] = cur;
-                queue.push({ c: cur.c, r: cur.r + 1 });
-            }
-            if (!w.W && cur.c > 0 && dist[cur.c - 1][cur.r] === -1) {
-                dist[cur.c - 1][cur.r] = d + 1;
-                parent[cur.c - 1][cur.r] = cur;
-                queue.push({ c: cur.c - 1, r: cur.r });
-            }
-        }
-
-        this.goalCell = farthest;
-
-        // reconstruct path from goal back to start
-        if (this.goalCell) {
-            let cur: { c: number; r: number } | null = this.goalCell;
-            while (cur) {
-                this.solutionPath.push(cur);
-                cur = parent[cur.c][cur.r];
-            }
-            // path currently from goal->start, reverse to start->goal
-            this.solutionPath.reverse();
-        }
-    }
-
     draw() {
         const p = this._p5;
         p.background(0);
@@ -254,6 +239,13 @@ export class MazeP5 extends p5Base{
 
         if(Params.debug){
             this._p5.image(this.maskG,0,0,100,100);
+        }
+
+        //生成の途中経過を1フレームにつき数歩ずつ進める
+        if (this.generating) {
+            for (let i = 0; i < this.stepsPerFrame && this.generating; i++) {
+                this.stepMaze();
+            }
         }
 
         for (let r = 0; r < this.rows; r++) {
@@ -271,31 +263,44 @@ export class MazeP5 extends p5Base{
             }
         }
 
-        // draw solution path as a line (through cell centers)
-        if (this.solutionPath && this.solutionPath.length > 0) {
-            p.stroke(255, 0, 0);//ここ
+        //実際に動いた軌跡を灰色の線で表示(行き止まりで戻った枝もそのまま残す)
+        if (this.trace.length > 0) {
+            p.stroke(150);
+            p.strokeWeight(3);
+            for (const seg of this.trace) {
+                const ax = seg.a.c * this.cellSize + this.cellSize * 0.5;
+                const ay = seg.a.r * this.cellSize + this.cellSize * 0.5;
+                const bx = seg.b.c * this.cellSize + this.cellSize * 0.5;
+                const by = seg.b.r * this.cellSize + this.cellSize * 0.5;
+                p.line(ax, ay, bx, by);
+            }
+        }
+
+        //現在バックトラッキング中のセル(スタック先頭)を赤丸でハイライト
+        if (this.generating && this.stack.length > 0) {
+            const cur = this.stack[this.stack.length - 1];
+            p.noStroke();
+            p.fill(255, 0, 0);
+            p.circle(cur.c * this.cellSize + this.cellSize * 0.5, cur.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
+            p.fill(255);
+        }
+
+        //ゴールに到達した後、そこまで実際に動いたルートを赤い線で表示
+        if (this.solutionPath.length > 0) {
+            p.stroke(255, 0, 0);
             p.strokeWeight(3);
             p.noFill();
             p.beginShape();
-
-            let len = this._p5.frameCount*1.5;
-            if(len>=this.solutionPath.length){
-                len = this.solutionPath.length;
-            }
-
-            for(let i=0;i< len;i++){
-                const cell = this.solutionPath[i];
+            for (const cell of this.solutionPath) {
                 const cx = cell.c * this.cellSize + this.cellSize * 0.5;
                 const cy = cell.r * this.cellSize + this.cellSize * 0.5;
                 p.vertex(cx, cy);
             }
             p.endShape();
 
-            // optionally draw start/goal markers
             p.noStroke();
             p.fill(255, 0, 0);
             if (this.startCell) p.circle(this.startCell.c * this.cellSize + this.cellSize * 0.5, this.startCell.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
-            p.fill(255, 0, 0);
             if (this.goalCell) p.circle(this.goalCell.c * this.cellSize + this.cellSize * 0.5, this.goalCell.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
             p.fill(255);
         }

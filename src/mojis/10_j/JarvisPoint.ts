@@ -13,13 +13,18 @@ export class JavisPoint{
 
     public random:boolean = false;
 
-    public update(){
+    public x:number = 0;
+    public y:number = 0;
 
+    public px:number = 0;
+    public py:number = 0;
 
+    public updateV(){
 
-        this.offsetX += this.vx;
-        this.offsetY += this.vy;
-        this.vx *= 0.99;
-        this.vy *= 0.99;
+        this.vx = this.x-this.px;
+        this.vy = this.y-this.py;
+        this.px = this.x;
+        this.py = this.y;
+
     }
 }

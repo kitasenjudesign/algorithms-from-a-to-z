@@ -35,6 +35,7 @@ export class QuadTreeThree{
     _fontManager    :FontManager;
     _path           :PathWrapper;
     _container:THREE.Object3D;
+    _counter:number=0;
     _callback:()=>void;
 
     constructor(){
@@ -99,7 +100,7 @@ export class QuadTreeThree{
     }
 
     makeLetter(){
-        const txt = 'Q';
+        const txt = Params.alphabet || "Q";
 
         const loader = new FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.
@@ -155,13 +156,26 @@ export class QuadTreeThree{
     }
 
     rotate(duration:number, delay:number){
-        this._container.rotation.y = 0;
-        gsap.to(this._container.rotation,{
-            duration: duration,
-            delay: delay,
-            y: Math.PI * 2,
-            ease: "power2.inOut"
-        });
+
+        if(this._counter%2==0){
+            this._container.rotation.y = 0;
+            gsap.to(this._container.rotation,{
+                duration: duration,
+                delay: delay,
+                y: Math.PI * 2,
+                ease: "power2.inOut"
+            });
+        }else{
+            this._container.rotation.x = 0;
+            gsap.to(this._container.rotation,{
+                duration: duration,
+                delay: delay,
+                x: Math.PI * 2,
+                ease: "power2.inOut"
+            });            
+        }
+        this._counter++;
+
     }
     animScale(){
         this._container.scale.set(0.5,0.5,0.5);

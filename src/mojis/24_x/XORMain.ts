@@ -9,7 +9,7 @@ export class XORMain extends WorkBase{
     constructor(){
 
         super(InfoData.X);
-
+        this.showTitle();
     }
 
     init(){

@@ -55,8 +55,13 @@ export class p5MainV extends p5MainBase{
                 this._p5 = p;
                 this._width=Stage.width;
                 this._height=Stage.height;
+
+                let letter = Params.alphabet;
+                if(letter=="") letter = "V";
+                console.log("letter = ",letter);
+
                 this._fontManager = new FontManager();
-                this._fontManager.init("V",(path)=>{
+                this._fontManager.init(letter,(path)=>{
                     
                     this._path=path;
                     this._ox = 200 * (Math.random()-0.5);
@@ -134,9 +139,12 @@ export class p5MainV extends p5MainBase{
         Params.gui.add(this,"reset");
     }
 
-    public getPosition(ratio:number):{x:number,y:number}{
+    public getPosition(ratio:number,idx:number):{x:number,y:number}{
 
-        let s = this._path.getStrokes()[0];
+
+        let strokes = this._path.getStrokes();
+
+        let s = strokes[idx%strokes.length];//0番目のストローク
         let scl = 10.5;
         let rect = this._path.getRect();
 
@@ -145,8 +153,6 @@ export class p5MainV extends p5MainBase{
         let yy1 = (p1.y-rect.y - rect.height/2)*scl;
         xx1+=this._width/2+this._ox;
         yy1+=this._height/2+this._oy;
-
-
 
         return {x:xx1,y:yy1};
     }

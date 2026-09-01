@@ -18,6 +18,9 @@ export class QuadTreeSplitter{
     private strokeColor:string = "#ffffff";
     private drawColorTh:number = 0;
 
+    public pastRects: { [key: string]: number } = {};
+
+
     constructor(){
 
 
@@ -64,10 +67,7 @@ export class QuadTreeSplitter{
 
         if(hensa<this._hensaTh || depth>=this._maxDepth){
 
-
             let rr = this.getMean(x,y,ww,hh,1);
-
-           
 
             this._p5.noFill();
             if(rr>=this.drawColorTh){
@@ -86,6 +86,24 @@ export class QuadTreeSplitter{
                         hh*ssY
                     );
                     
+                    
+                    if(this.pastRects[`${x}_${y}_${ww}_${hh}`]==null){
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`] = 120;
+                    }else{
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`]-=10;
+                    }
+
+
+                    this._p5.fill(255,255,255,this.pastRects[`${x}_${y}_${ww}_${hh}`]);
+
+                    
+                    if(this.pastRects[`${x}_${y}_${ww}_${hh}`]<=0){
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`]=0;
+                    };
+
+                        
+
+
                     this._p5.ellipse(
                         x*ssX + ww*ssX/2,
                         y*ssY + hh*ssY/2,

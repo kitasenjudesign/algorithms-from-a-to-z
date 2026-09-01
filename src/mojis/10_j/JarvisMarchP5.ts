@@ -25,6 +25,8 @@ export class JarvisMarchP5{
     private _oy:number = 0;
     public _noiseAmp:number = 0;
     public _radius:number = 20;
+    private _isFreeMode:boolean = false;
+    private _blink:number = 0;
 
     constructor(){
         
@@ -44,9 +46,11 @@ export class JarvisMarchP5{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                
+                let letter = Params.alphabet;
+                if(letter=="") letter = "J";
+                console.log("letter = ",letter);
                 this._fontManager = new FontManager();
-                this._fontManager.init("J",(path)=>{     
+                this._fontManager.init(letter,(path)=>{
                     this._path = path;
                     this._isInit = true;
                     this.setUp(this._p5);
@@ -100,8 +104,11 @@ export class JarvisMarchP5{
         this._control.setPoints(this._points);
         this._control.loopA();
 
+
         Params.gui.add(this,"_radius",0,300).name("radius");
         Params.gui.add(this,"_noiseAmp",0,300).name("noiseAmp");
+        Params.gui.add(this,"applyImpulse");
+
     }
 
     onLoad(){
@@ -113,6 +120,16 @@ export class JarvisMarchP5{
 
     reset(){
         
+    }
+
+    setFreeMode(b:boolean){
+
+        //this._isFreeMode = b;
+
+    }
+
+    public setBlink(b:number){
+        this._blink = b;
     }
 
     draw(){
@@ -134,6 +151,7 @@ export class JarvisMarchP5{
         let list:{x:number,y:number}[] = [];
         
         this._p5.stroke(255);
+        this._p5.strokeWeight(2);
 
         //TitleView.setCenter(this._ox, this._oy);
         TitleView.setCenter(this._ox, this._oy);
@@ -143,18 +161,72 @@ export class JarvisMarchP5{
             let num =this._points.length;
 
 
+             
+
             for(let j=0;j<num;j++){
+
+                
+                /*
+                this._points[j].offsetX += this._points[j].vx;
+                this._points[j].offsetY += this._points[j].vy;
+                */
 
                 let ratio = this._points[j].ratio+this._p5.frameCount*0.002;
                 
-                let p = s[i].pointAt(ratio%1);
-                let xx = (p.x-rect.x - rect.width/2)*scl;
-                let yy = (p.y-rect.y - rect.height/2)*scl;
+                let p = s[i].pointAt(ratio%1);//比率から位置を割り出す
+
+
+                if(!this._isFreeMode){
+
+                    //this._points[j].x += (p.x - this._points[j].x)/4;
+                    //this._points[j].y += (p.y - this._points[j].y)/4;
+                    this._points[j].x = p.x;
+                    this._points[j].y = p.y;
+                    this._points[j].updateV();
+
+
+                }else{
+                    
+                    //freeMode
+                    this._points[j].x += this._points[j].vx;
+                    this._points[j].y += this._points[j].vy;
+
+                    //画面をはみ出したら跳ね返る
+                    //(外へ向かうときだけ反転するので、すでにはみ出ていても内側へ戻ってくる)
+                    let sx = (this._points[j].x - rect.x - rect.width/2)*scl + this._width/2 + this._ox;
+                    let sy = (this._points[j].y - rect.y - rect.height/2)*scl + this._height/2 + this._oy;
+                    let r = this._radius;
+
+                    if(sx - r < 0 && this._points[j].vx < 0){
+                        this._points[j].vx *= -1;
+                    }
+                    if(sx + r > this._width && this._points[j].vx > 0){
+                        this._points[j].vx *= -1;
+                    }
+                    if(sy - r < 0 && this._points[j].vy < 0){
+                        this._points[j].vy *= -1;
+                    }
+                    if(sy + r > this._height && this._points[j].vy > 0){
+                        this._points[j].vy *= -1;
+                    }
+
+                }
+            
+                let tgtX = this._points[j].x;
+                let tgtY = this._points[j].y;
+
+
+
+                let xx = (tgtX-rect.x - rect.width/2)*scl;
+                let yy = (tgtY-rect.y - rect.height/2)*scl;
                 xx+=this._width/2+this._ox;
                 yy+=this._height/2+this._oy;
 
-                xx += (this._p5.noise(p.x,999+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
-                yy += (this._p5.noise(p.y,100+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
+                //xx += this._points[j].offsetX;
+                //yy += this._points[j].offsetY;
+
+                //xx += (this._p5.noise(p.x,999+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
+                //yy += (this._p5.noise(p.y,100+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
 
                 //this._points[j].update();
                 //xx += this._points[j].offsetX;
@@ -179,8 +251,8 @@ export class JarvisMarchP5{
         }
 
         let wrapped = GiftWrapping.getWrappedPoints(list);
-        this._p5.stroke(255);
-        this._p5.strokeWeight(2);
+
+
         for(let i=0;i<wrapped.length;i++){
 
             this._p5.line(
@@ -191,6 +263,13 @@ export class JarvisMarchP5{
             );
 
         }
+
+        this._p5.stroke(255,255,255,this._p5.frameCount%2==0?this._blink:this._blink*0.5);
+        this._blink -= 10;
+        if(this._blink<0) this._blink=0;
+        this._p5.noFill();
+        this._path.draw(this._p5, this._width, this._height, scl, this._ox, this._oy);
+
 
 
     }

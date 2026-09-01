@@ -37,10 +37,13 @@ export class IKMainP5 extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
+                let letter = Params.alphabet;
+                if(letter=="") letter = "IK";
+                console.log("letter = ",letter);
                 this.loadFont(
-                    "IK",()=>{
-                    //"IK",()=>{
+                    letter,()=>{
                     this.setUp(p);
+                    this._callback();
                 });
                 
             }

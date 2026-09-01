@@ -35,7 +35,7 @@ float sdSegment(vec2 p, vec2 a, vec2 b, float rr) {
 }
 
 
-vec3 yuv2rgb(vec3 yuv) {
+vec3 yuv2rgb(vec3 yuv, float rot) {
 
     bool limitedRange = false;
 
@@ -53,6 +53,16 @@ vec3 yuv2rgb(vec3 yuv) {
         U -= 0.5;
         V -= 0.5;
     }
+
+
+    float   rad  = atan (V, U) + rot;
+    float   amp  = sqrt (U * U + V * V);
+
+    U = amp * cos (rad);
+    V = amp * sin (rad);
+
+
+
 
     // BT.601
     float R = Y + 1.40200 * V;
@@ -109,16 +119,18 @@ void main() {
   vec2 dist = uv-vec2(0.5,0.5);
   float rad = value*1.0;//2.0*atan(dist.y,dist.x);
   
-  float stripe1 = 0.5+0.5*sin(minDist * 12.0-0.0001*u_frameCount+rad);
-  float stripe2 = 0.5+0.5*sin(minDist * 10.0-0.00015*u_frameCount+rad);
-  float stripe3 = 0.5+0.5*sin(minDist * 20.0-0.0002*u_frameCount+rad);
+  float stripe1 = 0.5+0.5*sin(minDist * 12.0-0.00010*u_frameCount+rad);
+  float stripe2 = 0.5+0.5*sin(minDist * 20.0-0.00015*u_frameCount+rad);
+  float stripe3 = 0.5+0.5*sin(minDist * 25.0-0.00020*u_frameCount+rad);
   
-           stripe1 = yuv2rgb(vec3(0.5,stripe1,stripe1)).r;
-           stripe2 = yuv2rgb(vec3(0.5,stripe1,stripe1)).g;
-           stripe3 = yuv2rgb(vec3(0.5,stripe1,stripe1)).b;
+  //yuvからrgbに変換
+           stripe1 = yuv2rgb(vec3(0.5,stripe1,stripe1), 0.0).r;
+           stripe2 = yuv2rgb(vec3(0.5,stripe2,stripe2), 0.0).g;
+           stripe3 = yuv2rgb(vec3(0.5,stripe3,stripe3), 0.0).b;
 
-  vec2 col = uv.xy/u_resolution.xy*0.5;
-  
+  vec3 col = yuv2rgb(vec3(0.5,uv.x,uv.y),0.0);
+  //vec3 col2 = hueShift(col, -u_frameCount*0.05+minDist*10.0);
+  vec3 col2 = yuv2rgb(vec3(0.5,uv.x,uv.y),u_frameCount*0.05+minDist*10.0);
   vec3 col3 = vec3(stripe1,stripe2,stripe3);
   
     //Tone mapping
@@ -128,12 +140,15 @@ void main() {
     //col3 = pow(col3, vec3(0.4545));
 
   //col3 = hueShift(col3,u_frameCount*0.25);
-  float rrr = 1.0;// + 1.0 * sin(0.5 * u_frameCount);
+  float rrr = 3.0;// + 1.0 * sin(0.5 * u_frameCount);
   col3 = mix(
-      hueShift( yuv2rgb(vec3(0.5,uv.x,uv.y)), u_frameCount*0.05 ),
-      col3,
+      //hueShift( col, u_frameCount*0.1+minDist*100.0 ),
+      col2,
+      col,
       clamp(minDist*rrr, 0.0, 1.0)
   );
+
+  //col3.rgb=vec3(col.r,col.g,col.b);
   //col3 = step(0.5,col3);
   //if(stripe1<0.5) col3=vec3(0.0,0.0,0.0);
   

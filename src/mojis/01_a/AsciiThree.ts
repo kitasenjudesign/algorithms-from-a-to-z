@@ -10,6 +10,7 @@ import { Path } from 'opentype.js';
 import { PathWrapper } from '../../font/PathWrapper';
 import { Stage } from '../../data/Stage';
 import { Params } from '../../data/Params';
+import { AlphabetInputView } from '../../html/AlphabetInputView';
 
 
 export class AsciiThree{
@@ -35,10 +36,14 @@ export class AsciiThree{
     _fontManager    :FontManager;
     _path           :PathWrapper;
     _container:THREE.Object3D;
+    _container2:THREE.Object3D;
 
     _rotX:number=0;
     _rotY:number=0;
     _rotZ:number=0;
+
+    public _ox:number = 0;
+    public _oy:number = 0;
 
     constructor(){
         //this.init();
@@ -49,9 +54,15 @@ export class AsciiThree{
     }
 
     init(){
+
+        let letter = Params.alphabet;
+        if(letter==""){
+            letter = "A";
+        }
+        console.log("letter = ",letter);
     
         this._fontManager = new FontManager();
-        this._fontManager.init("A",(path)=>{
+        this._fontManager.init(letter,(path)=>{
             this._path = path;
             this.makeLetter();
         });
@@ -83,13 +94,11 @@ export class AsciiThree{
         
        this.oCamera = new OrthographicCamera( -stgW, stgW, stgH, -stgH, 1, 10000);
 
-       this.oCamera.position.x = 300 * (Math.random()-0.5);
-       this.oCamera.position.y = 300 * (Math.random()-0.5);
+       this.oCamera.position.x = 0;// * (Math.random()-0.5);
+       this.oCamera.position.y = 0;// * (Math.random()-0.5);
 
 
-        this.control = new OrbitControls(this.oCamera,dom)
-//        this.control.enabled = false;
-
+        //this.control = new OrbitControls(this.oCamera,dom);
        
         this.resetCam();
         this.tick();
@@ -110,7 +119,7 @@ export class AsciiThree{
     }
 
     makeLetter(){
-        const txt = 'A';
+        const txt = Params.alphabet || "A";
 
         const loader = new FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.
@@ -137,12 +146,30 @@ export class AsciiThree{
             mesh.position.set(0, 0, -height/2);
 //            this.scene.add(mesh);
 
+            
             this._container = new THREE.Object3D();
+            
             this._container.add(mesh);
-            this._container.scale.set(2,2,2);
+            
+            this._container.scale.set(0.5,0.5,0.5);
+            gsap.to(this._container.scale,{
+                x:2,
+                y:2,
+                z:2,
+                duration:3,
+                ease:"power2.out"
+            });
             this._container.position.set(0, 0, 0);
             this.scene.add(this._container);
-            this.meshes.push(this._container);
+
+            this._container2 = new THREE.Object3D();
+            this._container2.add(this._container);
+            this.scene.add(this._container2);
+
+            this.meshes.push(this._container2);
+
+            this.rotateAnim(0, "power2.out");
+
 
         //let d:DirectionalLight = new DirectionalLight(0xffffff);
         //this.scene.add(d);
@@ -151,9 +178,26 @@ export class AsciiThree{
         }, undefined, (err) => {
             console.warn('FontLoader failed, using canvas fallback', err);
         });
+
+
     }
 
     
+    rotateAnim(delay:number=0,ease:string="power2.inOut"){
+
+            gsap.to(this._container2.rotation,{
+                x:this._container2.rotation.x - this._rotX*1500,
+                y:this._container2.rotation.y - this._rotY*1500,
+                z:this._container2.rotation.z - this._rotZ*1500,
+                duration:4,
+                delay:delay,
+                ease: ease,
+                onComplete:()=>{
+                    this.rotateAnim(12);
+                }
+            });
+
+    }
 
     resetCam(){
         //this.oCamera.position.set(0,0,3000);
@@ -164,7 +208,7 @@ export class AsciiThree{
 
     tick(){
 
-        this.control?.update();
+        //this.control?.update();
         this.renderer.render(this.scene, this.oCamera);//this.oCamera);//this.camera);    
 
         if(this._container){
@@ -185,14 +229,18 @@ export class AsciiThree{
         console.log("resize");
         let ww = this.WIDTH;
         let hh = this.HEIGHT;
+
         let size:number = 400;
         var stgW:number = ww*0.417;
         var stgH:number = hh*0.417;
 
-        this.oCamera.top=stgH;
-        this.oCamera.bottom=-stgH;
-        this.oCamera.left=-stgW;
-        this.oCamera.right=stgW;
+
+        this.oCamera.top = stgH;
+        this.oCamera.bottom = -stgH;
+
+        this.oCamera.left = -stgW;
+        this.oCamera.right = stgW;
+
         this.oCamera.updateProjectionMatrix();
         
         this.renderer.setSize(ww,hh);

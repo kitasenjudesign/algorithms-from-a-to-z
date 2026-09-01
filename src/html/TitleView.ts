@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { InfoData } from "../data/InfoData";
 import { Params } from "../data/Params";
 import { Stage } from "../data/Stage";
@@ -14,30 +15,33 @@ export class TitleView{
     private static _width:number = 0;
     private static _height:number = 0;
 
+    private static _baseX:number = 0;
+    private static _baseY:number = 0;
+
     constructor(){
-       
+
     }
+
 
     public static init(data:InfoData){
 
         this._data = data;
-        if(this._data.alphabet=="") return;
+        //if(this._data.alphabet=="") return;
 
-        let info = document.getElementById("info");
-        this._container = info as HTMLDivElement;
-        info.style.display = "block";
+        
+        this._container =  document.getElementById("title") as HTMLDivElement;
+        this._container.style.display = "block";
 
-        //info.style.transformOrigin = "0 0";
-        //info.style.scale = Params.isMobile ? "0.5" : "1";
-
-        this._anim1 = new TextAnim("title");
-        this._anim2 = new TextAnim("subtitle");
+        this._anim1 = new TextAnim("mainTitle");
+        this._anim2 = new TextAnim("subTitle");
         this._anim3 = new TextAnim("year");
 
         this._anim1.setText("Algorithms from A to Z");
         this._anim2.setText(this._data.title);
 
         let txt = this._data.date +", "+data.author;
+        if(data.date=="") txt = data.author;
+
         if(data.anotherTitle!=""){
             txt = ""+this._data.anotherTitle +"<br/>"+txt;
         }
@@ -57,6 +61,7 @@ export class TitleView{
             this._anim3.play(txt,0.5);
         }
 
+        
         if(!Params.debug){
             document.getElementById("center")!.style.display = "none";
             document.getElementById("center2")!.style.display = "none";
@@ -67,21 +72,13 @@ export class TitleView{
             console.log("speak:",data.alphabet+":"+data.title);
             let utterance = new SpeechSynthesisUtterance(data.alphabet+":"+data.title);  
             utterance.lang = "en-US"
+            utterance.volume = 0.25;
             //utterance.rate = 0.9;
             window.speechSynthesis.speak(utterance);            
         }, 500);
 
-
     }
 
-
-
-    public static show(){
-        document.getElementById("info")!.style.display = "block";
-    }
-    public static hide(){
-        document.getElementById("info")!.style.display = "none";
-    }
 
     public static getSize():{width:number,height:number} {
 
@@ -90,14 +87,44 @@ export class TitleView{
     }
 
 
-    public static setPosition(x:number,y:number){
+    public static setPosition(){
 
-        this._container!.style.left = x + "px";
-        this._container!.style.top  = y + "px";
+        //console.log("setPosition",this._baseX,this._baseY);
+        //console.log(this._container);
+        if(!this._container){
+            this._container =  document.getElementById("title") as HTMLDivElement;
+            //this._container.style.display = "block";
+        }
+
+        this._container!.style.left = this._baseX + "px";
+        this._container!.style.top  = this._baseY + "px";
+        console.log("setPosition",this._container!.style.left,this._container!.style.top);
 
     }
 
+    public static setBasePosition(x:number,y:number){
 
+        this._baseX = x;
+        this._baseY = y;
+
+    }
+
+    public static movePosition(tx:number,ty:number){
+
+        gsap.to(this._container!,{
+            left:tx,top:ty,duration:0.5,ease:"power2.inOut"
+        });
+
+    }
+
+    public static resetPoisition(){
+
+        gsap.to(this._container!,{
+            left:this._baseX,top:this._baseY,duration:0.5,ease:"power2.inOut"
+        });
+
+
+    }
 
 
     /**
@@ -150,8 +177,6 @@ export class TitleView{
         let tgtX = (textX * (1 - t) + crossPoint.x * t) - this._width / 2;
         let tgtY = (textY * (1 - t) + crossPoint.y * t) - this._height / 2;
 
-
-        
         let margin = 50;
 
         if(margin >tgtX) tgtX = margin;
@@ -159,11 +184,12 @@ export class TitleView{
         if(tgtX+this._width + margin>Stage.width) tgtX = Stage.width - this._width - margin;
         if(tgtY+this._height + margin>Stage.height) tgtY = Stage.height - this._height - margin;
 
+
+        this._container =  document.getElementById("title") as HTMLDivElement;
+        //this._container.style.display = "block";
         this._container!.style.left = tgtX + "px"
         this._container!.style.top  = tgtY + "px"
         
-
-
     }
 
 

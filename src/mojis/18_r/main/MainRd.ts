@@ -45,7 +45,7 @@ export class MainRd{
            antialias: false
        });
 
-        this.renderer.setPixelRatio(2);
+        this.renderer.setPixelRatio(1);
         this.renderer.setClearColor(new THREE.Color(0x000000));
         this.renderer.setSize(Stage.width, Stage.height);
          
@@ -112,7 +112,7 @@ export class MainRd{
 
     tick(){
         
-       //this._rttTest.visible=false;
+        //this._rttTest.visible=false;
         //this.control?.update();
         //this._rttTest.update();
         //this._circles.update();
@@ -137,7 +137,7 @@ export class MainRd{
 
         window.setTimeout(()=>{
             this.tick();
-        },1000/30)
+        },1000/60)
     }
 
 

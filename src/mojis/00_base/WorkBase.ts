@@ -1,4 +1,5 @@
 import { InfoData } from "../../data/InfoData";
+import { Params } from "../../data/Params";
 import { TitleView } from "../../html/TitleView";
 import { TextAnim } from "./TextAnim";
 
@@ -10,12 +11,21 @@ export class WorkBase{
     constructor(data:InfoData){
 
         this._data = data;
-        TitleView.init(this._data);
+        Params.currentData = this._data;
         
+    }
+
+    showTitle(){
+
+        console.log("showTitle");
+        TitleView.init(this._data);
+       
     }
 
     init(){
 
     }
+
+
 
 }

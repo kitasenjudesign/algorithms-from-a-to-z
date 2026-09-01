@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Cellular Automaton (C) 解説</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="./index.html">&larr; Algorithms from A to Z 解説へ</a>
+  <h1>Cellular Automaton (C) 解説</h1>
+  <p>
+    セルオートマトンと「ウルフラムコード」の仕組み、そしてこのサイトの「C」のページで実際に使われているルール番号をまとめたページ。
+  </p>
+</header>
+
+<main>
+
+  <h2>セルオートマトンとは</h2>
+  <p>
+    セルオートマトン(cellular automaton)は、格子状に並んだセルがそれぞれ状態(生/死など)を持ち、決められたルールに従って、隣接セルの状態を見ながら世代ごとに一斉に状態を更新していく計算モデル。
+    もっとも単純な形が「1次元・初等セルオートマトン」で、セルを1列に並べ、各セルの次の状態を「自分自身と両隣、合わせて3つのセルの現在の状態」だけから決める。
+  </p>
+  <p>
+    1983年、Stephen Wolframはこの1次元セルオートマトンを体系的に分類し、単純な規則からでも複雑で予測不能なパターンが自己組織的に生まれることを示した。
+    ライフゲーム(2次元セルオートマトンの一種)もこの考え方の延長線上にある。
+  </p>
+
+  <h2>ウルフラムコードの決め方</h2>
+  <p>
+    3つの隣接セル(左・自分・右)の組み合わせは、それぞれ0か1なので 2<sup>3</sup>=8 パターンある。1次元・初等セルオートマトンの「ルール」とは、
+    この8パターンそれぞれに対して「次の状態は0か1か」を1つずつ割り当てたもの。
+  </p>
+  <table class="neighborhoods">
+    <thead>
+      <tr>
+        <th>近傍パターン(左・自分・右)</th>
+        <th>111</th><th>110</th><th>101</th><th>100</th><th>011</th><th>010</th><th>001</th><th>000</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>次の状態(例: Rule 30)</th>
+        <td class="bit">0</td><td class="bit">0</td><td class="bit">0</td><td class="bit">1</td>
+        <td class="bit">1</td><td class="bit">1</td><td class="bit">1</td><td class="bit">0</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    8個の0/1を並べると1つの8ビットの2進数になる(上の例なら <code class="mono">00011110</code>)。これを10進数に変換した数(この例では30)が、そのルールの名前=「ウルフラムコード(Wolfram code / rule number)」になる。
+    8ビットなので、組み合わせは全部で2<sup>8</sup>=256通り、つまりウルフラムコードは0〜255の256種類存在する。
+  </p>
+
+  <h2>代表的なウルフラムコード</h2>
+  <p>
+    Wolframは、初期状態からしばらく走らせた見た目のパターンによって、256種類のルールを大きく4つのクラスに分類した(Class I〜IV)。中でもよく知られているルールを挙げる。
+  </p>
+  <table class="params">
+    <thead><tr><th>ルール</th><th>分類</th><th>特徴</th></tr></thead>
+    <tbody>
+      <tr><td class="key">0 / 255</td><td class="cls">Class I</td><td>すべてのセルが最終的に0(または1)一色に収束する、最も単純で自明なルール。</td></tr>
+      <tr><td class="key">30</td><td class="cls">Class III</td><td>初期条件のわずかな違いで大きく異なるパターンになるカオス的なルール。Mathematicaの乱数生成にも使われる、Wolfram自身が特に重視する代表的なルール。</td></tr>
+      <tr><td class="key">90</td><td class="cls">Class III</td><td>XOR(排他的論理和)と等価。パスカルの三角形の偶奇パターンと同じ、シェルピンスキーの三角形を生成する。</td></tr>
+      <tr><td class="key">110</td><td class="cls">Class IV</td><td>単純なルールでありながらチューリング完全であることが証明されている(Matthew Cook, 2004)。「グライダー」のような構造が現れ、複雑系の縮図としてよく引用される。</td></tr>
+      <tr><td class="key">184</td><td class="cls">Class II</td><td>交通渋滞モデルとして知られ、車の流れのシミュレーションによく使われる。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>「C」のページで実際に使われているルール</h2>
+  <p>
+    <code class="mono">src/mojis/03_c/myP5/p5MainCA.ts</code> の <code class="mono">RULES</code> 配列に、以下の18種類のルール番号があらかじめ用意されている。
+  </p>
+  <div class="chip-grid">
+    <div class="chip">0</div>
+    <div class="chip">18</div>
+    <div class="chip">22</div>
+    <div class="chip">30</div>
+    <div class="chip">41</div>
+    <div class="chip">45</div>
+    <div class="chip">54</div>
+    <div class="chip">62</div>
+    <div class="chip">73</div>
+    <div class="chip highlight">86</div>
+    <div class="chip">90</div>
+    <div class="chip">110</div>
+    <div class="chip">124</div>
+    <div class="chip highlight">126</div>
+    <div class="chip">137</div>
+    <div class="chip">193</div>
+    <div class="chip">231</div>
+    <div class="chip">184</div>
+  </div>
+  <p>
+    実装メモによれば、このうち主に <strong>Rule 126</strong> と <strong>Rule 86</strong> の2つを使って文字を表現しており、
+    「角のセルが連続していた場合は横方向につながるようにした」という独自の工夫が加えられている。
+  </p>
+  <div class="note">
+    <span class="note-label">実装補足</span>
+    計算自体はTypeScript側ではなくGPU(<code class="mono">CACalculator.ts</code> / <code class="mono">GPUComputationRenderer</code>)上のフラグメントシェーダで行われており、各ルールの0/1パターンは <code class="mono">RuleTex</code> というテクスチャとしてGPUに渡されている。
+  </div>
+
+</main>
+
+<footer>
+  Algorithms from A to Z — C (Cellular Automaton) 実装解説
+</footer>
+
+</body>
+</html>

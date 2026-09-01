@@ -21,6 +21,7 @@ export class Mouse{
         if(uri.hostname=="127.0.0.1"){
             //return;
         }
+        return;
 
         // remove previous handler if any
         if (this._handler) document.removeEventListener('mousemove', this._handler);

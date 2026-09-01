@@ -4,6 +4,7 @@ import { PathWrapper } from "../../font/PathWrapper";
 import { p5Base } from "../00_base/p5Base";
 import { TitleView } from "../../html/TitleView";
 import { Stage } from "../../data/Stage";
+import { Params } from "../../data/Params";
 
 export class OpenTypeP5 extends p5Base {
 
@@ -38,7 +39,12 @@ export class OpenTypeP5 extends p5Base {
 
                 this._p5 = p;
 
-                this.loadFont("Opentype", () => {
+                let letter = Params.alphabet;
+                if(letter=="") letter = "Opentype";
+                console.log("letter = ",letter);
+                
+                this._fontManager = new FontManager();
+                this.loadFont(letter, () => {
                     console.log("font loaded");
                     this._isInit = true;
                     this.setUp(this._p5);

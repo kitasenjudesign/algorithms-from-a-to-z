@@ -1,6 +1,9 @@
 
 import { Mouse } from "../data/Mouse";
 import { Params } from "../data/Params";
+import { ArrowView } from "../html/ArrowView";
+import { AlphabetInputView } from "../html/AlphabetInputView";
+import { InfoView } from "../html/InfoView";
 import { TitleMain } from "../mojis/00_title/TitleMain";
 import { AsciiMain } from "../mojis/01_a/AsciiMain";
 import { BoidsMain } from "../mojis/02_b/BoidsMain";
@@ -17,15 +20,12 @@ import { LSystemMain } from "../mojis/12_l/LSystemMain";
 import { MazeMain } from "../mojis/13_m/MazeMain";
 import { NavierMain } from "../mojis/14_n/NavierMain";
 import { OpenTypeMain } from "../mojis/15_o/OpenTypeMain";
-import { OpenTypeP5 } from "../mojis/15_o/OpenTypeP5";
-import { OpticalFlowMain } from "../mojis/15_o/OpticalFlowMain";
 import { PerlinNoiseMain } from "../mojis/16_p/PerlinNoiseMain";
 import { QuadTreeMain } from "../mojis/17_q/QuadTreeMain";
 import { ReactionDiffusionMain } from "../mojis/18_r/ReactionDiffusionMain";
 import { SpiroMain } from "../mojis/19_s/SpiroMain";
 import { TenPrintMain } from "../mojis/20_t/TenPrintMain";
 import { UnsharpMaskMain } from "../mojis/21_u/UnsharpMaskMain";
-//import { UDFMain } from "../mojis/21_u/UDF";
 import { VerletMain } from "../mojis/22_v/VerletMain";
 import { WaveMain } from "../mojis/23_w/WaveMain";
 import { XORMain } from "../mojis/24_x/XORMain";
@@ -37,33 +37,40 @@ export class Main{
 
     public static type:string="";
     public static TEXTS:string="0abcdefghijklmnopqrstuvwxyz";
+    private info:InfoView;
+    
     constructor(){
 
     }
 
     public static nextPage(){
+        console.log("next page");
         const params = new URLSearchParams(window.location.search);
         const a =   params.get("auto");
+        const lang = params.get("lang");
         let str = Main.TEXTS;
         let idx = str.indexOf(Main.type);
         let nextIdx = (idx + 1) % str.length;
-        
-        /*window.location.search = "?type=" + str[nextIdx]
-            let utterance = new SpeechSynthesisUtterance("Next");  
-            utterance.lang = "en-US"
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance); */
+
+        let query = "?type=" + str[nextIdx];
+        if(lang){
+            query += "&lang=" + lang;
+        }
+        window.location.search = query;
     }
     public static prevPage(){
+        console.log("prev page");
+        const params = new URLSearchParams(window.location.search);
+        const lang = params.get("lang");
         let str = Main.TEXTS;
         let idx = str.indexOf(Main.type);
         let prevIdx = (idx - 1 + str.length) % str.length;
-        /*
-         window.location.search = "?type=" + str[prevIdx];
-            let utterance = new SpeechSynthesisUtterance("Previous");  
-            utterance.lang = "en-US"
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);*/
+
+        let query = "?type=" + str[prevIdx];
+        if(lang){
+            query += "&lang=" + lang;
+        }
+        window.location.search = query;
     }
 
     public init(){
@@ -75,18 +82,25 @@ export class Main{
         let t =     params.get("type");
         const a =   params.get("auto");
 
+        console.log("type:", t, "auto:", a);
         //音声はtitleview
 
         if(t===null){
             //return;
             Main.type="0";
             t="0";
-        }else{
+
+            console.log("default page: 0");
+
+        }
+        
+        
             t=t.toLowerCase();
 
             //autoがあったとき
             if(a=="1"){
 
+                console.log("auto mode: next page after 10 seconds");
                 let str = Main.TEXTS;
                 let idx = str.indexOf(t);
                 let nextIdx = (idx + 1) % str.length;
@@ -94,18 +108,21 @@ export class Main{
                     window.location.search = "?type=" + str[nextIdx] + "&auto=1";
                 }, 10000);
 
+            }else{
+                console.log("manual mode");
             }
 
             Main.type = t;
 
-        }
+        
 
             if(t=="0"){
-                document.title=t.toUpperCase() + "";
+                document.title="Algorithms from A to Z";
             }else{
-                document.title=t.toUpperCase() + "";
+                document.title=t.toUpperCase() + " - Algorithms from A to Z"
             }
             
+        const alphabetInput = new AlphabetInputView();
 
 
         switch(t){
@@ -221,36 +238,58 @@ export class Main{
                 break;
         }
 
-    //window.addEventListener("click", (event) => {
-        // Handle click events
-        //document.documentElement.requestFullscreen();
-    //});
-    window.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            // Handle escape key press
-        }
+        this.info = new InfoView();
+        this.info.init(Params.currentData);
 
-        console.log("key down:", event.key);
-        if(event.key===" "){
-            window.location.search = "?type=0&auto=1";
-            return;
-        }
-        if(event.key==="Enter"){
-            window.location.search = "?type=0&auto=1";
-            return;
-        }
+        const arrow = new ArrowView();
+        arrow.init();
 
-        //console.log(event.key);
-
-        let t = event.key;
-        if (!/^[a-z0]$/.test(t)) return;
+        alphabetInput.init(Params.currentData);
 
         
+        this.addKeyEventListener();
+    }
 
-        window.location.search = "?type=" + t;
-        return;
 
-    });
+    private addKeyEventListener(){
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                // Handle escape key press
+            }
+
+            console.log("key down:", event.key);
+            if(event.key===" "){
+                window.location.search = "?type=0&auto=1";
+                return;
+            }
+
+            const target = event.target as HTMLElement;
+            const isTextInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA");
+
+            if(!isTextInput && event.key === "ArrowRight"){
+                Main.nextPage();
+                return;
+            }
+            if(!isTextInput && event.key === "ArrowLeft"){
+                Main.prevPage();
+                return;
+            }
+            //if(event.key==="Enter"){
+            //    window.location.search = "?type=0&auto=1";
+            //    return;
+            //}
+
+            //console.log(event.key);
+
+            let t = event.key;
+            if (!/^[a-z0]$/.test(t)) return;
+
+        
+            //    window.location.search = "?type=" + t;
+            //    return;
+            
+
+        });
 
     }
 

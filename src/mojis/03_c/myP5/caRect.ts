@@ -16,6 +16,15 @@ export class caRect{
 
     public flag:boolean=false;
 
+    private _listBG:number[] = [
+        150,18,186,5
+    ];
+    private _listLetter:number[] = [
+        147
+    ];
+    private _bgIndex:number = 0;
+    private _letterIndex:number = 0;
+
     constructor(idxBG:number, idxA:number, idxB:number, idxC:number){
         this.idxBG = idxBG;
         this.idxA = idxA;
@@ -41,22 +50,39 @@ export class caRect{
 
     public draw(p5:p5, parent:p5MainCA){
 
-        p5.fill(
-            p5MainCA.RULES[this.idxBG],
-            0,0
-        );
-        p5.rect(
-            this.x,this.y,this.w,this.h
-        );
-        p5.fill(
-            0,//p5MainCA.RULES[this.idxA],
-            0,//p5MainCA.RULES[this.idxB],
-            p5MainCA.RULES[this.idxC],
-        );
 
-        if(p5.frameCount>=50){
-            parent.drawFont(p5.width,p5.height,2.5,0,-p5.height/6);
-        }
+            if(p5.frameCount%180==0){
+                this._bgIndex++;
+                this._letterIndex++;
+            }
+
+            p5.fill(
+                this._listBG[this._bgIndex%this._listBG.length],
+                
+                0,0
+            );
+            p5.rect(
+                this.x,this.y,this.w,this.h
+            );
+
+
+            //文字を書く
+            //if(p5.frameCount%50==30){
+                p5.fill(
+                    this._listLetter[this._letterIndex%this._listLetter.length],
+                    //p5MainCA.RULES[1],//p5MainCA.RULES[this.idxA],
+                    255,//p5MainCA.RULES[this.idxB],
+                    
+                    //p5MainCA.RULES[this.idxC],
+                    0,
+                    255
+                );
+            //}
+
+            if(p5.frameCount>=50){
+                parent.drawFont(p5.width,p5.height,2.5,0,-p5.height/6);
+            }
+
 
     }
 

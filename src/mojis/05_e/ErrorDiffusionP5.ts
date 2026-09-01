@@ -5,6 +5,7 @@ import { Path } from "opentype.js";
 import { PathWrapper } from "../../font/PathWrapper";
 import { ErrorDiffusionP5src } from "./ErrorDiffusionP5src";
 import { Stage } from "../../data/Stage";
+import { Params } from "../../data/Params";
 
 export class ErrorDiffusionP5{
 
@@ -35,7 +36,10 @@ export class ErrorDiffusionP5{
                 this._p5 = p;
                 const W = 140;
                 this._src = new ErrorDiffusionP5src();
-                this._src.start("E", W, Math.floor(W*window.innerHeight/innerWidth), ()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "E";
+                console.log("letter = ",letter);
+                this._src.start(letter, W, Math.floor(W*window.innerHeight/innerWidth), ()=>{
                     this._isInit = true;
                     //console.log("start2")
                     this._callback();
@@ -110,31 +114,6 @@ export class ErrorDiffusionP5{
         
     }
     
-    imageIndex(img:p5.Image, x:number, y:number) {
-        return 4 * (x + y * img.width);
-    }
-
-    getColorAtindex(img:p5.Image, x:number, y:number) {
-        let idx = this.imageIndex(img, x, y);
-        let pix = img.pixels;
-        let red = pix[idx];
-        let green = pix[idx + 1];
-        let blue = pix[idx + 2];
-        let alpha = pix[idx + 3];
-        return this._p5.color(red, green, blue, alpha);
-    }
-
-    setColorAtIndex(img:p5.Image, x:number, y:number, clr:p5.Color) {
-        let idx = this.imageIndex(img, x, y);
-
-        let pix = img.pixels;
-        pix[idx] = this._p5.red(clr);
-        pix[idx + 1] = this._p5.green(clr);
-        pix[idx + 2] = this._p5.blue(clr);
-        pix[idx + 3] = this._p5.alpha(clr);
-
-    }
-
     // Finds the closest step for a given value
     // The step 0 is always included, so the number of steps
     // is actually steps + 1
@@ -142,65 +121,47 @@ export class ErrorDiffusionP5{
         return Math.round(steps * value / 255) * Math.floor(255 / steps);
     }
 
+    //描画負荷対策: p5.Colorの生成やred()/green()/blue()呼び出しはピクセル毎に非常に重いので、
+    //pixels[]配列を直接読み書きする。元の実装もaddError内でG/BをRの値からしか作っていなかった
+    //(事実上グレースケール処理)ので、誤差もR成分だけを伝搬させれば同じ結果になる
     makeDithered(img:p5.Image, steps:number) {
         img.loadPixels();
 
-        for (let y = 0; y < img.height; y++) {
-            for (let x = 0; x < img.width; x++) {
-                let clr = this.getColorAtindex(img, x, y);
-                let oldR = this._p5.red(clr);
-                let oldG = this._p5.green(clr);
-                let oldB = this._p5.blue(clr);
-                let newR = this.closestStep(255, steps, oldR);
-                let newG = this.closestStep(255, steps, oldG);
-                let newB = this.closestStep(255, steps, oldB);
+        const pixels = img.pixels;
+        const w = img.width;
+        const h = img.height;
+        const vv = 2;
 
-                let newClr = this._p5.color(newR, newG, newB);
-                this.setColorAtIndex(img, x, y, newClr);
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const idx = 4 * (x + y * w);
+                const oldR = pixels[idx];
+                const newR = this.closestStep(255, steps, oldR);
 
-                let errR = oldR - newR;
-                let errG = oldG - newG;
-                let errB = oldB - newB;
+                pixels[idx] = newR;
+                pixels[idx + 1] = newR;
+                pixels[idx + 2] = newR;
+                pixels[idx + 3] = 255;
 
-                this.distributeError(img, x, y, errR, errG, errB);
+                const errR = (oldR - newR) + (Math.random() * (vv * 2) - vv);
+
+                this.addErrorFast(pixels, w, h, x + 1, y,     errR * (7 / 16));
+                this.addErrorFast(pixels, w, h, x - 1, y + 1, errR * (3 / 16));
+                this.addErrorFast(pixels, w, h, x,     y + 1, errR * (5 / 16));
+                this.addErrorFast(pixels, w, h, x + 1, y + 1, errR * (1 / 16));
             }
         }
 
         img.updatePixels();
     }
 
-    distributeError(img:p5.Image, x:number, y:number, errR:number, errG:number, errB:number) {
-
-        let n1 = 7/16
-        let n2 = 3/16
-        let n3 = 5/16
-        let n4 = 1/16
-
-        let vv = 2;//this._p5.mouseX;
-        errR+=this._p5.random(-vv,vv);
-        errG+=this._p5.random(-vv,vv);
-        errB+=this._p5.random(-vv,vv);
-        
-        this.addError(img, n1, x + 1, y, errR, errG, errB);
-        this.addError(img, n2, x - 1, y + 1, errR, errG, errB);
-        this.addError(img, n3, x, y + 1, errR, errG, errB);
-        this.addError(img, n4, x + 1, y + 1, errR, errG, errB);
-        
-    }
-
-    addError(img:p5.Image, factor:number, x:number, y:number, errR:number, errG:number, errB:number) {
-        if (x < 0 || x >= img.width || y < 0 || y >= img.height) return;
-        let clr = this.getColorAtindex(img, x, y);
-        let r = this._p5.red(clr);
-        let g = this._p5.green(clr);
-        let b = this._p5.blue(clr);
-        clr.setRed(r + errR * factor);
-        //clr.setGreen(g + errG * factor);
-        //clr.setBlue(b + errB * factor);
-        clr.setGreen(r + errR * factor);
-        clr.setBlue(r + errR * factor);
-
-        this.setColorAtIndex(img, x, y, clr);
+    addErrorFast(pixels:number[], w:number, h:number, x:number, y:number, err:number) {
+        if (x < 0 || x >= w || y < 0 || y >= h) return;
+        const idx = 4 * (x + y * w);
+        const v = pixels[idx] + err;
+        pixels[idx] = v;
+        pixels[idx + 1] = v;
+        pixels[idx + 2] = v;
     }
 
 

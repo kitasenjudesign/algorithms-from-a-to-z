@@ -43,6 +43,11 @@
         vec3 rgb2 = texture2D(textureLifeGame, texCoord2 / textureSize).rgb;
         vec3 rgb3 = texture2D(textureLifeGame, texCoord3 / textureSize).rgb;
 
+        vec4 ruleCol1 = texture2D(areaTex, texCoord1 / textureSize);//1,2,3
+        vec4 ruleCol2 = texture2D(areaTex, texCoord2 / textureSize);//1,2,3
+        vec4 ruleCol3 = texture2D(areaTex, texCoord3 / textureSize);//1,2,3
+
+
         vec3 rgb1_old = texture2D(textureLifeGame2, texCoord1 / textureSize).rgb;
 
 
@@ -66,17 +71,40 @@
           vec4 dotCol3 = texture2D(dotTex3, dotUV);
           vec4 dotCol4 = texture2D(dotTex4, dotUV);
 
-        if(rgb2.x>0.5){
-          if(rgb1.x>0.5 && rgb3.x<0.5){
-            op.x = dotCol3.x;// 110
-          }else if(rgb1.x<0.5 && rgb3.x>0.5){
-            op.x = dotCol1.x;// 011
-          }else if(rgb1.x>0.5 && rgb3.x>0.5){
-            op.x = dotCol2.x;// 111    
-          }else{
-            op.x = dotCol4.x;//010
+          
+          //オンオフを表現している
+
+          //オンの時、自分が、文字部分かどうか
+          //文字部分だったら、隣の文字がどうかチェック
+          //文字部分じゃないなら、いまといっしょ
+
+          if(rgb2.x>0.5){
+            
+              float r1 = ruleCol1.y;
+              float r2 = ruleCol2.y;
+              float r3 = ruleCol3.y;
+              
+              if(r2<0.5){
+                r1 = 1.0 -r1;
+                r2 = 1.0 -r2;
+                r3 = 1.0 -r3;
+              }
+
+              if(rgb1.x*r1>0.5 && rgb3.x*r3<0.5){
+                op.x = dotCol3.x;// 110
+              }else if(rgb1.x*r1<0.5 && rgb3.x*r3>0.5){
+                op.x = dotCol1.x;// 011
+              }else if(rgb1.x*r1>0.5 && rgb3.x*r3>0.5){
+                op.x = dotCol2.x;// 111    
+              }else{
+                op.x = dotCol4.x;//010
+              }              
+
           }
-        }
+
+
+        
+
         
         if(rgb2.y>0.5){
           if(rgb1.y>0.5 && rgb3.y<0.5){
@@ -104,7 +132,13 @@
         float avv = (op.x+op.y+op.z)/3.0;
         if(op.z>0.0) avv += 1.0;
 
+       
 
-        gl_FragColor = vec4(avv,avv,avv,1.0);
+        if(ruleCol2.y>0.5){
+          gl_FragColor = vec4(op.x, op.x, op.x,1.0);
+        }else{
+          gl_FragColor = vec4(op.x*0.5, op.x*0.5, op.x*0.5,1.0);
+        }
+        //gl_FragColor = vec4(avv,avv,avv,1.0);
         //vec4(v > 0.5 ? vec3(0.0, 0.0, 1.0) : vec3(0.8, 0.8, 0.8), 1.0);
       }

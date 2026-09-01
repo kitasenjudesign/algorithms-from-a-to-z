@@ -7,7 +7,7 @@ export class OpenTypeMain extends WorkBase{
     constructor(){
 
         super(InfoData.O);
-
+        this.showTitle();
     }
 
     init(){

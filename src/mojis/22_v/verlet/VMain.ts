@@ -103,8 +103,8 @@ export class VMain{
             let ratio1 = Math.random();
             let ratio2 = Math.random();
             
-            let p1 = p5MainV.instance.getPosition(ratio1);
-            let p2 = p5MainV.instance.getPosition(ratio2);
+            let p1 = p5MainV.instance.getPosition(ratio1, j);
+            let p2 = p5MainV.instance.getPosition(ratio2, j);
             
             this.currentPoints = [];
             this.isRec=true;
@@ -173,7 +173,7 @@ export class VMain{
         pp.strokeWeight(1);
 
         for(let i=0;i<this.sticksList.length;i++){
-            this.sticksList[i].update(pp);
+            this.sticksList[i].update(pp,i);
         }
 
     

@@ -10,7 +10,7 @@ export class QuadTreeMain extends WorkBase{
     constructor(){
 
         super(InfoData.Q);
-
+        this.showTitle();
     }
 
     init(){

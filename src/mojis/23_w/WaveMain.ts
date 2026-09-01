@@ -10,6 +10,7 @@ export class WaveMain extends WorkBase{
     constructor(){
         
         super(InfoData.W);
+        this.showTitle();
         //console.log("W");
         this.init();
 

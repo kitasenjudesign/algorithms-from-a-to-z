@@ -24,11 +24,11 @@ export class FontManager{
 
                 this.font = f;
 
+                console.log("moji = ",text);
                 const linePath= this.font.getPath(text, 0, 0, 100);
 
                 let wrapper = new PathWrapper(linePath);
                 
-
                 //console.log(linePath);
                 //console.log("bbb");
                 callback(wrapper);

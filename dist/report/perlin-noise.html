@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Perlin Noise (P) 解説</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="./index.html">&larr; Algorithms from A to Z 解説へ</a>
+  <h1>Perlin Noise (P) 解説</h1>
+  <p>
+    このサイトのPのページで、文字がゆらゆらとノイズで歪んで見える表現の作り方をまとめたページ。
+    <code class="mono">src/mojis/16_p/</code> 以下のコードを実際に読んで確認した内容。
+  </p>
+</header>
+
+<main>
+
+  <h2>Perlin Noiseとは</h2>
+  <p>
+    Perlin Noiseは、1982年に映像エンジニアのKen Perlinが映画のCG制作のために考案した、自然で滑らかな擬似乱数(勾配ノイズ)を生成するアルゴリズム。
+    格子の各交点にランダムな「勾配ベクトル」を割り当て、その周囲を補間することで、完全にランダムなノイズとは違い連続的でなめらかな模様(木目・雲・地形のような見た目)を作れるのが特徴。
+  </p>
+
+  <h2>全体の流れ</h2>
+  <p>実装は大きく2つのファイルに分かれていて、まず文字を白黒のマスク画像として描き、それを別のシェーダでノイズを使って歪ませている。</p>
+
+  <div class="step-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>文字をマスク画像として描く</h4>
+        <div class="step-file">PerlinP5src.ts</div>
+        <p>
+          <code class="mono">Params.alphabet</code>(既定は<code class="mono">"P"</code>)を、p5.jsの <code class="mono">loadFont()</code> + <code class="mono">text()</code> でオフスクリーンのcanvasに白文字・黒背景で描く。
+          <code class="mono">font.textBounds()</code>で実際の見た目のグリフの大きさを測り、フォントのascent/descentに左右されずに正確に中央へ配置している。
+          このcanvasが <code class="mono">getGraphics()</code> 経由で次のステップの入力画像になる。
+        </p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>フルスクリーンのシェーダでノイズを掛けて歪ませる</h4>
+        <div class="step-file">PerlinP5.ts</div>
+        <p>
+          WEBGLモードのp5キャンバスに画面いっぱいの四角形を1枚描き、その中で自作のフラグメントシェーダを実行。マスク画像をノイズで揺らしたり、明るさをノイズパターンに置き換えたりして最終的な絵を作る(詳細は次のセクション)。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h2>ノイズシェーダの中身</h2>
+  <p>
+    <code class="mono">PerlinP5.ts</code>のフラグメントシェーダ内で、実際に毎ピクセル呼ばれているノイズ関数は <code class="mono">noise2d()</code>。
+    格子の四隅にハッシュ関数(<code class="mono">hash2</code>)でランダムな勾配ベクトルを作り、その勾配と位置ベクトルの内積をスムーズ補間する、Perlinのアルゴリズムと同じ構造をGLSLで書き直したもの。
+  </p>
+  <div class="rules">vec2 hash2(vec2 p){ ... }             // 格子点ごとにランダムな勾配ベクトルを作る
+
+float noise2d(vec2 p, float line){
+  vec2 i = floor(p);                  // 格子のマス目
+  vec2 f = fract(p);                  // マス目内での位置(0〜1)
+  if(line>0.5 && length(i-p)<0.01) return 11.0;  // 格子点のごく近くだけ特大値を返す(=線を光らせる)
+  vec2 u = f*f*(3.0-2.0*f);           // スムーズステップ補間
+  ... 四隅の勾配と位置ベクトルの内積を u で補間 ...
+}</div>
+
+  <p>main()関数で実際に行っていることを順番に書くと:</p>
+  <div class="step-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>ノイズでサンプリング位置を揺らす(ドメインワープ)</h4>
+        <p><code class="mono">offset = noise2d(uv*5 + vec2(0,u_time), 0.0) * 0.02</code> を計算し、マスク画像を読む座標(uv)にこのoffsetを足してからサンプリングする。結果、文字の輪郭がノイズでゆらゆらと波打って見える。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>もう一つの(格子線が光る)ノイズで明るさを決める</h4>
+        <p><code class="mono">noise = noise2d(uv*5 + vec2(0,u_time), 1.0)</code>(2つ目の引数を1.0にして呼ぶ)を明るさの元にする。この時だけ格子点のすぐ近くで特大値(11.0)が返るため、Perlinノイズの格子構造そのものが薄い光る線として画面に浮かび上がる。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>文字の内側/外側で明るさを反転する</h4>
+        <p>ワープ後の位置でマスク画像をサンプリングした値(<code class="mono">src.r</code>)が0.5より大きい(＝文字の内側)なら、<code class="mono">noise = 1.0 - noise</code> として明るさを反転。これにより文字の内側と外側でノイズの濃淡がちぐはぐに入れ替わり、コントラストが生まれる。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>色をつけて出力</h4>
+        <p>最終的な<code class="mono">noise</code>の値をそのままグレースケール(<code class="mono">rr=gg=bb=noise</code>)として出力。サイトの配色モード(<code class="mono">Params.color</code>)がオンの時は<code class="mono">u_color</code>経由で青みがかった色(<code class="mono">r*=0, g*=0.5, b*=0.9</code>)に変える。<code class="mono">u_time</code>(経過時間)がノイズの参照座標に乗っているので、時間とともに模様が流れるように動き続ける。</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>実は使われていないコード</h2>
+  <p>コードを読むと、Perlinノイズに関わる実装が実はもう2つ用意されているが、どちらも現在は最終的な絵に反映されていない。</p>
+  <div class="note warn">
+    <span class="note-label">未使用</span>
+    <code class="mono">Perlin.ts</code>には、格子点に永続的な乱数勾配を持たせる教科書通りのPerlin Noise(TypeScript版)が実装されており、<code class="mono">PerlinP5.ts</code>の<code class="mono">setUp()</code>で<code class="mono">this._perlin = new Perlin(this._p5)</code>とインスタンス化まではされているが、<code class="mono">draw()</code>からは一度も呼ばれていない。
+  </div>
+  <div class="note warn">
+    <span class="note-label">未使用</span>
+    シェーダ内の<code class="mono">fbm()</code>関数(<code class="mono">noise2d</code>を複数オクターブ重ねて雲のような模様を作るfractal Brownian motion)も定義はされているが、<code class="mono">main()</code>からは呼ばれておらず、代わりに<code class="mono">noise2d()</code>が単発でそのまま使われている。<code class="mono">u_scale</code>ユニフォーム(<code class="mono">setScale()</code>で設定可能)も同様に、シェーダ側で宣言されているだけで実際の計算には使われていない。
+  </div>
+  <p>
+    つまり「Pの文字がノイズで揺れて見える」実際の仕組みは、上記のGLSL内<code class="mono">noise2d()</code>だけで完結しており、TypeScript側の<code class="mono">Perlin.ts</code>クラスや<code class="mono">fbm()</code>は実験用に書かれた後、使われないまま残っているコード。</p>
+
+  <h2>パラメータ</h2>
+  <table class="params">
+    <thead><tr><th>キー</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td class="key">u_time</td><td>経過時間(<code class="mono">millis()/1000*0.35</code>)。ノイズの参照座標をずらして模様をアニメーションさせる。</td></tr>
+      <tr><td class="key">u_resolution</td><td>画面解像度。<code class="mono">gl_FragCoord</code>を0〜1の<code class="mono">uv</code>に正規化するのに使う。</td></tr>
+      <tr><td class="key">u_image</td><td>文字マスク画像(<code class="mono">PerlinP5src</code>のcanvas)。</td></tr>
+      <tr><td class="key">u_color</td><td><code class="mono">Params.color</code>がtrueなら1。青みがかった配色に切り替える。</td></tr>
+      <tr><td class="key">u_scale</td><td>宣言・設定はされているが、シェーダ内では未使用。</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  Algorithms from A to Z — P (Perlin Noise) 実装解説
+</footer>
+
+</body>
+</html>

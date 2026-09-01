@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>LSystemTree.ts 解説</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="./index.html">&larr; Algorithms from A to Z 解説へ</a>
+  <h1>LSystemTree.ts 解説</h1>
+  <p>L(letter)-systemで木を生やす<code class="mono">LSystemTree.ts</code>の仕組みと、7種類の樹形（<code class="mono">type</code>）ごとの生成ルールをまとめたページ。</p>
+</header>
+
+<main>
+
+  <h2>L-systemの基本の仕組み</h2>
+  <p>
+    L-system(Lindenmayer system)は、「公理(axiom)」という初期文字列に「書き換えルール(rules)」を指定回数(<code class="mono">iterations</code>)だけ繰り返し適用して文字列を成長させ、
+    できあがった文字列を1文字ずつ「タートルグラフィックス」として解釈することで枝分かれする形を描く手法。
+  </p>
+  <p>
+    このクラスでは <code class="mono">createSystem()</code> で樹形ごとの axiom・rules・角度・反復回数などを設定し、
+    <code class="mono">generate()</code> が rules を <code class="mono">iterations</code> 回適用して最終的な文字列(<code class="mono">sentence</code>)を作る。
+    <code class="mono">draw()</code> は <code class="mono">sentence</code> を先頭から1文字ずつ読み、以下の記号として解釈しながら線を引いていく。
+  </p>
+
+  <table class="symbol-table">
+    <thead>
+      <tr><th>記号</th><th>意味</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="sym">F, G</td><td>現在の向きに <code class="mono">len</code> だけ線を引きながら前進する</td></tr>
+      <tr><td class="sym">f</td><td>線を引かずに <code class="mono">len</code> だけ前進する(使用箇所なし)</td></tr>
+      <tr><td class="sym">+</td><td>右に <code class="mono">angleIncDeg</code> 回転する</td></tr>
+      <tr><td class="sym">-</td><td>左に <code class="mono">angleIncDeg</code> 回転する</td></tr>
+      <tr><td class="sym">[</td><td>現在の位置・向き・<code class="mono">len</code> をスタックに保存し、<code class="mono">len</code> に <code class="mono">lengthDecay</code> を掛ける(枝分かれの開始)</td></tr>
+      <tr><td class="sym">]</td><td>スタックに保存した位置・向き・<code class="mono">len</code> に戻る(枝分かれの終了)</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <code class="mono">X</code>・<code class="mono">A</code> はルール展開だけに使う「成長点」の記号で、描画時には何もしない(<code class="mono">draw()</code>のswitchに該当がないため無視される)。
+    また <code class="mono">baseStepLength</code> は樹形ごとの初期値にすべて共通の係数 <code class="mono">lenRatio = 0.35</code> を掛けて縮小し、
+    さらに世代を経るごとに枝が <code class="mono">lengthDecay</code>(全樹形共通でランダムに0.60〜0.75)倍ずつ短くなっていく。
+  </p>
+
+  <h2>文字列が世代を経て増えていく様子（symmetricの例）</h2>
+  <p>
+    symmetric(<code class="mono">X &rarr; F[+X][-X]FX</code> / <code class="mono">F &rarr; FF</code>)を例に、公理 <code class="mono">X</code> から
+    <code class="mono">generate()</code> が1回・2回・3回ルールを適用するたびに文字列がどう増えるかを実際に展開したもの。
+  </p>
+  <div class="legend">
+    <span><span class="swatch tok-x">X</span>成長点(次に展開される)</span>
+    <span><span class="swatch tok-f">F</span>線分(前進して描画)</span>
+    <span><span class="swatch tok-r">+ -</span>回転</span>
+    <span><span class="swatch tok-b">[ ]</span>位置の保存・復帰(分岐)</span>
+  </div>
+  <div class="gens">
+    <div class="gen-block">
+      <div class="gen-head"><span class="gen-label">公理(0世代)</span><span class="gen-stat">1文字 / X:1個</span></div>
+      <div class="gen-str"><span class="tok-x">X</span></div>
+    </div>
+    <div class="gen-block">
+      <div class="gen-head"><span class="gen-label">第1世代</span><span class="gen-stat">11文字 / X:3個 &middot; F:2個</span></div>
+      <div class="gen-str"><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span></div>
+    </div>
+    <div class="gen-block">
+      <div class="gen-head"><span class="gen-label">第2世代</span><span class="gen-stat">43文字 / X:9個 &middot; F:10個</span></div>
+      <div class="gen-str"><span class="tok-f">FF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">FFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span></div>
+    </div>
+    <div class="gen-block">
+      <div class="gen-head"><span class="gen-label">第3世代</span><span class="gen-stat">143文字 / X:27個 &middot; F:38個</span></div>
+      <div class="gen-str"><span class="tok-f">FFFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-f">FF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">FFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-f">FF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">FFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">FFFFFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-f">F</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">FFF</span><span class="tok-b">[</span><span class="tok-r">+</span><span class="tok-x">X</span><span class="tok-b">][</span><span class="tok-r">-</span><span class="tok-x">X</span><span class="tok-b">]</span><span class="tok-f">F</span><span class="tok-x">X</span></div>
+    </div>
+  </div>
+  <p>
+    緑の <code class="mono">X</code> は「まだ展開されていない成長点」で、1世代進むごとに <code class="mono">X &rarr; F[+X][-X]FX</code> によって
+    3個ずつに増える(1 &rarr; 3 &rarr; 9 &rarr; 27)。一方 <code class="mono">F</code> は <code class="mono">F &rarr; FF</code> によって世代ごとに倍増するため、
+    古い世代で生まれた <code class="mono">F</code> ほど後の世代でどんどん増殖し、根本に近い幹ほど(実際に描画したときに)長くなる。
+  </p>
+
+  <h2>成長アニメーション</h2>
+  <p>
+    1本の木は生成されてすぐ全体が表示されるのではなく、<code class="mono">phase</code> の状態遷移によって「生えて→しばらく静止→根本から消えて→また別の樹形として生え直す」というループを繰り返す。
+    <code class="mono">progress</code>(0〜1)で <code class="mono">sentence</code> のどこまでを描画するか(<code class="mono">drawStart</code>/<code class="mono">drawEnd</code>)を制御している。
+  </p>
+  <div class="phase-flow">
+    <div class="phase"><b>delay</b><br>0〜29フレーム待機</div>
+    <span class="arrow">&rarr;</span>
+    <div class="phase"><b>grow</b><br>先端に向かって伸びる</div>
+    <span class="arrow">&rarr;</span>
+    <div class="phase"><b>hold</b><br>約10秒(200フレーム)静止</div>
+    <span class="arrow">&rarr;</span>
+    <div class="phase"><b>shrink</b><br>根本側から消える</div>
+    <span class="arrow">&rarr;</span>
+    <div class="phase">新しい<b>type</b>で再生成</div>
+  </div>
+  <p>
+    伸びる・消える速さ(<code class="mono">growSpeed</code>)は 0.008〜0.016/フレームでランダムに決まる。
+    消え切ると <code class="mono">regenerate()</code> が呼ばれ、<code class="mono">randomType()</code> で7種類からランダムに選び直した樹形として一から生え直す。
+  </p>
+
+  <h2>樹形(type)ごとのルール</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">symmetric（左右対称の木）</span><span class="type-key">"symmetric"</span></div>
+      <p class="desc">左右に均等に枝分かれしていく、もっとも基本的な対称形の木。</p>
+      <div class="rules">X &rarr; F[+X][-X]FX
+F &rarr; FF</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">25&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">5(固定)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">40〜120 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>1回のXの展開で「+X」「-X」の2方向へ均等に枝分かれしたあと、幹(FX)がまっすぐ伸びる。これが対称な樹形を作る。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">broadleaf（広葉樹）</span><span class="type-key">"broadleaf"</span></div>
+      <p class="desc">3方向に枝分かれするため、こんもりと広がった広葉樹らしいシルエットになる。</p>
+      <div class="rules">X &rarr; F[-X][+X][X]
+F &rarr; FF</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">22&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">4〜5</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">30〜100 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>「-X」「+X」に加えて回転しない「X」もあるため、1つの成長点から3本の枝が生まれ、symmetricより枝数が多く密度が高くなる。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">wind（風になびく木）</span><span class="type-key">"wind"</span></div>
+      <p class="desc">枝ごとにわずかな回転が加わり続けるため、全体が風に吹かれたように一方向へなびいて見える。</p>
+      <div class="rules">X &rarr; F[+X]F[-X]FX
+F &rarr; FF</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">20&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">4(固定)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">50〜130 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>ルール自体はsymmetric寄りだが、<code class="mono">draw()</code>内で <code class="mono">F</code> を描くたびに追加で +0.2&deg; 回転させており(<code class="mono">this.type === 'wind'</code> の分岐)、これが累積して片側になびくカーブを生む。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">weeping（枝垂れ木）</span><span class="type-key">"weeping"</span></div>
+      <p class="desc">枝が下向きに垂れ下がっていく、枝垂れ柳のような樹形。</p>
+      <div class="rules">X &rarr; FF-[-X]+[+X]
+F &rarr; FF</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">18&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">4(固定)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">40〜100 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>windとは逆に、<code class="mono">F</code> を描くたびに -0.5&deg; ずつ回転させており(<code class="mono">this.type === 'weeping'</code> の分岐)、これが積み重なって枝が弧を描きながら垂れ下がる効果になる。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">pine（松）</span><span class="type-key">"pine"</span></div>
+      <p class="desc">幹に沿って規則的に短い側枝(針葉)が生えていく、松や針葉樹のような樹形。</p>
+      <div class="rules">X &rarr; FFX
+F &rarr; F[+F][-F]F</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">30&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">5(固定)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">30〜90 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>他の樹形と違い <code class="mono">F</code> 自身も書き換え対象になっている点が特徴。幹を表す <code class="mono">F</code> が展開されるたびに左右へ短い枝を生やすので、まっすぐな幹の両側にたくさんの小枝が並ぶ。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">dead（枯れ木）</span><span class="type-key">"dead"</span></div>
+      <p class="desc">ルール適用が確率的で、角度や反復回数もランダムに揺れるため、左右非対称でいびつな枯れ木のような形になる。</p>
+      <div class="rules">X &rarr; 60%: F[+X]F[-X]FX
+     30%: F[-X]FX
+     10%: F
+F &rarr; FF</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">10〜35&deg;(個体ごとランダム)</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">3〜5(個体ごとランダム)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">50〜150 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span> <code class="mono">rules.X</code> が文字列ではなく関数になっている唯一の樹形(確率的L-system)。展開のたびに枝分かれするか・片側だけ枝分かれするか・そこで止まる(F)かがランダムに決まり、左右非対称で不揃いな枝ぶりになる。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="type-name">bamboo（竹）</span><span class="type-key">"bamboo"</span></div>
+      <p class="desc">まっすぐな幹に小さな側枝が点々とつく、竹のような樹形。axiomが他と異なる唯一のタイプ。</p>
+      <div class="rules">axiom: A
+A &rarr; FFA
+F &rarr; F[+F]F</div>
+      <div class="param-grid">
+        <div><span class="param-label">分岐角</span><span class="param-value">10&deg;</span></div>
+        <div><span class="param-label">反復回数</span><span class="param-value">4(固定)</span></div>
+        <div><span class="param-label">初期の枝の長さ</span><span class="param-value">60〜140 (&times;0.35)</span></div>
+        <div><span class="param-label">減衰率</span><span class="param-value">0.60〜0.75(共通)</span></div>
+      </div>
+      <p class="note"><span class="note-label">読み方</span>他の樹形が <code class="mono">X</code> を成長点にするのに対し、bambooだけ <code class="mono">A</code> を使い、<code class="mono">A &rarr; FFA</code> によって幹をひたすらまっすぐ伸ばし続ける。<code class="mono">F &rarr; F[+F]F</code> により各節から片側に1本だけ小枝が出るので、対称な枝分かれではなく直線的な幹に小枝が点在する形になる。</p>
+    </div>
+
+  </div>
+
+  <h2>樹形はどうやって選ばれるか</h2>
+  <p>
+    <code class="mono">type</code> を省略してインスタンス化すると <code class="mono">randomType()</code> が7種類(symmetric / broadleaf / wind / weeping / pine / dead / bamboo)から等確率で1つを選ぶ。
+    <code class="mono">regenerate()</code> でも同様にランダムに選び直すため、1本の木は生え変わるたびに違う樹形になり得る。
+  </p>
+
+</main>
+
+<footer>
+  Algorithms from A to Z — L (L-system) 実装解説
+</footer>
+
+</body>
+</html>

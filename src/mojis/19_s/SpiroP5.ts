@@ -44,9 +44,11 @@ export class SpiroP5{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                
+                let letter = Params.alphabet;
+                if(letter=="") letter = "S";
+                console.log("letter = ",letter);
                 this._fontManager = new FontManager();
-                this._fontManager.init("S",(path)=>{     
+                this._fontManager.init(letter,(path)=>{     
 
                     this.setUp(p);
                     this._ox = this._p5.width*0.2* (Math.random()-0.5);
@@ -119,7 +121,6 @@ export class SpiroP5{
 
             //ease: CustomEase.create("custom", "M0,0 C0.3,0.602 0.699,0.402 1,1 "),
         })
-
 
         gsap.to(this,{
             delay: 11,
@@ -243,8 +244,9 @@ export class SpiroP5{
 
                 xx += this.getX(rad+this._p5.frameCount*0.1);
                 yy += this.getY(rad+this._p5.frameCount*0.1);
-                //xx += Math.cos(rad) * this._p5.mouseY/10;
-                //yy += Math.sin(rad) * this._p5.mouseY/10;
+
+                //this._p5.circle(xx,yy,5);
+                
 
                 rad += 0.05;
 

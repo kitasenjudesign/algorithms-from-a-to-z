@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Navier-Stokes Equations (N) 解説</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="./index.html">&larr; Algorithms from A to Z 解説へ</a>
+  <h1>Navier-Stokes Equations (N) 解説</h1>
+  <p>
+    このサイトのNのページで動いている流体シミュレーションの仕組みと、文字「N」がどうやって流体と絡んでいるかをまとめたページ。
+    実装は <a href="https://github.com/mnmxmx/fluid-three" target="_blank" rel="noopener">fluid-three</a>(Three.js製のStable Fluids実装)をベースにしている。
+  </p>
+</header>
+
+<main>
+
+  <h2>Navier-Stokes方程式とStable Fluids</h2>
+  <p>
+    Navier-Stokes方程式は、粘性を持つ流体の速度場がどう時間変化するかを記述する偏微分方程式群。そのまま解くのは重く不安定になりやすいが、
+    1999年にJos Stamが発表した<strong>Stable Fluids</strong>という手法は、移流(advection)を「逆方向に辿って前の値をサンプリングする」semi-Lagrangian法で計算し、
+    さらに速度場を非圧縮(divergence-free)に補正するステップを組み合わせることで、どんなタイムステップでも発散しない(unconditionally stable)という特徴を持つ。
+    リアルタイムCGにおける煙・水・インクのようなシミュレーションのほぼ標準的な手法になっている。
+  </p>
+  <p>
+    このサイトの実装では、速度場をWebGL上のFBO(フレームバッファ)に持たせ、GLSLシェーダで1ステップずつ計算する「GPU版Stable Fluids」になっている。
+    <code class="mono">MainN.ts</code> が60fpsで <code class="mono">Output.update()</code> を呼び、その中で <code class="mono">Simulation.update()</code>(物理計算)と最終描画が行われる。
+  </p>
+
+  <h2>シミュレーションのパイプライン</h2>
+  <p><code class="mono">Simulation.update()</code>(<code class="mono">fluid/Simulation.ts</code>)は、毎フレーム次の順番でシェーダパスを実行している。</p>
+
+  <div class="step-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>移流(Advection)</h4>
+        <div class="step-file">glsl/advection.frag ・ fluid/Advection.ts</div>
+        <p>今のuv座標から速度ベクトル分だけ「過去の位置」を逆算し(<code class="mono">uv - velocity*dt</code>)、そこの速度をサンプリングして自分の値にする。流れが流れ自身を運んでいく効果(自己移流)。高精度版のBFECC(前進・後退トレースで誤差を補正する方式)も実装されているが、<code class="mono">Simulation.options.BFECC = false</code> のため既定では無効。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>外力(External Force)</h4>
+        <div class="step-file">glsl/externalForce.frag ・ fluid/ExternalForce.ts</div>
+        <p>マウス/タッチの移動量(<code class="mono">Mouse.diff</code>)を力として、カーソル位置を中心とした円形の範囲に加算合成(AdditiveBlending)で速度場へ注入する。<code class="mono">mouse_force</code>・<code class="mono">cursor_size</code> で強さと範囲を調整。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step optional">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>粘性拡散(Viscous) <span style="color:var(--muted); font-weight:normal;">— 既定では無効</span></h4>
+        <div class="step-file">glsl/viscous.frag ・ fluid/Viscous.ts</div>
+        <p>ヤコビ法の反復(既定16回)で速度を周囲と拡散混合し、粘り気のある流れにする。<code class="mono">Simulation.options.isViscous = false</code> になっているため、通常はこのステップは実行されず、直前の速度がそのまま次に渡る。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>発散(Divergence)</h4>
+        <div class="step-file">glsl/divergence.frag ・ fluid/Divergence.ts</div>
+        <p>各セルの上下左右の速度の差から、その点で流体が「湧き出している/吸い込まれている」量(発散)を計算する。非圧縮な流体では本来ここは0になるべきだが、外力を加えた直後は0からずれている。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>ポアソン方程式(Poisson) — 圧力を求める</h4>
+        <div class="step-file">glsl/poisson.frag ・ fluid/Poisson.ts</div>
+        <p>「圧力場pを、発散をちょうど打ち消せるように」求めるポアソン方程式 &nabla;&sup2;p = &nabla;&middot;v を、ヤコビ法(周囲4セルの平均から発散を引く)で既定32回反復して近似的に解く。反復回数が多いほど正確だが重くなる。</p>
+      </div>
+    </div>
+    <div class="step-arrow">&darr;</div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h4>圧力投影(Pressure projection)</h4>
+        <div class="step-file">glsl/pressure.frag ・ fluid/Pressure.ts</div>
+        <p>求めた圧力の勾配 &nabla;p を速度から引き(<code class="mono">v -= &nabla;p * dt</code>)、速度場を発散ゼロ(非圧縮)に補正する。これがStable Fluidsの要となる最終ステップで、結果は次のフレームの入力速度(<code class="mono">vel_0</code>)に戻る。<strong>この場所で「N」の文字マスクとの合流も行われている(次のセクション)。</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <h2>文字「N」との融合</h2>
+  <p>
+    上記はあくまで一般的なStable Fluidsのパイプラインで、文字を描いているのは主に <code class="mono">NMainP5.ts</code>(オフスクリーンのp5.jsキャンバス)と、
+    それを取り込む2箇所のシェーダ(<code class="mono">pressure.frag</code> / <code class="mono">shader1.frag</code>)。
+  </p>
+
+  <h3>1. オフスクリーンで文字を描く(NMainP5.ts)</h3>
+  <p>
+    <code class="mono">Params.alphabet</code>(空なら既定で <code class="mono">"Navier"</code>)を、DIFFERENCEブレンドで白く描き、その上から少し透明な黒を毎フレーム重ねてフェードさせている。
+    このcanvasをそのまま <code class="mono">THREE.CanvasTexture</code> 化したものが、以降 <code class="mono">baseTex</code> としてシェーダに渡される「文字のマスク画像」になる。
+  </p>
+
+  <h3>2. 文字の内側では流体を止める(pressure.frag)</h3>
+  <div class="rules">v = v - &nabla;p * dt;          // 通常の圧力投影
+v *= 1.0 - baseTex(uv).x;    // 文字の内側(白)なら v=0 に
+v.y += 0.004 * sin(uv.x*10.0); // 画面全体に弱い波状の力を常時追加</div>
+  <p>
+    圧力投影の直後、文字マスクが白い(＝文字の内側)ピクセルの速度を強制的に0にしている。つまり「N」の形は流体にとって<strong>動けない壁(障害物)</strong>として働き、
+    周囲の流体だけがその形を避けるように流れる。あわせて画面全体に弱いサイン波状の力を常に加えており、放っておいても流れが完全に止まらず、ゆらゆらと揺れ続けるようにしている。
+  </p>
+
+  <h3>3. フィードバックで文字の色を溶かして流す(Feedback.ts / shader1.frag)</h3>
+  <p>
+    最終的に画面に映る色は速度場そのものではなく、<code class="mono">Feedback</code> という別のping-pongバッファ(<code class="mono">renderTargetA</code>/<code class="mono">B</code>を交互に読み書き)を通した結果。
+    <code class="mono">shader1.frag</code> は毎フレーム、
+  </p>
+  <div class="rules">offset = velocity(uv) * 0.1;
+inputCol = 前フレームの蓄積テクスチャ(uv - offset)を読む;  // 速度で"逆算"して読む=流れで運ばれる
+if baseTex(uv) が明るい(=文字の内側):
+    inputCol = baseTex(uv) の明るさをそのままグレーとして上書き;       // 文字の形を継続的に注入</div>
+  <p>
+    という2つのことをしている。1つ目は「前フレームまでに溜まった色を、今の流速で運ぶ(移流)」処理で、これにより一度乗った色が流れに沿って引き伸ばされ、滲むように広がっていく。
+    2つ目は「文字の内側では毎フレーム文字の色を上書きし続ける」処理で、Nの形が絶えず色の発生源(ソース)として機能する。
+    この2つが組み合わさることで、<strong>「文字の形から絶えず色が生まれ、それが流体の流れに乗って周囲へ溶け出していく」</strong>という、このページの狙った表現になっている。
+  </p>
+  <p>
+    マウスをクリックすると <code class="mono">Feedback.time</code> が一度リセットされる(<code class="mono">window.onmousedown</code>)。ただし現状 <code class="mono">shader1.frag</code> 側の
+    <code class="mono">if(time&lt;=0.01){...}</code> の中身はコメントアウトされて空になっており、クリック時の特別な演出としては現在は機能していない実験の残骸。
+  </p>
+
+  <h2>パラメータ一覧</h2>
+  <p><code class="mono">Simulation.options</code>(<code class="mono">fluid/Simulation.ts</code>)で定義されている、シミュレーションの挙動を決めるパラメータ。デバッグモード(<code class="mono">?debug=1</code>)では画面上のlil-guiパネルからも調整できる(<code class="mono">fluid/Controls.ts</code>)。</p>
+  <table class="params">
+    <thead><tr><th>キー</th><th>既定値</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td class="key">resolution</td><td>0.5</td><td>シミュレーション用FBOの解像度倍率。画面解像度の半分の格子で計算することで負荷を抑えている。</td></tr>
+      <tr><td class="key">dt</td><td>0.01</td><td>物理計算1ステップあたりの時間刻み(固定値。実際のフレーム時間には依存しない)。</td></tr>
+      <tr><td class="key">iterations_poisson</td><td>32</td><td>圧力を求めるヤコビ法反復回数。多いほど正確だが、フルスクリーンパスを32回実行するため最も重い部分。</td></tr>
+      <tr><td class="key">iterations_viscous</td><td>16</td><td>粘性拡散のヤコビ法反復回数(<code class="mono">isViscous=true</code>の時のみ使われる)。</td></tr>
+      <tr><td class="key">mouse_force</td><td>75</td><td>マウス/タッチの移動量に掛ける力の強さ。</td></tr>
+      <tr><td class="key">cursor_size</td><td>40</td><td>外力を加える円の半径(セル単位)。</td></tr>
+      <tr><td class="key">viscous</td><td>300</td><td>粘性拡散の強さ係数。</td></tr>
+      <tr><td class="key">isViscous</td><td>false</td><td>粘性拡散ステップを実行するかどうか。既定は無効。</td></tr>
+      <tr><td class="key">isBounce</td><td>true</td><td>trueなら画面端を境界(壁)として扱い、境界用のライン形状も描画する。</td></tr>
+      <tr><td class="key">BFECC</td><td>false</td><td>移流計算を高精度なBFECC方式にするかどうか。既定はシンプルな1次のsemi-Lagrangian。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>マウス・タッチ操作</h2>
+  <p>
+    <code class="mono">fluid/Mouse.ts</code> がポインタ座標を <code class="mono">[-1, 1]</code> のクリップ空間座標に変換して保持し、毎フレーム前回位置との差分(<code class="mono">diff</code>)を計算する。
+    この差分が <code class="mono">ExternalForce</code> に渡され、カーソル位置を中心とした円形範囲に力として加算される。指やマウスを素早く動かすほど強い渦や噴出が生まれる仕組み。
+  </p>
+
+  <h2>実装メモ・参考</h2>
+  <p>
+    パイプライン自体は <a href="https://github.com/mnmxmx/fluid-three" target="_blank" rel="noopener">mnmxmx/fluid-three</a>(<a href="https://mofu-dev.com/en/blog/stable-fluids/" target="_blank" rel="noopener">Stable Fluidsの解説記事</a>もあわせて参照)をベースに、
+    「N」の文字を流体の障害物兼カラーソースとして組み込む部分をこのサイト用に追加している。
+  </p>
+  <div class="note warn">
+    <span class="note-label">重い理由</span>
+    毎フレーム、移流・外力・(粘性)・発散・圧力(ポアソン32回)・圧力投影・フィードバックと、フルスクリーンのシェーダパスを合計30回以上実行しており、
+    これに加えて文字用の別canvas(NMainP5)の描画やThree.jsの描画そのものも重なる。<code class="mono">resolution: 0.5</code> でシミュレーション格子を画面の半分に間引くことで既に負荷を抑えているが、
+    それでも「文字から色が溶け出す」表現のために毎フレームこれだけの計算をしているため、実装メモに書かれている通り重くなりやすい。
+  </div>
+
+</main>
+
+<footer>
+  Algorithms from A to Z — N (Navier-Stokes Equations) 実装解説
+</footer>
+
+</body>
+</html>

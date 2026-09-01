@@ -1,6 +1,7 @@
 
 import { InfoData } from "../../data/InfoData";
 import { Stage } from "../../data/Stage";
+import { InfoView } from "../../html/InfoView";
 import { TitleView } from "../../html/TitleView";
 import { WorkBase } from "../00_base/WorkBase";
 import { AsciiThree } from "./AsciiThree";
@@ -10,20 +11,38 @@ export class AsciiMain extends WorkBase{
     //private asciiP5: AsciiMainP5;
     private asciiThree:AsciiThree;
 
+    private _ox:number = 0;
+    private _oy:number = 0;
+
     constructor(){
         
         super(InfoData.A);
-        this.init();
+        this.showTitle();
+        //this.init();
     }
 
     init(){
 
+        if(this.asciiThree) return;
+        
         this.asciiThree = new AsciiThree();
+
+        this._ox = 1200;
+        this._oy = 600;
+
+        this.asciiThree._ox = this._ox;
+        this.asciiThree._oy = this._oy;
+
         this.asciiThree.init();
 
         this.loop();
 
-        TitleView.setPosition(200,200);
+
+        TitleView.setBasePosition(
+            200,200
+        );
+        TitleView.setPosition();
+        
         this.resize();
         window.addEventListener("resize", () => this.resize());
 
@@ -35,7 +54,6 @@ export class AsciiMain extends WorkBase{
 
         if(e){
             let img = this.asciiThree.captureImageData();
-            // convert to ascii (5 tones)
             const ascii = this.imageDataToAscii(
                 img,
                 this.asciiThree.WIDTH,
@@ -46,6 +64,8 @@ export class AsciiMain extends WorkBase{
             e.style.fontFamily = "monospace, monospace";
             e.style.fontSize = (Stage.width/1920*33)+"px";
             e.textContent = ascii;
+
+            this.resize();
         }
 
         setTimeout(() => {
@@ -64,7 +84,8 @@ export class AsciiMain extends WorkBase{
         if (w === 0 || h === 0) return "";
 
         // character set for non-edge (light -> dark)
-        const charset = [" ", ".", ":", "-", " "]; // length should be == levels
+        const charset = [" ", ".", "+", ":", "=", " "]; // length should be == levels
+        
         const chars = charset.length >= levels ? charset : (new Array(levels).fill(0).map((_,i)=> charset[Math.floor(i/levels*charset.length)]));
 
         // build grayscale image
@@ -180,6 +201,7 @@ export class AsciiMain extends WorkBase{
     private resize(){
 
         let box = document.getElementById("ascii");
+
         const vw = Stage.width;
         const vh = Stage.height;
 
@@ -189,7 +211,7 @@ export class AsciiMain extends WorkBase{
         const left = (vw - bw) / 2;
         const top  = (vh - bh) / 2;
 
-        box.style.position = "absolute";
+        box.style.position = "fixed";
         box.style.left = left + "px";
         box.style.top  = top  + "px";
 

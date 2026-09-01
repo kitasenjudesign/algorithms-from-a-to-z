@@ -24,6 +24,12 @@ export class p5MainRd extends p5Base{
     private _ox:number=0;
     private _oy:number=0;
 
+    private _font!:p5.Font;
+    private _letter:string = "R";
+    private _textSize:number = 300;
+    private _textX:number = 0;
+    private _textY:number = 0;
+
     constructor(){
         //super();
         super();
@@ -42,11 +48,20 @@ export class p5MainRd extends p5Base{
         this._callback=callback;
 
         new p5((p: p5)=>{
+
+            p.preload = ()=>{
+                this._font = p.loadFont("./data/FreeSans.otf");
+            }
+
             /** 初期化処理 */
             p.setup = ()=>{
-                this.loadFont("R",()=>{
-                    this.setUp();                
-                })
+
+                let letter = Params.alphabet;
+                if(letter=="") letter = "R";
+                console.log("letter = ",letter);
+
+                this._letter = letter;
+                this.setUp();
             }
             /** フレームごとの描画処理 */
             p.draw = ()=> {
@@ -55,7 +70,7 @@ export class p5MainRd extends p5Base{
 
             this._p5 = p;
         });
-        
+
     }
 
 
@@ -69,7 +84,7 @@ export class p5MainRd extends p5Base{
             512
         );
         r.id('p5canvas');
-        
+
         if(Params.debug){
             r.elt.style.zIndex="999999";
             r.elt.style.position="absolute";
@@ -83,13 +98,15 @@ export class p5MainRd extends p5Base{
         this._p5.pixelDensity(1);
         this._p5.frameRate(3);
         this._p5.noSmooth();
-        
+
+        this.layoutText();
+
         //console.log(r.elt);
         this.canvasElement = r.elt;//scopeがよくわからない
         this.isInit=true;
-    
+
         p5MainRd.Instance = this;
-        
+
         //this._bg = 0;
         this._callback();
 
@@ -105,7 +122,21 @@ export class p5MainRd extends p5Base{
     }
 
     reset(){
-        
+
+    }
+
+    //textAlign(CENTER,CENTER)はフォントによって見た目とずれるので、
+    //実際のグリフの見た目のbboxを基準に中心(+ランダムオフセット)を計算しておく
+    private layoutText(){
+
+        const bounds = this._font.textBounds(this._letter, 0, 0, this._textSize) as {x:number,y:number,w:number,h:number};
+
+        const cx = this._width/2 + this._ox;
+        const cy = this._height/2 + this._oy;
+
+        this._textX = cx - (bounds.x + bounds.w/2);
+        this._textY = cy - (bounds.y + bounds.h/2);
+
     }
 
     draw(){
@@ -113,41 +144,44 @@ export class p5MainRd extends p5Base{
         if(!this.isInit)return;
 
         this._p5.blendMode(this._p5.BLEND);
-        this._p5.background(
-                this.debugBg/ParamsRd.rdParams.length*255,
-                0,
-                0,
-                255
-        );
-       
 
-        this._p5.fill(
-            this.debugIndex/ParamsRd.rdParams.length*255,
-            255,
-            0,
-            255          
-        );
-        this._p5.noStroke();
-
-            
-        let scale = 3;
-        this.drawFont(this._width,this._height,scale,this._ox,this._oy,0);
-
-        if(this._path.getStrokes().length >= 2){
-            this._p5.fill(
+        if(this._p5.frameCount%60<30){
+            this._p5.background(
                     this.debugBg/ParamsRd.rdParams.length*255,
                     0,
                     0,
                     255
             );
-            this.drawFont(this._width,this._height,scale,this._ox,this._oy,1);
+            this._p5.fill(
+                this.debugIndex/ParamsRd.rdParams.length*255,
+                255,
+                0,
+                255
+            );
+        }else{
+            this._p5.background(
+                    this.debugIndex/ParamsRd.rdParams.length*255,
+                    0,
+                    0,
+                    255
+            );
+            this._p5.fill(
+                this.debugBg/ParamsRd.rdParams.length*255,
+                255,
+                0,
+                255          
+            );
+
         }
+        this._p5.noStroke();
 
-        
-        TitleView.show();
+        this._p5.textFont(this._font);
+        this._p5.textSize(this._textSize);
+        this._p5.text(this._letter, this._textX, this._textY);
+
+
+        //TitleView.show();
         TitleView.setCenter(this._ox,this._oy);
-
-     
 
     }
 

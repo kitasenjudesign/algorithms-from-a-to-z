@@ -8,7 +8,7 @@ export class CAMain extends WorkBase {
 
        //this.init();
        super(InfoData.C);
-
+       this.showTitle();
     }
     
     init(){

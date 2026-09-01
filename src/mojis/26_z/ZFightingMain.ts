@@ -12,6 +12,7 @@ import { WorkBase } from '../00_base/WorkBase';
 import { InfoData } from '../../data/InfoData';
 import { Stage } from '../../data/Stage';
 import { TitleView } from '../../html/TitleView';
+import { Params } from '../../data/Params';
 
 
 export class ZFightingMain extends WorkBase{
@@ -44,7 +45,10 @@ export class ZFightingMain extends WorkBase{
     _rot2:THREE.Vector3 = new THREE.Vector3();
 
     constructor(){
+        
         super(InfoData.Z);
+        this.showTitle();
+
         //this.init();
     }
 
@@ -55,7 +59,8 @@ export class ZFightingMain extends WorkBase{
 
             this._path = path;
             this.makeLetter();
-            TitleView.setPosition(100,Stage.height-TitleView.getSize().height-100);
+            TitleView.setBasePosition(100,Stage.height-TitleView.getSize().height-100);
+            TitleView.setPosition();
         });
 
 
@@ -112,7 +117,7 @@ export class ZFightingMain extends WorkBase{
     }
 
     makeLetter(){
-        const txt = 'Z';
+        const txt = Params.alphabet || "Z";
 
         const loader = new FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.

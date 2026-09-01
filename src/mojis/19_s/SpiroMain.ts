@@ -11,16 +11,17 @@ export class SpiroMain extends WorkBase{
         //https://kitasenjudesign.com/tool/06_spiro/
 
         super(InfoData.S);
-        this.spiroP5 = new SpiroP5();
-        this.spiroP5.start(()=>{
-            
-        });
+        this.showTitle();
+
 
     }
 
     init(){
         
-
+        this.spiroP5 = new SpiroP5();
+        this.spiroP5.start(()=>{
+            
+        });
     }
 
 }

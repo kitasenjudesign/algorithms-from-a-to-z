@@ -22984,7 +22984,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("      uniform sampler2D textureLifeGame;\n      uniform sampler2D textureLifeGame2;\n      uniform sampler2D colorTex;\n      uniform sampler2D areaTex;\n      uniform sampler2D ruleTex;\n      \n      uniform sampler2D dotTex;\n      uniform sampler2D dotTex2;\n      uniform sampler2D dotTex3;\n      uniform sampler2D dotTex4;\n\n      uniform vec2 areaTexSize;\n      uniform vec2 planeSize;\n      uniform vec2 textureSize;\n      uniform float time;\n      varying vec2 vUv;\n\n      float div(in float a, in float b) {\n        return floor(a / b);\n      }\n\n      float modulo(in float a, in float b) {\n        return a - floor(a / b) * b;\n      }\n\n      vec2 convertFromPosCoordToTexCoord(in vec2 posCoord) {\n        float idx = posCoord.x + posCoord.y * planeSize.x;\n        return vec2(modulo(idx, textureSize.x), div(idx, textureSize.x));\n      }\n\n      float random(vec2 co){\n          return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n      }\n\n\n      void main() {\n        vec2 posCoord = vUv * planeSize;//planeSize=512とか\n        vec2 texCoord1 = convertFromPosCoordToTexCoord(floor(posCoord+vec2(-1.0,0.0)));\n        vec2 texCoord2 = convertFromPosCoordToTexCoord(floor(posCoord));\n        vec2 texCoord3 = convertFromPosCoordToTexCoord(floor(posCoord+vec2(1.0,0.0)));\n\n        vec3 rgb1 = texture2D(textureLifeGame, texCoord1 / textureSize).rgb;\n        vec3 rgb2 = texture2D(textureLifeGame, texCoord2 / textureSize).rgb;\n        vec3 rgb3 = texture2D(textureLifeGame, texCoord3 / textureSize).rgb;\n\n        vec3 rgb1_old = texture2D(textureLifeGame2, texCoord1 / textureSize).rgb;\n\n\n        vec3 op = vec3(0.1,0.1,0.1);//rgb.xyz;\n\n        vec3 col = texture2D(areaTex, vUv.xy).rgb;\n        \n        //op.xyz = mix(op.xyz,vec3(0.0,0.0,1.0),col.x);\n        \n        //dot----------------------------------------\n        \n        vec2 dotUV = vUv;\n        float rez = 256.0;//64.0;//128.0;\n        dotUV = fract(dotUV*rez);\n\n        float t = floor(time);\n        op.xyz=rgb2.rgb;\n\n          vec4 dotCol1 = texture2D(dotTex, dotUV);\n          vec4 dotCol2 = texture2D(dotTex2, dotUV);\n          vec4 dotCol3 = texture2D(dotTex3, dotUV);\n          vec4 dotCol4 = texture2D(dotTex4, dotUV);\n\n        if(rgb2.x>0.5){\n          if(rgb1.x>0.5 && rgb3.x<0.5){\n            op.x = dotCol3.x;// 110\n          }else if(rgb1.x<0.5 && rgb3.x>0.5){\n            op.x = dotCol1.x;// 011\n          }else if(rgb1.x>0.5 && rgb3.x>0.5){\n            op.x = dotCol2.x;// 111    \n          }else{\n            op.x = dotCol4.x;//010\n          }\n        }\n        \n        if(rgb2.y>0.5){\n          if(rgb1.y>0.5 && rgb3.y<0.5){\n            op.y = dotCol3.y;// 110\n          }else if(rgb1.y<0.5 && rgb3.y>0.5){\n            op.y = dotCol1.y;// 011\n          }else if(rgb1.y>0.5 && rgb3.y>0.5){\n            op.y = dotCol2.y;// 111    \n          }else{\n            op.y = dotCol4.y;//010\n          }\n        }        \n        if(rgb2.z>0.5){\n          if(rgb1.z>0.5 && rgb3.z<0.5){\n            op.z = dotCol3.z;// 110\n          }else if(rgb1.z<0.5 && rgb3.z>0.5){\n            op.z = dotCol1.z;// 011\n          }else if(rgb1.z>0.5 && rgb3.z>0.5){\n            op.z = dotCol2.z;// 111    \n          }else{\n            op.z = dotCol4.z;\n          }\n        }\n\n        float avv = (op.x+op.y+op.z)/3.0;\n        if(op.z>0.0) avv += 1.0;\n\n\n        gl_FragColor = vec4(avv,avv,avv,1.0);\n        //vec4(v > 0.5 ? vec3(0.0, 0.0, 1.0) : vec3(0.8, 0.8, 0.8), 1.0);\n      }");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("      uniform sampler2D textureLifeGame;\n      uniform sampler2D textureLifeGame2;\n      uniform sampler2D colorTex;\n      uniform sampler2D areaTex;\n      uniform sampler2D ruleTex;\n      \n      uniform sampler2D dotTex;\n      uniform sampler2D dotTex2;\n      uniform sampler2D dotTex3;\n      uniform sampler2D dotTex4;\n\n      uniform vec2 areaTexSize;\n      uniform vec2 planeSize;\n      uniform vec2 textureSize;\n      uniform float time;\n      varying vec2 vUv;\n\n      float div(in float a, in float b) {\n        return floor(a / b);\n      }\n\n      float modulo(in float a, in float b) {\n        return a - floor(a / b) * b;\n      }\n\n      vec2 convertFromPosCoordToTexCoord(in vec2 posCoord) {\n        float idx = posCoord.x + posCoord.y * planeSize.x;\n        return vec2(modulo(idx, textureSize.x), div(idx, textureSize.x));\n      }\n\n      float random(vec2 co){\n          return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n      }\n\n\n      void main() {\n        vec2 posCoord = vUv * planeSize;//planeSize=512とか\n        vec2 texCoord1 = convertFromPosCoordToTexCoord(floor(posCoord+vec2(-1.0,0.0)));\n        vec2 texCoord2 = convertFromPosCoordToTexCoord(floor(posCoord));\n        vec2 texCoord3 = convertFromPosCoordToTexCoord(floor(posCoord+vec2(1.0,0.0)));\n\n        vec3 rgb1 = texture2D(textureLifeGame, texCoord1 / textureSize).rgb;\n        vec3 rgb2 = texture2D(textureLifeGame, texCoord2 / textureSize).rgb;\n        vec3 rgb3 = texture2D(textureLifeGame, texCoord3 / textureSize).rgb;\n\n        vec4 ruleCol1 = texture2D(areaTex, texCoord1 / textureSize);//1,2,3\n        vec4 ruleCol2 = texture2D(areaTex, texCoord2 / textureSize);//1,2,3\n        vec4 ruleCol3 = texture2D(areaTex, texCoord3 / textureSize);//1,2,3\n\n\n        vec3 rgb1_old = texture2D(textureLifeGame2, texCoord1 / textureSize).rgb;\n\n\n        vec3 op = vec3(0.1,0.1,0.1);//rgb.xyz;\n\n        vec3 col = texture2D(areaTex, vUv.xy).rgb;\n        \n        //op.xyz = mix(op.xyz,vec3(0.0,0.0,1.0),col.x);\n        \n        //dot----------------------------------------\n        \n        vec2 dotUV = vUv;\n        float rez = 256.0;//64.0;//128.0;\n        dotUV = fract(dotUV*rez);\n\n        float t = floor(time);\n        op.xyz=rgb2.rgb;\n\n          vec4 dotCol1 = texture2D(dotTex, dotUV);\n          vec4 dotCol2 = texture2D(dotTex2, dotUV);\n          vec4 dotCol3 = texture2D(dotTex3, dotUV);\n          vec4 dotCol4 = texture2D(dotTex4, dotUV);\n\n          \n          //オンオフを表現している\n\n          //オンの時、自分が、文字部分かどうか\n          //文字部分だったら、隣の文字がどうかチェック\n          //文字部分じゃないなら、いまといっしょ\n\n          if(rgb2.x>0.5){\n            \n              float r1 = ruleCol1.y;\n              float r2 = ruleCol2.y;\n              float r3 = ruleCol3.y;\n              \n              if(r2<0.5){\n                r1 = 1.0 -r1;\n                r2 = 1.0 -r2;\n                r3 = 1.0 -r3;\n              }\n\n              if(rgb1.x*r1>0.5 && rgb3.x*r3<0.5){\n                op.x = dotCol3.x;// 110\n              }else if(rgb1.x*r1<0.5 && rgb3.x*r3>0.5){\n                op.x = dotCol1.x;// 011\n              }else if(rgb1.x*r1>0.5 && rgb3.x*r3>0.5){\n                op.x = dotCol2.x;// 111    \n              }else{\n                op.x = dotCol4.x;//010\n              }              \n\n          }\n\n\n        \n\n        \n        if(rgb2.y>0.5){\n          if(rgb1.y>0.5 && rgb3.y<0.5){\n            op.y = dotCol3.y;// 110\n          }else if(rgb1.y<0.5 && rgb3.y>0.5){\n            op.y = dotCol1.y;// 011\n          }else if(rgb1.y>0.5 && rgb3.y>0.5){\n            op.y = dotCol2.y;// 111    \n          }else{\n            op.y = dotCol4.y;//010\n          }\n        }        \n        if(rgb2.z>0.5){\n          if(rgb1.z>0.5 && rgb3.z<0.5){\n            op.z = dotCol3.z;// 110\n          }else if(rgb1.z<0.5 && rgb3.z>0.5){\n            op.z = dotCol1.z;// 011\n          }else if(rgb1.z>0.5 && rgb3.z>0.5){\n            op.z = dotCol2.z;// 111    \n          }else{\n            op.z = dotCol4.z;\n          }\n        }\n\n        float avv = (op.x+op.y+op.z)/3.0;\n        if(op.z>0.0) avv += 1.0;\n\n       \n\n        if(ruleCol2.y>0.5){\n          gl_FragColor = vec4(op.x, op.x, op.x,1.0);\n        }else{\n          gl_FragColor = vec4(op.x*0.5, op.x*0.5, op.x*0.5,1.0);\n        }\n        //gl_FragColor = vec4(avv,avv,avv,1.0);\n        //vec4(v > 0.5 ? vec3(0.0, 0.0, 1.0) : vec3(0.8, 0.8, 0.8), 1.0);\n      }");
 
 /***/ }),
 
@@ -23014,7 +23014,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("// \"uniform vec2 resolution\" is automatically added by GPUComputationRenderer as texture size\n      uniform vec2 planeSize;\n      uniform sampler2D ruleTex;\n      uniform sampler2D areaTex;\n      uniform vec2 ruleTexSize;\n      uniform float counter;\n      uniform float rule;\n      vec2 textureSize = resolution;\n\n\n      vec3 getRuleValue(vec3 ruleIndex, float keta){     \n        float value1 = step(0.5,\n          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.x/ruleTexSize.y)).r\n        );\n        float value2 = step(0.5,\n          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.y/ruleTexSize.y)).r\n        );\n        float value3 = step(0.5,\n          texture2D( ruleTex,vec2( keta/ruleTexSize.x,ruleIndex.z/ruleTexSize.y)).r\n        );\n        return vec3(value1,value2,value3);      \n      }\n\n      float random(vec2 co){\n          return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n      }\n\n      bool isInPosCoordRange(in vec2 texCoord) {\n        float v = texCoord.x + texCoord.y * textureSize.x;\n        return v <= (planeSize.x * planeSize.y);\n      }\n\n      float div(in float a, in float b) {\n        return floor(a / b);\n      }\n\n      float modulo(in float a, in float b) {\n        return a - floor(a / b) * b;\n      }\n\n      vec2 convertFromTexCoordToPosCoord(in vec2 texCoord) {\n        float idx = texCoord.x + texCoord.y * textureSize.x;\n        return vec2(modulo(idx, planeSize.x), div(idx, planeSize.x));\n      }\n\n      vec2 convertFromPosCoordToTexCoord(in vec2 posCoord) {\n        float idx = posCoord.x + posCoord.y * planeSize.x;\n        return vec2(modulo(idx, textureSize.x), div(idx, textureSize.x));\n      }\n\n      //0.0,0.1,0.2を0,1,2\n      vec3 status(in vec2 offset) {\n        vec2 posCoord = convertFromTexCoordToPosCoord(floor(gl_FragCoord.xy)) + offset;\n\n        // boundary condition\n        /*\n        posCoord.x = posCoord.x < 0.0 ? planeSize.x - 1.0 : posCoord.x;\n        posCoord.x = posCoord.x > planeSize.x ? 0.0 : posCoord.x;\n        posCoord.y = posCoord.y < 0.0 ? planeSize.y - 1.0 : posCoord.y;\n        posCoord.y = posCoord.y > planeSize.y ? 0.0 : posCoord.y;\n        */\n\n        posCoord.x = posCoord.x < 1.0 ? 1.0 : posCoord.x;\n        posCoord.y = posCoord.y < 1.0 ? 1.0 : posCoord.y;\n\n        posCoord.x = posCoord.x > planeSize.x-1.0 ? planeSize.x-1.0 : posCoord.x;\n        posCoord.y = posCoord.y > planeSize.y-1.0 ? planeSize.y-1.0 : posCoord.y;\n\n\n        vec2 texCoord = convertFromPosCoordToTexCoord(posCoord) + fract(gl_FragCoord.xy);\n        \n        //0.1,0.2,0.3を1.0,2.0,3.0にする\n        vec3 nn = step(\n          vec3(0.5,0.5,0.5),\n          texture2D(textureLifeGame, texCoord / textureSize.xy).xyz\n        );\n        \n        return nn; \n      }\n\n      //int getLive(in vec2 offset, int nn, int maxStatus){\n      //  return int( status(offset,maxStatus) == nn );\n      //}\n\n\n\n\n      void main() {\n        // checks whether current position is used or not\n        if (!isInPosCoordRange(floor(gl_FragCoord.xy))) {\n          gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);\n          return;\n        }\n\n        vec2 ratio = gl_FragCoord.xy/planeSize.xy;\n        \n\n        int neighbor = 0;\n\n        float dir = 1.0;//mix(1.0,-1.0,step(0.5,fract(counter*0.05 + ratio.x)));\n\n        //if(ratio.x<0.5) dir = 1.0;\n\n        vec3 aa = status(vec2(-1.0,dir*1.0));\n        vec3 bb = status(vec2(0.0, dir*1.0));\n        vec3 cc = status(vec2(1.0, dir*1.0));\n\n\n        vec3 center = status(vec2(0.0,0.0));\n\n        vec4 areaColor = texture2D( areaTex, ratio );\n        vec3 rule1 =  floor( areaColor.xyz * 256.0 );\n        //184.0;//floor( texture2D( ruleTex, ratio ).y * 256.0-0.0001 );\n        /*\n        if(rule1.x>100.0){\n          aa = status(vec2(dir*1.0, -1.0));\n          bb = status(vec2(dir*1.0, 0.0));\n          cc = status(vec2(dir*1.0, 1.0));   \n        }*/\n\n        //184.0 - floor(ratio.y*10.0);\n\n        if(ratio.y<1.0-1.0/textureSize.y){\n            \n            vec3 ruleA = getRuleValue(rule1,0.0);\n            vec3 ruleB = getRuleValue(rule1,1.0);\n            vec3 ruleC = getRuleValue(rule1,2.0);\n            vec3 ruleD = getRuleValue(rule1,2.0);\n            vec3 ruleE = getRuleValue(rule1,3.0);\n            vec3 ruleF = getRuleValue(rule1,4.0);\n            vec3 ruleG = getRuleValue(rule1,5.0);\n            vec3 ruleH = getRuleValue(rule1,6.0);\n            \n            if(aa.x==1.0 && bb.x==1.0 && cc.x==1.0) center.x = ruleA.x;\n            if(aa.x==1.0 && bb.x==1.0 && cc.x==0.0) center.x = ruleB.x;\n            if(aa.x==1.0 && bb.x==0.0 && cc.x==1.0) center.x = ruleC.x;\n            if(aa.x==1.0 && bb.x==0.0 && cc.x==0.0) center.x = ruleD.x;\n            if(aa.x==0.0 && bb.x==1.0 && cc.x==1.0) center.x = ruleE.x;\n            if(aa.x==0.0 && bb.x==1.0 && cc.x==0.0) center.x = ruleF.x;\n            if(aa.x==0.0 && bb.x==0.0 && cc.x==1.0) center.x = ruleG.x;\n            if(aa.x==0.0 && bb.x==0.0 && cc.x==0.0) center.x = ruleH.x;\n\n            if(aa.y==1.0 && bb.y==1.0 && cc.y==1.0) center.y = ruleA.y;\n            if(aa.y==1.0 && bb.y==1.0 && cc.y==0.0) center.y = ruleB.y;\n            if(aa.y==1.0 && bb.y==0.0 && cc.y==1.0) center.y = ruleC.y;\n            if(aa.y==1.0 && bb.y==0.0 && cc.y==0.0) center.y = ruleD.y;\n            if(aa.y==0.0 && bb.y==1.0 && cc.y==1.0) center.y = ruleE.y;\n            if(aa.y==0.0 && bb.y==1.0 && cc.y==0.0) center.y = ruleF.y;\n            if(aa.y==0.0 && bb.y==0.0 && cc.y==1.0) center.y = ruleG.y;\n            if(aa.y==0.0 && bb.y==0.0 && cc.y==0.0) center.y = ruleH.y;\n\n            if(aa.z==1.0 && bb.z==1.0 && cc.z==1.0) center.z = ruleA.z;\n            if(aa.z==1.0 && bb.z==1.0 && cc.z==0.0) center.z = ruleB.z;\n            if(aa.z==1.0 && bb.z==0.0 && cc.z==1.0) center.z = ruleC.z;\n            if(aa.z==1.0 && bb.z==0.0 && cc.z==0.0) center.z = ruleD.z;\n            if(aa.z==0.0 && bb.z==1.0 && cc.z==1.0) center.z = ruleE.z;\n            if(aa.z==0.0 && bb.z==1.0 && cc.z==0.0) center.z = ruleF.z;\n            if(aa.z==0.0 && bb.z==0.0 && cc.z==1.0) center.z = ruleG.z;\n            if(aa.z==0.0 && bb.z==0.0 && cc.z==0.0) center.z = ruleH.z;\n        }\n         \n\n        vec4 oo = vec4(1.0,0.0,1.0,1.0);\n       \n\n        oo.xyz = center.xyz;//ここ\n        //oo.x += blink;\n\n        gl_FragColor = oo;\n         \n      }");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("// \"uniform vec2 resolution\" is automatically added by GPUComputationRenderer as texture size\n      uniform vec2 planeSize;\n      uniform sampler2D areaTex;\n      uniform float counter;\n      uniform float rule;\n      vec2 textureSize = resolution;\n\n\n      //ウルフラムコード(0〜255)から、keta桁目のビットを取り出す。\n      //ruleTexの参照(row=ruleIndex, col=keta のテーブル引き)をやめ、2進数への変換を直接計算する。\n      //RuleTex.tsは8桁の2進数文字列を先頭(MSB=パターン111)から順にketa列へ詰めていたため、\n      //keta=0が最上位ビット(bit7)、keta=7が最下位ビット(bit0)に対応する\n      //(x,y,z)は3チャンネル分のルール番号(areaTexのRGBそれぞれに対応)をまとめて処理する\n      vec3 getRuleValue(vec3 ruleIndex, float keta){\n        float p = pow(2.0, 7.0 - keta);\n        return mod(floor(ruleIndex / p), 2.0);\n      }\n\n      float random(vec2 co){\n          return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n      }\n\n      bool isInPosCoordRange(in vec2 texCoord) {\n        float v = texCoord.x + texCoord.y * textureSize.x;\n        return v <= (planeSize.x * planeSize.y);\n      }\n\n      float div(in float a, in float b) {\n        return floor(a / b);\n      }\n\n      float modulo(in float a, in float b) {\n        return a - floor(a / b) * b;\n      }\n\n      vec2 convertFromTexCoordToPosCoord(in vec2 texCoord) {\n        float idx = texCoord.x + texCoord.y * textureSize.x;\n        return vec2(modulo(idx, planeSize.x), div(idx, planeSize.x));\n      }\n\n      vec2 convertFromPosCoordToTexCoord(in vec2 posCoord) {\n        float idx = posCoord.x + posCoord.y * planeSize.x;\n        return vec2(modulo(idx, textureSize.x), div(idx, textureSize.x));\n      }\n\n      //0.0,0.1,0.2を0,1,2\n      vec3 status(in vec2 offset) {\n        vec2 posCoord = convertFromTexCoordToPosCoord(floor(gl_FragCoord.xy)) + offset;\n\n        // boundary condition\n        /*\n        posCoord.x = posCoord.x < 0.0 ? planeSize.x - 1.0 : posCoord.x;\n        posCoord.x = posCoord.x > planeSize.x ? 0.0 : posCoord.x;\n        posCoord.y = posCoord.y < 0.0 ? planeSize.y - 1.0 : posCoord.y;\n        posCoord.y = posCoord.y > planeSize.y ? 0.0 : posCoord.y;\n        */\n\n        posCoord.x = posCoord.x < 1.0 ? 1.0 : posCoord.x;\n        posCoord.y = posCoord.y < 1.0 ? 1.0 : posCoord.y;\n\n        posCoord.x = posCoord.x > planeSize.x-1.0 ? planeSize.x-1.0 : posCoord.x;\n        posCoord.y = posCoord.y > planeSize.y-1.0 ? planeSize.y-1.0 : posCoord.y;\n\n\n        vec2 texCoord = convertFromPosCoordToTexCoord(posCoord) + fract(gl_FragCoord.xy);\n        \n        //0.1,0.2,0.3を1.0,2.0,3.0にする\n        vec3 nn = step(\n          vec3(0.5,0.5,0.5),\n          texture2D(textureLifeGame, texCoord / textureSize.xy).xyz\n        );\n        \n        return nn; \n      }\n\n      //int getLive(in vec2 offset, int nn, int maxStatus){\n      //  return int( status(offset,maxStatus) == nn );\n      //}\n\n\n\n\n      void main() {\n        // checks whether current position is used or not\n        if (!isInPosCoordRange(floor(gl_FragCoord.xy))) {\n          gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);\n          return;\n        }\n\n        vec2 ratio = gl_FragCoord.xy/planeSize.xy;\n        \n\n        int neighbor = 0;\n\n        float dir = 1.0;//mix(1.0,-1.0,step(0.5,fract(counter*0.05 + ratio.x)));\n\n        //if(ratio.x<0.5) dir = 1.0;\n\n        vec3 aa = status(vec2(-1.0,dir*1.0));\n        vec3 bb = status(vec2(0.0, dir*1.0));\n        vec3 cc = status(vec2(1.0, dir*1.0));\n\n\n        vec3 center = status(vec2(0.0,0.0));\n\n        vec4 areaColor = texture2D( areaTex, ratio );\n        vec3 rule1 =  floor( areaColor.xyz * 256.0 );\n        //184.0;//floor( texture2D( ruleTex, ratio ).y * 256.0-0.0001 );\n        /*\n        if(rule1.x>100.0){\n          aa = status(vec2(dir*1.0, -1.0));\n          bb = status(vec2(dir*1.0, 0.0));\n          cc = status(vec2(dir*1.0, 1.0));   \n        }*/\n\n        //184.0 - floor(ratio.y*10.0);\n\n        if(ratio.y<1.0-1.0/textureSize.y){\n            \n            vec3 ruleA = getRuleValue(rule1,0.0);\n            vec3 ruleB = getRuleValue(rule1,1.0);\n            vec3 ruleC = getRuleValue(rule1,2.0);\n            vec3 ruleD = getRuleValue(rule1,3.0);\n            vec3 ruleE = getRuleValue(rule1,4.0);\n            vec3 ruleF = getRuleValue(rule1,5.0);\n            vec3 ruleG = getRuleValue(rule1,6.0);\n            vec3 ruleH = getRuleValue(rule1,7.0);\n            \n            if(aa.x==1.0 && bb.x==1.0 && cc.x==1.0) center.x = ruleA.x;\n            if(aa.x==1.0 && bb.x==1.0 && cc.x==0.0) center.x = ruleB.x;\n            if(aa.x==1.0 && bb.x==0.0 && cc.x==1.0) center.x = ruleC.x;\n            if(aa.x==1.0 && bb.x==0.0 && cc.x==0.0) center.x = ruleD.x;\n            if(aa.x==0.0 && bb.x==1.0 && cc.x==1.0) center.x = ruleE.x;\n            if(aa.x==0.0 && bb.x==1.0 && cc.x==0.0) center.x = ruleF.x;\n            if(aa.x==0.0 && bb.x==0.0 && cc.x==1.0) center.x = ruleG.x;\n            if(aa.x==0.0 && bb.x==0.0 && cc.x==0.0) center.x = ruleH.x;\n\n            if(aa.y==1.0 && bb.y==1.0 && cc.y==1.0) center.y = ruleA.y;\n            if(aa.y==1.0 && bb.y==1.0 && cc.y==0.0) center.y = ruleB.y;\n            if(aa.y==1.0 && bb.y==0.0 && cc.y==1.0) center.y = ruleC.y;\n            if(aa.y==1.0 && bb.y==0.0 && cc.y==0.0) center.y = ruleD.y;\n            if(aa.y==0.0 && bb.y==1.0 && cc.y==1.0) center.y = ruleE.y;\n            if(aa.y==0.0 && bb.y==1.0 && cc.y==0.0) center.y = ruleF.y;\n            if(aa.y==0.0 && bb.y==0.0 && cc.y==1.0) center.y = ruleG.y;\n            if(aa.y==0.0 && bb.y==0.0 && cc.y==0.0) center.y = ruleH.y;\n\n            if(aa.z==1.0 && bb.z==1.0 && cc.z==1.0) center.z = ruleA.z;\n            if(aa.z==1.0 && bb.z==1.0 && cc.z==0.0) center.z = ruleB.z;\n            if(aa.z==1.0 && bb.z==0.0 && cc.z==1.0) center.z = ruleC.z;\n            if(aa.z==1.0 && bb.z==0.0 && cc.z==0.0) center.z = ruleD.z;\n            if(aa.z==0.0 && bb.z==1.0 && cc.z==1.0) center.z = ruleE.z;\n            if(aa.z==0.0 && bb.z==1.0 && cc.z==0.0) center.z = ruleF.z;\n            if(aa.z==0.0 && bb.z==0.0 && cc.z==1.0) center.z = ruleG.z;\n            if(aa.z==0.0 && bb.z==0.0 && cc.z==0.0) center.z = ruleH.z;\n        }\n         \n\n        vec4 oo = vec4(1.0,0.0,1.0,1.0);\n       \n\n        oo.xyz = center.xyz;//ここ\n        //oo.x += blink;\n\n        gl_FragColor = oo;\n         \n      }");
 
 /***/ }),
 
@@ -23284,7 +23284,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("#define PHONG\n#define USE_MAP\n#define USE_UV\n#define USE_ENVMAP\n\nuniform vec3 diffuse;\nuniform vec3 emissive;\nuniform vec3 specular;\nuniform float shininess;\nuniform float opacity;\nuniform float counter;\nuniform float colorId;\nuniform vec3 offsetCol;\nuniform vec3 colDisplace;\nuniform sampler2D tex1;\nuniform sampler2D tex2;\nuniform sampler2D ruleTex;\n\nuniform samplerCube envMap2;\n\nvarying vec3 vPos;\n\n#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\n#include <color_pars_fragment>\n#include <uv_pars_fragment>\n#include <uv2_pars_fragment>\n#include <map_pars_fragment>\n#include <alphamap_pars_fragment>\n#include <alphatest_pars_fragment>\n#include <aomap_pars_fragment>\n#include <lightmap_pars_fragment>\n#include <emissivemap_pars_fragment>\n#include <envmap_common_pars_fragment>\n#include <envmap_pars_fragment>\n#include <cube_uv_reflection_fragment>\n#include <fog_pars_fragment>\n#include <bsdfs>\n#include <lights_pars_begin>\n#include <normal_pars_fragment>\n#include <lights_phong_pars_fragment>\n#include <shadowmap_pars_fragment>\n#include <bumpmap_pars_fragment>\n#include <normalmap_pars_fragment>\n#include <specularmap_pars_fragment>\n#include <logdepthbuf_pars_fragment>\n#include <clipping_planes_pars_fragment>\n\nvec3 hueShiftYIQ(vec3 color, float hueShift){\n    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);\n    const vec3  kRGBToI     = vec3 (0.596, -0.275, -0.321);\n    const vec3  kRGBToQ     = vec3 (0.212, -0.523, 0.311);\n\n    const vec3  kYIQToR   = vec3 (1.0, 0.956, 0.621);\n    const vec3  kYIQToG   = vec3 (1.0, -0.272, -0.647);\n    const vec3  kYIQToB   = vec3 (1.0, -1.107, 1.704);\n\n    float   YPrime  = dot (color, kRGBToYPrime);\n    float   I      = dot (color, kRGBToI);\n    float   Q      = dot (color, kRGBToQ);\n\n    // Calculate the hue and chroma\n    float   hue     = atan (Q, I);\n    float   chroma  = sqrt (I * I + Q * Q);\n\n    hue += hueShift;\n\n    // Convert back to YIQ\n    Q = chroma * sin (hue);\n    I = chroma * cos (hue);\n\n    // Convert back to RGB\n    vec3    yIQ   = vec3 (YPrime, I, Q);\n    color.r = dot (yIQ, kYIQToR);\n    color.g = dot (yIQ, kYIQToG);\n    color.b = dot (yIQ, kYIQToB);\n\n    return color;\n}\n\nfloat random(vec2 co){\n    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\nfloat decode16bit(vec2 v) {\n    return dot(v, vec2(255.0 / 256.0, 1.0 / 256.0));\n}\n\nvec2 decode(vec4 encoded) {\n    return vec2(decode16bit(encoded.rg), decode16bit(encoded.ba));\n}\n\nvec4 tex(vec2 uv){\n    vec4 col =  texture2D( map, vUv + uv / vec2(512.0,512.0) );\n    vec2 nn = decode(col).xy;\n\tnn.y = smoothstep(0.15,0.2,nn.y);\n    return vec4(nn.y,nn.y,nn.y,1.0);\n}\n\nvoid main() {\n\t#include <clipping_planes_fragment>\n\n\tvec4 diffuseColor = vec4( diffuse, opacity );\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\n\t\n\tvec3 totalEmissiveRadiance = emissive;// + \n\n\t#include <logdepthbuf_fragment>\n\n\t//#include <map_fragment>\n\t\n    vec4 sampledDiffuseColor = texture2D( map, vUv );\n\n\tvec2 d = decode(sampledDiffuseColor);\n\t//d.x=1.0-d.x;\n\t//d.y=1.0-d.y;\n\n\t//float yy = decode(sampledDiffuseColor).y;\n\t//yy=smoothstep(0.3,0.6,yy);\n\t//diffuseColor.rgb = vec3(yy,yy,yy);\n\n\n\tfloat dx = tex( vec2( 0.0, 0.0) ).x - tex( vec2(-1.0,0.0) ).x;\n\tfloat dy = tex( vec2( 0.0, 0.0) ).x - tex( vec2(0.0,-1.0) ).x;\n\t//float ddx = tex( vec2( 1.0, 0.0) ).x - tex( vec2(-1.0,0.0) ).x;\n\t//float ddy = tex( vec2( 0.0, 1.0) ).x - tex( vec2(0.0,-1.0) ).x;\n\t\n\n\tfloat amp = 0.2;//length(vec2(dx,dy));\n\tfloat rad = atan(dy,dx);\n\n\n\n\t//color\n\tvec4 oCol = texture2D( tex1, vec2(smoothstep(0.1,0.3,fract(d.y*1.0) ),0.5));\n\toCol.r = smoothstep(0.20,0.24,fract(d.y*1.0) );\n\toCol.g = smoothstep(0.20,0.23,fract(d.y*1.0) );\n\toCol.b = smoothstep(0.20,0.22,fract(d.y*1.0) );\n\n\t//vec2(0.5+0.5*sin(rad+1.5),0.5) );\n\tvec3 bgColor = mix(\n\t\tvec3(0.9,0.95,1.0),\n\t\tvec3(0.8,0.9,0.95),\n\t\t2.0*length(vUv-vec2(0.5,0.5))\n\t);\n\n\t/*\n\tdiffuseColor.rgb = mix(\n\t\t mix(bgColor,vec3(0.8, 0.6, 1.0),smoothstep(0.1,0.2,d.y)),\n\t\t //mix(vec3(1.0,1.0,1.0),vec3(1.0, 1.0, 0.75),smoothstep(0.2,0.3,d.y)),\n\t\t hueShiftYIQ(oCol.rgb,vUv.x+vUv.y*3.14/2.0),\n\t\t //oCol.rgb,\n\t\t max(dx,dy)*2.0\n\t);*/\n\n\tdiffuseColor.r=oCol.r+dy*0.5;//-dx*0.5;\n\tdiffuseColor.g=oCol.g+dy*0.5;//-dy*5.0-dx*5.0;\n\tdiffuseColor.b=oCol.b+dy*0.5;//-dy*5.5-dx*5.5;\n\n\n\t//diffuseColor.rgb *= texture2D(ruleTex,vUv).rgb + vec3(0.5,0.5,0.5);\n\n\t//diffuseColor.rgb \n\t//= diffuseColor.rgb * smoothstep(0.1,0.4,tex(vec2(0.0,0.0)).rgb);\n\n\n\t//diffuseColor.rgb = bgColor;\n\t/*\n\tdiffuseColor.rgb = hueShiftYIQ(\n\t\tdiffuseColor.rgb + dx + dy,\n\t\tcolorId*3.1415*6.0\n\t);*/\n\n\t//vec4 hoge = diffuseColor;\n\n\t/*\n\t*/\n\n\t//normal.rgb += vec3(col.r,col.g,col.b);\n\t//normal = normalize(normal);\n\n//https://github.com/mrdoob/three.js/tree/dev/src/renderers/shaders/ShaderChunk\n\n\n\t#include <color_fragment>\n\t#include <alphamap_fragment>\n\t#include <alphatest_fragment>\n\t#include <specularmap_fragment>\n\t#include <normal_fragment_begin>\n\n\n\n\t//diffuseColor.x = fract(dx*5.0);\n\t//diffuseColor.y = fract(dy*5.0);\n\n\t//normal.y = fract(dy*5.0);\n\t//normal.z = 1.0;\n\t//normal = normalize(normal);\n\t//normal.z = 1.0;\n\t//normal = normalize( diffuseColor.rgb );\n\t\n\n\t#include <normal_fragment_maps>\n\t#include <emissivemap_fragment>\n\t#include <lights_phong_fragment>\n\t#include <lights_fragment_begin>\n\t#include <lights_fragment_maps>\n\t#include <lights_fragment_end>\n\t#include <aomap_fragment>\n\t\n\tvec3 outgoingLight = \n\treflectedLight.directDiffuse +\n\treflectedLight.indirectDiffuse +\n\treflectedLight.directSpecular +\n\treflectedLight.indirectSpecular +\n\ttotalEmissiveRadiance;\n\t\t\n\t\t//outgoingLight = diffuseColor.rgb;\n\t\t//outgoingLight.x = 0.0;\n\t//outgoingLight.xyz += (0.02*(random(vUv.xy)-0.5));\n\n\t#include <envmap_fragment>\n\t#include <output_fragment>\n\t#include <tonemapping_fragment>\n\t#include <encodings_fragment>\n\t#include <fog_fragment>\n\t#include <premultiplied_alpha_fragment>\n\t#include <dithering_fragment>\n\n}");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("#define PHONG\n#define USE_MAP\n#define USE_UV\n#define USE_ENVMAP\n\nuniform vec3 diffuse;\nuniform vec3 emissive;\nuniform vec3 specular;\nuniform float shininess;\nuniform float opacity;\nuniform float counter;\nuniform float colorId;\nuniform vec3 offsetCol;\nuniform vec3 colDisplace;\nuniform sampler2D tex1;\nuniform sampler2D tex2;\nuniform sampler2D ruleTex;\n\nuniform samplerCube envMap2;\n\nvarying vec3 vPos;\n\n#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\n#include <color_pars_fragment>\n#include <uv_pars_fragment>\n#include <uv2_pars_fragment>\n#include <map_pars_fragment>\n#include <alphamap_pars_fragment>\n#include <alphatest_pars_fragment>\n#include <aomap_pars_fragment>\n#include <lightmap_pars_fragment>\n#include <emissivemap_pars_fragment>\n#include <envmap_common_pars_fragment>\n#include <envmap_pars_fragment>\n#include <cube_uv_reflection_fragment>\n#include <fog_pars_fragment>\n#include <bsdfs>\n#include <lights_pars_begin>\n#include <normal_pars_fragment>\n#include <lights_phong_pars_fragment>\n#include <shadowmap_pars_fragment>\n#include <bumpmap_pars_fragment>\n#include <normalmap_pars_fragment>\n#include <specularmap_pars_fragment>\n#include <logdepthbuf_pars_fragment>\n#include <clipping_planes_pars_fragment>\n\nvec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}\nvec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}\n\nfloat snoise(vec3 v){ \n  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;\n  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);\n\n// First corner\n  vec3 i  = floor(v + dot(v, C.yyy) );\n  vec3 x0 =   v - i + dot(i, C.xxx) ;\n\n// Other corners\n  vec3 g = step(x0.yzx, x0.xyz);\n  vec3 l = 1.0 - g;\n  vec3 i1 = min( g.xyz, l.zxy );\n  vec3 i2 = max( g.xyz, l.zxy );\n\n  //  x0 = x0 - 0. + 0.0 * C \n  vec3 x1 = x0 - i1 + 1.0 * C.xxx;\n  vec3 x2 = x0 - i2 + 2.0 * C.xxx;\n  vec3 x3 = x0 - 1. + 3.0 * C.xxx;\n\n// Permutations\n  i = mod(i, 289.0 ); \n  vec4 p = permute( permute( permute( \n             i.z + vec4(0.0, i1.z, i2.z, 1.0 ))\n           + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) \n           + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));\n\n// Gradients\n// ( N*N points uniformly over a square, mapped onto an octahedron.)\n  float n_ = 1.0/7.0; // N=7\n  vec3  ns = n_ * D.wyz - D.xzx;\n\n  vec4 j = p - 49.0 * floor(p * ns.z *ns.z);  //  mod(p,N*N)\n\n  vec4 x_ = floor(j * ns.z);\n  vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)\n\n  vec4 x = x_ *ns.x + ns.yyyy;\n  vec4 y = y_ *ns.x + ns.yyyy;\n  vec4 h = 1.0 - abs(x) - abs(y);\n\n  vec4 b0 = vec4( x.xy, y.xy );\n  vec4 b1 = vec4( x.zw, y.zw );\n\n  vec4 s0 = floor(b0)*2.0 + 1.0;\n  vec4 s1 = floor(b1)*2.0 + 1.0;\n  vec4 sh = -step(h, vec4(0.0));\n\n  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;\n  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;\n\n  vec3 p0 = vec3(a0.xy,h.x);\n  vec3 p1 = vec3(a0.zw,h.y);\n  vec3 p2 = vec3(a1.xy,h.z);\n  vec3 p3 = vec3(a1.zw,h.w);\n\n//Normalise gradients\n  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));\n  p0 *= norm.x;\n  p1 *= norm.y;\n  p2 *= norm.z;\n  p3 *= norm.w;\n\n// Mix final noise value\n  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);\n  m = m * m;\n  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), \n                                dot(p2,x2), dot(p3,x3) ) );\n}\n\n\nvec3 hueShiftYIQ(vec3 color, float hueShift){\n    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);\n    const vec3  kRGBToI     = vec3 (0.596, -0.275, -0.321);\n    const vec3  kRGBToQ     = vec3 (0.212, -0.523, 0.311);\n\n    const vec3  kYIQToR   = vec3 (1.0, 0.956, 0.621);\n    const vec3  kYIQToG   = vec3 (1.0, -0.272, -0.647);\n    const vec3  kYIQToB   = vec3 (1.0, -1.107, 1.704);\n\n    float   YPrime  = dot (color, kRGBToYPrime);\n    float   I      = dot (color, kRGBToI);\n    float   Q      = dot (color, kRGBToQ);\n\n    // Calculate the hue and chroma\n    float   hue     = atan (Q, I);\n    float   chroma  = sqrt (I * I + Q * Q);\n\n    hue += hueShift;\n\n    // Convert back to YIQ\n    Q = chroma * sin (hue);\n    I = chroma * cos (hue);\n\n    // Convert back to RGB\n    vec3    yIQ   = vec3 (YPrime, I, Q);\n    color.r = dot (yIQ, kYIQToR);\n    color.g = dot (yIQ, kYIQToG);\n    color.b = dot (yIQ, kYIQToB);\n\n    return color;\n}\n\nfloat random(vec2 co){\n    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\nfloat decode16bit(vec2 v) {\n    return dot(v, vec2(255.0 / 256.0, 1.0 / 256.0));\n}\n\nvec2 decode(vec4 encoded) {\n    return vec2(decode16bit(encoded.rg), decode16bit(encoded.ba));\n}\n\nvec4 tex(vec2 uv){\n    vec4 col =  texture2D( map, vUv + uv / vec2(512.0,512.0) );\n    vec2 nn = decode(col).xy;\n\tnn.y = smoothstep(0.15,0.2,nn.y);\n    return vec4(nn.y,nn.y,nn.y,1.0);\n}\n\nvoid main() {\n\t#include <clipping_planes_fragment>\n\n\tvec4 diffuseColor = vec4( diffuse, opacity );\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\n\t\n\tvec3 totalEmissiveRadiance = emissive;// + \n\n\t#include <logdepthbuf_fragment>\n\n\t//#include <map_fragment>\n\t\n    vec4 sampledDiffuseColor = texture2D( map, vUv );\n\n\tvec2 d = decode(sampledDiffuseColor);\n\t//d.x=1.0-d.x;\n\t//d.y=1.0-d.y;\n\n\t//float yy = decode(sampledDiffuseColor).y;\n\t//yy=smoothstep(0.3,0.6,yy);\n\t//diffuseColor.rgb = vec3(yy,yy,yy);\n\n\n\tfloat dx = tex( vec2( 0.0, 0.0) ).x - tex( vec2(-1.0,0.0) ).x;\n\tfloat dy = tex( vec2( 0.0, 0.0) ).x - tex( vec2(0.0,-1.0) ).x;\n\t//float ddx = tex( vec2( 1.0, 0.0) ).x - tex( vec2(-1.0,0.0) ).x;\n\t//float ddy = tex( vec2( 0.0, 1.0) ).x - tex( vec2(0.0,-1.0) ).x;\n\t\n\n\tfloat amp = 0.2;//length(vec2(dx,dy));\n\tfloat rad = atan(dy,dx);\n\n\n\n\t//color\n\tvec4 oCol = texture2D( tex1, vec2(smoothstep(0.29,0.3,fract(d.y*1.0) ),0.5));\n\toCol.r = step(0.15+0.1*snoise(vec3(floor(counter*2.0)/10.0,vUv.x*2.5,vUv.y*2.5)),d.y);\n\n\t//oCol.r = step(0.11+0.04*sin(vUv.x*100.0 + vUv.y*100.0 + counter*48.0),d.y);\n\toCol.g = oCol.r;\n\toCol.b = oCol.r;\n\n\t//oCol.r = smoothstep(0.20,0.24,fract(d.y*1.0) );\n\t//oCol.g = smoothstep(0.20,0.23,fract(d.y*1.0) );\n\t//oCol.b = smoothstep(0.20,0.22,fract(d.y*1.0) );\n\n\t//vec2(0.5+0.5*sin(rad+1.5),0.5) );\n\tvec3 bgColor = mix(\n\t\tvec3(0.9,0.95,1.0),\n\t\tvec3(0.8,0.9,0.95),\n\t\t2.0*length(vUv-vec2(0.5,0.5))\n\t);\n\n\t/*\n\tdiffuseColor.rgb = mix(\n\t\t mix(bgColor,vec3(0.8, 0.6, 1.0),smoothstep(0.1,0.2,d.y)),\n\t\t //mix(vec3(1.0,1.0,1.0),vec3(1.0, 1.0, 0.75),smoothstep(0.2,0.3,d.y)),\n\t\t hueShiftYIQ(oCol.rgb,vUv.x+vUv.y*3.14/2.0),\n\t\t //oCol.rgb,\n\t\t max(dx,dy)*2.0\n\t);*/\n\n\tdiffuseColor.r=oCol.r;//+dy*0.5;//-dx*0.5;\n\tdiffuseColor.g=oCol.g;//+dy*0.5;//-dy*5.0-dx*5.0;\n\tdiffuseColor.b=oCol.b;//+dy*0.5;//-dy*5.5-dx*5.5;\n\n\n\t//diffuseColor.rgb *= texture2D(ruleTex,vUv).rgb + vec3(0.5,0.5,0.5);\n\n\t//diffuseColor.rgb \n\t//= diffuseColor.rgb * smoothstep(0.1,0.4,tex(vec2(0.0,0.0)).rgb);\n\n\n\t//diffuseColor.rgb = bgColor;\n\t/*\n\tdiffuseColor.rgb = hueShiftYIQ(\n\t\tdiffuseColor.rgb + dx + dy,\n\t\tcolorId*3.1415*6.0\n\t);*/\n\n\t//vec4 hoge = diffuseColor;\n\n\t/*\n\t*/\n\n\t//normal.rgb += vec3(col.r,col.g,col.b);\n\t//normal = normalize(normal);\n\n//https://github.com/mrdoob/three.js/tree/dev/src/renderers/shaders/ShaderChunk\n\n\n\t#include <color_fragment>\n\t#include <alphamap_fragment>\n\t#include <alphatest_fragment>\n\t#include <specularmap_fragment>\n\t#include <normal_fragment_begin>\n\n\n\n\t//diffuseColor.x = fract(dx*5.0);\n\t//diffuseColor.y = fract(dy*5.0);\n\n\t//normal.y = fract(dy*5.0);\n\t//normal.z = 1.0;\n\t//normal = normalize(normal);\n\t//normal.z = 1.0;\n\t//normal = normalize( diffuseColor.rgb );\n\t\n\n\t#include <normal_fragment_maps>\n\t#include <emissivemap_fragment>\n\t#include <lights_phong_fragment>\n\t#include <lights_fragment_begin>\n\t#include <lights_fragment_maps>\n\t#include <lights_fragment_end>\n\t#include <aomap_fragment>\n\t\n\tvec3 outgoingLight = \n\treflectedLight.directDiffuse +\n\treflectedLight.indirectDiffuse +\n\treflectedLight.directSpecular +\n\treflectedLight.indirectSpecular +\n\ttotalEmissiveRadiance;\n\t\t\n\t\t//outgoingLight = diffuseColor.rgb;\n\t\t//outgoingLight.x = 0.0;\n\t//outgoingLight.xyz += (0.02*(random(vUv.xy)-0.5));\n\n\t#include <envmap_fragment>\n\t#include <output_fragment>\n\t#include <tonemapping_fragment>\n\t#include <encodings_fragment>\n\t#include <fog_fragment>\n\t#include <premultiplied_alpha_fragment>\n\t#include <dithering_fragment>\n\n}");
 
 /***/ }),
 
@@ -23314,7 +23314,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("// shader.frag\nprecision mediump float;\n\nuniform vec2 u_resolution;\nuniform vec2 u_lines[200]; // 最大100本の線 (start, end)\nuniform int u_lineCount;\nuniform float u_frameCount;\n\nfloat sdSegment(vec2 p, vec2 a, vec2 b, float rr) {\n  vec2 pa = p - a;\n  vec2 ba = b - a;\n  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);\n  \n  float dist = length(pa - ba * h);\n\n  float dx = abs(pa.x - (ba * h).x );\n  float dy = abs(pa.y - (ba * h).y );\n\n  // マンハッタン距離でのSDF\n  float manhattanDist = dx + dy;\n  \n  //ちぇび\n  float chabi = max (abs(dx), abs(dy));\n    dist = mix(dist,chabi,rr);//manhattanDist;\n  \n  /*\n  if(rr<0.5){\n    dist = mix(dist,chabi,rr*2.0);//manhattanDist;\n  }else{\n    dist = mix(chabi,manhattanDist,(rr-0.5)*2.0);//manhattanDist;    \n  }*/\n   \n  return dist;\n\n}\n\n\nvec3 yuv2rgb(vec3 yuv) {\n\n    bool limitedRange = false;\n\n    float Y = yuv.x;\n    float U = yuv.y;\n    float V = yuv.z;\n\n    if (limitedRange) {\n        // 8-bit limited range normalization\n        Y = (Y - 16.0/255.0) * (255.0/219.0);\n        U = (U - 128.0/255.0) * (255.0/224.0);\n        V = (V - 128.0/255.0) * (255.0/224.0);\n    } else {\n        // full range: Y in [0,1], U,V in [0,1] with 0.5 center\n        U -= 0.5;\n        V -= 0.5;\n    }\n\n    // BT.601\n    float R = Y + 1.40200 * V;\n    float G = Y - 0.344136 * U - 0.714136 * V;\n    float B = Y + 1.77200 * U;\n\n    return clamp(vec3(R, G, B), 0.0, 1.0);\n}\n\nvec3 hueShift( vec3 color, float hueAdjust ){\n\n    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);\n    const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);\n    const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);\n\n    const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);\n    const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);\n    const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);\n\n    float   YPrime  = dot (color, kRGBToYPrime);\n    float   I       = dot (color, kRGBToI);\n    float   Q       = dot (color, kRGBToQ);\n    float   hue     = atan (Q, I);\n    float   chroma  = sqrt (I * I + Q * Q);\n\n    hue += hueAdjust;\n\n    Q = chroma * sin (hue);\n    I = chroma * cos (hue);\n\n    vec3    yIQ   = vec3 (YPrime, I, Q);\n\n    return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );\n\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy/u_resolution*0.5;\n  float rr = 0.0;//0.5+0.5*sin(0.5*u_frameCount);\n  \n  float minDist = 1e10;\n  float value = 0.0;\n  for (int i = 0; i < 100; i++) {\n    if (i >= u_lineCount) break;\n    vec2 a = u_lines[i * 2] / u_resolution;\n    vec2 b = u_lines[i * 2 + 1] / u_resolution;\n    a.y=1.0-a.y;\n    b.y=1.0-b.y;\n    //uvという点と、対象との距離を測る　　\n    minDist = min(minDist, sdSegment(uv, a, b, rr));\n    //value += sdSegment(uv, a, b, rr);\n  }\n\n  vec2 dist = uv-vec2(0.5,0.5);\n  float rad = value*1.0;//2.0*atan(dist.y,dist.x);\n  \n  float stripe1 = 0.5+0.5*sin(minDist * 12.0-0.0001*u_frameCount+rad);\n  float stripe2 = 0.5+0.5*sin(minDist * 10.0-0.00015*u_frameCount+rad);\n  float stripe3 = 0.5+0.5*sin(minDist * 20.0-0.0002*u_frameCount+rad);\n  \n           stripe1 = yuv2rgb(vec3(0.5,stripe1,stripe1)).r;\n           stripe2 = yuv2rgb(vec3(0.5,stripe1,stripe1)).g;\n           stripe3 = yuv2rgb(vec3(0.5,stripe1,stripe1)).b;\n\n  vec2 col = uv.xy/u_resolution.xy*0.5;\n  \n  vec3 col3 = vec3(stripe1,stripe2,stripe3);\n  \n    //Tone mapping\n    //col3 = 1.0 - exp(-col3);\n    \n    //Gamma\n    //col3 = pow(col3, vec3(0.4545));\n\n  //col3 = hueShift(col3,u_frameCount*0.25);\n  float rrr = 1.0;// + 1.0 * sin(0.5 * u_frameCount);\n  col3 = mix(\n      hueShift( yuv2rgb(vec3(0.5,uv.x,uv.y)), u_frameCount*0.05 ),\n      col3,\n      clamp(minDist*rrr, 0.0, 1.0)\n  );\n  //col3 = step(0.5,col3);\n  //if(stripe1<0.5) col3=vec3(0.0,0.0,0.0);\n  \n  //if(stripe1<0.33)col3=vec3(1.0,0.6,0.0);\n  //else if(stripe1<0.66)col3=vec3(1.0,1.0,1.0);\n  //col3 = 1.0 - exp(-col3);\n  gl_FragColor = vec4(col3,1.0);\n}\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("// shader.frag\nprecision mediump float;\n\nuniform vec2 u_resolution;\nuniform vec2 u_lines[200]; // 最大100本の線 (start, end)\nuniform int u_lineCount;\nuniform float u_frameCount;\n\nfloat sdSegment(vec2 p, vec2 a, vec2 b, float rr) {\n  vec2 pa = p - a;\n  vec2 ba = b - a;\n  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);\n  \n  float dist = length(pa - ba * h);\n\n  float dx = abs(pa.x - (ba * h).x );\n  float dy = abs(pa.y - (ba * h).y );\n\n  // マンハッタン距離でのSDF\n  float manhattanDist = dx + dy;\n  \n  //ちぇび\n  float chabi = max (abs(dx), abs(dy));\n    dist = mix(dist,chabi,rr);//manhattanDist;\n  \n  /*\n  if(rr<0.5){\n    dist = mix(dist,chabi,rr*2.0);//manhattanDist;\n  }else{\n    dist = mix(chabi,manhattanDist,(rr-0.5)*2.0);//manhattanDist;    \n  }*/\n   \n  return dist;\n\n}\n\n\nvec3 yuv2rgb(vec3 yuv, float rot) {\n\n    bool limitedRange = false;\n\n    float Y = yuv.x;\n    float U = yuv.y;\n    float V = yuv.z;\n\n    if (limitedRange) {\n        // 8-bit limited range normalization\n        Y = (Y - 16.0/255.0) * (255.0/219.0);\n        U = (U - 128.0/255.0) * (255.0/224.0);\n        V = (V - 128.0/255.0) * (255.0/224.0);\n    } else {\n        // full range: Y in [0,1], U,V in [0,1] with 0.5 center\n        U -= 0.5;\n        V -= 0.5;\n    }\n\n\n    float   rad  = atan (V, U) + rot;\n    float   amp  = sqrt (U * U + V * V);\n\n    U = amp * cos (rad);\n    V = amp * sin (rad);\n\n\n\n\n    // BT.601\n    float R = Y + 1.40200 * V;\n    float G = Y - 0.344136 * U - 0.714136 * V;\n    float B = Y + 1.77200 * U;\n\n    return clamp(vec3(R, G, B), 0.0, 1.0);\n}\n\nvec3 hueShift( vec3 color, float hueAdjust ){\n\n    const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);\n    const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);\n    const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);\n\n    const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);\n    const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);\n    const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);\n\n    float   YPrime  = dot (color, kRGBToYPrime);\n    float   I       = dot (color, kRGBToI);\n    float   Q       = dot (color, kRGBToQ);\n    float   hue     = atan (Q, I);\n    float   chroma  = sqrt (I * I + Q * Q);\n\n    hue += hueAdjust;\n\n    Q = chroma * sin (hue);\n    I = chroma * cos (hue);\n\n    vec3    yIQ   = vec3 (YPrime, I, Q);\n\n    return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );\n\n}\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy/u_resolution*0.5;\n  float rr = 0.0;//0.5+0.5*sin(0.5*u_frameCount);\n  \n  float minDist = 1e10;\n  float value = 0.0;\n  for (int i = 0; i < 100; i++) {\n    if (i >= u_lineCount) break;\n    vec2 a = u_lines[i * 2] / u_resolution;\n    vec2 b = u_lines[i * 2 + 1] / u_resolution;\n    a.y=1.0-a.y;\n    b.y=1.0-b.y;\n    //uvという点と、対象との距離を測る　　\n    minDist = min(minDist, sdSegment(uv, a, b, rr));\n    //value += sdSegment(uv, a, b, rr);\n  }\n\n  vec2 dist = uv-vec2(0.5,0.5);\n  float rad = value*1.0;//2.0*atan(dist.y,dist.x);\n  \n  float stripe1 = 0.5+0.5*sin(minDist * 12.0-0.00010*u_frameCount+rad);\n  float stripe2 = 0.5+0.5*sin(minDist * 20.0-0.00015*u_frameCount+rad);\n  float stripe3 = 0.5+0.5*sin(minDist * 25.0-0.00020*u_frameCount+rad);\n  \n  //yuvからrgbに変換\n           stripe1 = yuv2rgb(vec3(0.5,stripe1,stripe1), 0.0).r;\n           stripe2 = yuv2rgb(vec3(0.5,stripe2,stripe2), 0.0).g;\n           stripe3 = yuv2rgb(vec3(0.5,stripe3,stripe3), 0.0).b;\n\n  vec3 col = yuv2rgb(vec3(0.5,uv.x,uv.y),0.0);\n  //vec3 col2 = hueShift(col, -u_frameCount*0.05+minDist*10.0);\n  vec3 col2 = yuv2rgb(vec3(0.5,uv.x,uv.y),u_frameCount*0.05+minDist*10.0);\n  vec3 col3 = vec3(stripe1,stripe2,stripe3);\n  \n    //Tone mapping\n    //col3 = 1.0 - exp(-col3);\n    \n    //Gamma\n    //col3 = pow(col3, vec3(0.4545));\n\n  //col3 = hueShift(col3,u_frameCount*0.25);\n  float rrr = 3.0;// + 1.0 * sin(0.5 * u_frameCount);\n  col3 = mix(\n      //hueShift( col, u_frameCount*0.1+minDist*100.0 ),\n      col2,\n      col,\n      clamp(minDist*rrr, 0.0, 1.0)\n  );\n\n  //col3.rgb=vec3(col.r,col.g,col.b);\n  //col3 = step(0.5,col3);\n  //if(stripe1<0.5) col3=vec3(0.0,0.0,0.0);\n  \n  //if(stripe1<0.33)col3=vec3(1.0,0.6,0.0);\n  //else if(stripe1<0.66)col3=vec3(1.0,1.0,1.0);\n  //col3 = 1.0 - exp(-col3);\n  gl_FragColor = vec4(col3,1.0);\n}\n");
 
 /***/ }),
 
@@ -23345,46 +23345,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "InfoData": () => (/* binding */ InfoData)
 /* harmony export */ });
 class InfoData {
-    constructor(alphabet, title, date, author, anotherTitle = "") {
+    constructor(alphabet, title, date, author, maxLetters = 0, defaultLetter = "", anotherTitle = "") {
         this.title = "";
         this.date = "";
         this.author = "";
         this.anotherTitle = "";
         this.alphabet = "";
+        this.maxLetters = 0;
+        this.defaultLetter = "";
         this.alphabet = alphabet;
         this.title = title;
         this.date = date;
         this.author = author;
         this.anotherTitle = anotherTitle;
+        this.maxLetters = maxLetters;
+        this.defaultLetter = defaultLetter;
     }
 }
-InfoData.TITLE = new InfoData("", "Algorithms from A to Z ", "", "");
-InfoData.A = new InfoData("A", "Ascii Art", "1966", "Kenneth Knowlton");
-InfoData.B = new InfoData("B", "Boids", "1986", "Craig Reynolds");
-InfoData.C = new InfoData("C", "Cellular Automaton", "1983", "Stephen Wolfram", "");
-InfoData.D = new InfoData("D", "Differential Growth", "2014", "Andy Lomas");
-InfoData.E = new InfoData("E", "Error Diffusion", "1976", "Robert W. Floyd and Louis Steinberg");
-InfoData.F = new InfoData("F", "Fourier Transform", "1807", "Joseph Fourier");
-InfoData.G = new InfoData("G", "Game of Life", "1970", "John Conway");
-InfoData.H = new InfoData("H", "Hilbert Curve", "1891", "David Hilbert");
-InfoData.I = new InfoData("I", "Inverse Kinematics", "1985", "Michael Girard and Anthony Maciejewski");
-InfoData.J = new InfoData("J", "Jarvis March", "1973", "R. A. Jarvis");
-InfoData.K = new InfoData("K", "K-d Tree", "1975", "Jon Louis Bentley");
-InfoData.L = new InfoData("L", "L-system", "1968", "Aristid Lindenmayer");
-InfoData.M = new InfoData("M", "Maze Generation", "1882", "Charles Pierre Trémaux", "");
-InfoData.N = new InfoData("N", "Navier-Stokes Equations", "1845", "Claude-Louis Navier and George Gabriel Stokes");
-InfoData.O = new InfoData("O", "Opentype.js", "2014", "Frederik De Bleser");
-InfoData.P = new InfoData("P", "Perlin Noise", "1982", "Ken Perlin");
-InfoData.Q = new InfoData("Q", "Quadtree", "1974", "Raphael Finkel and J.L. Bentley");
-InfoData.R = new InfoData("R", "Reaction Diffusion", "1984", "Peter Gray and Stephen K. Scott");
-InfoData.S = new InfoData("S", "Spirograph", "1960", "Denys Fisher");
-InfoData.T = new InfoData("T", "Ten Print", "1982", "Unknown");
-InfoData.U = new InfoData("U", "Unsharp Mask", "1930s", "Unknown");
-InfoData.V = new InfoData("V", "Verlet Integration", "1967", "Loup Verlet");
-InfoData.W = new InfoData("W", "Wave Equation", "1783", "Jean le Rond d'Alembert");
-InfoData.X = new InfoData("X", "XOR Blending", "1982", "Thomas Porter and Tom Duff");
-InfoData.Y = new InfoData("Y", "YUV Color Space", "1960s", "Walter Bruch");
-InfoData.Z = new InfoData("Z", "Z-fighting", "1980s", "Unknown");
+InfoData.TITLE = new InfoData("", "Algorithms from A to Z ", "", "Kitasenju Design", 0, "");
+InfoData.A = new InfoData("A", "Ascii Art", "1966", "Kenneth Knowlton", 8, "A");
+InfoData.B = new InfoData("B", "Boids", "1986", "Craig Reynolds", 8, "B");
+InfoData.C = new InfoData("C", "Cellular Automaton", "1983", "Stephen Wolfram", 8, "C");
+InfoData.D = new InfoData("D", "Differential Growth", "2014", "Andy Lomas", 8, "D");
+InfoData.E = new InfoData("E", "Error Diffusion", "1976", "Robert W. Floyd and Louis Steinberg", 8, "E");
+InfoData.F = new InfoData("F", "Fourier Transform", "1807", "Joseph Fourier", 8, "F");
+InfoData.G = new InfoData("G", "Game of Life", "1970", "John Conway", 10, "G");
+InfoData.H = new InfoData("H", "Hilbert Curve", "1891", "David Hilbert", 1, "H");
+InfoData.I = new InfoData("I", "Inverse Kinematics", "1985", "Michael Girard and Anthony Maciejewski", 10, "IK");
+InfoData.J = new InfoData("J", "Jarvis March", "1973", "R. A. Jarvis", 10, "J");
+InfoData.K = new InfoData("K", "K-d Tree", "1975", "Jon Louis Bentley", 3, "Kd");
+InfoData.L = new InfoData("L", "L-system", "1968", "Aristid Lindenmayer", 10, "L");
+InfoData.M = new InfoData("M", "Maze Generation", "1882", "Charles Pierre Trémaux", 10, "M");
+InfoData.N = new InfoData("N", "Navier-Stokes Equations", "1845", "Claude-Louis Navier and George Gabriel Stokes", 10, "Navier");
+InfoData.O = new InfoData("O", "Opentype.js", "2014", "Frederik De Bleser", 10, "Opentype");
+InfoData.P = new InfoData("P", "Perlin Noise", "1982", "Ken Perlin", 10, "P");
+InfoData.Q = new InfoData("Q", "Quadtree", "1974", "Raphael Finkel and J.L. Bentley", 10, "Q");
+InfoData.R = new InfoData("R", "Reaction Diffusion", "1984", "Peter Gray and Stephen K. Scott", 10, "R");
+InfoData.S = new InfoData("S", "Spirograph", "1960", "Denys Fisher", 10, "S");
+InfoData.T = new InfoData("T", "Ten Print", "1982", "Unknown", 1, "T");
+InfoData.U = new InfoData("U", "Unsharp Mask", "1930s", "Unknown", 10, "U");
+InfoData.V = new InfoData("V", "Verlet Integration", "1967", "Loup Verlet", 10, "V");
+InfoData.W = new InfoData("W", "Wave Equation", "1783", "Jean le Rond d'Alembert", 10, "W");
+InfoData.X = new InfoData("X", "XOR Blending", "1982", "Thomas Porter and Tom Duff", 10, "X");
+InfoData.Y = new InfoData("Y", "YUV Color Space", "1960s", "Walter Bruch", 10, "Y");
+InfoData.Z = new InfoData("Z", "Z-fighting", "1980s", "Unknown", 10, "Z");
 
 
 /***/ }),
@@ -23417,6 +23421,7 @@ class Mouse {
         if (uri.hostname == "127.0.0.1") {
             //return;
         }
+        return;
         // remove previous handler if any
         if (this._handler)
             document.removeEventListener('mousemove', this._handler);
@@ -23538,6 +23543,14 @@ class Params {
         if (this._initialized)
             return;
         this._initialized = true;
+        console.log(">>>>> lang = ", navigator.language);
+        const params = new URLSearchParams(window.location.search);
+        //言語指定
+        this.language = navigator.language.toLowerCase().indexOf("ja") == 0 ? "ja" : "en";
+        let lang = params.get("lang");
+        if (lang) {
+            this.language = lang == "ja" ? "ja" : "en";
+        }
         console.log(window.location.hostname);
         if (window.location.hostname == 'kitasenjudesign.com') {
             this.isStation = false;
@@ -23547,7 +23560,6 @@ class Params {
         let win = window;
         this.isStation = win.isStation;
         this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const params = new URLSearchParams(window.location.search);
         let dd = params.get("debug");
         if (dd && dd == "1") {
             this.debug = true;
@@ -23569,9 +23581,32 @@ class Params {
         if (ss && ss == "0") {
             this.isStation = false;
         }
+        let tt = params.get("t");
+        if (tt) {
+            this.alphabet = String(tt);
+        }
+        else {
+        }
         _Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.showNoEntryArea();
+        if (this.isStation) {
+            this.initCursorHide();
+        }
         _MyGUI__WEBPACK_IMPORTED_MODULE_0__.MyGUI.Init();
         this.gui = _MyGUI__WEBPACK_IMPORTED_MODULE_0__.MyGUI.gui;
+    }
+    static initCursorHide() {
+        let timer = null;
+        const hide = () => {
+            document.body.style.cursor = 'none';
+        };
+        const show = () => {
+            document.body.style.cursor = '';
+            if (timer !== null)
+                clearTimeout(timer);
+            timer = setTimeout(hide, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        setTimeout(hide, 3000);
     }
     static getMaxPoints() {
         return 10000;
@@ -23591,9 +23626,11 @@ Params.svgScale = 1; // SVGのスケール
 Params.mutation = 100; // ミューテーションの強さ
 Params.mojiCenterX = 0;
 Params.mojiCenterY = 0;
-Params.isStation = false; //えきモード
+Params.isStation = true; //えきモード
 Params.isMobile = false;
 Params.color = false;
+Params.language = "en";
+Params.alphabet = "";
 
 
 /***/ }),
@@ -23627,14 +23664,17 @@ class Stage {
         if (_Params__WEBPACK_IMPORTED_MODULE_0__.Params.isStation) {
             let win = window;
             let ww = win.noEntryAreaWidth == null ? 3456 : win.noEntryAreaWidth;
-            //console.log("ww:",win.noEntryAreaWidth);
-            return (window.innerHeight * (16 / 9)) * ww / 3840;
-            //return window.innerWidth*3456/3840;
+            return (this.getInnerHeight() * (16 / 9)) * ww / 3840;
         }
         return window.innerWidth;
     }
     static get height() {
+        return this.getInnerHeight();
+    }
+    static getInnerHeight() {
+        //console.log("", window.innerWidth,window.innerHeight);
         return window.innerHeight;
+        //return 1080;
     }
 }
 
@@ -23669,6 +23709,7 @@ class FontManager {
             else {
                 console.log("onload", f);
                 this.font = f;
+                console.log("moji = ", text);
                 const linePath = this.font.getPath(text, 0, 0, 100);
                 let wrapper = new _PathWrapper__WEBPACK_IMPORTED_MODULE_1__.PathWrapper(linePath);
                 //console.log(linePath);
@@ -23731,28 +23772,99 @@ class PathWrapper {
         }
         return this.strokes;
     }
+    // shoelace formula: sign tells winding direction (CW vs CCW), magnitude is used to find the outermost contour
+    signedArea(pts) {
+        let area = 0;
+        for (let i = 0; i < pts.length; i++) {
+            const [x1, y1] = pts[i];
+            const [x2, y2] = pts[(i + 1) % pts.length];
+            area += x1 * y2 - x2 * y1;
+        }
+        return area / 2;
+    }
+    // ray casting point-in-polygon test, used to find which outer contour a hole belongs to
+    pointInPolygon(pt, poly) {
+        let inside = false;
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const [xi, yi] = poly[i];
+            const [xj, yj] = poly[j];
+            const intersect = ((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi);
+            if (intersect)
+                inside = !inside;
+        }
+        return inside;
+    }
     draw(p5, width, height, scale = 1, ox = 0, oy = 0, tgtStroke = -1) {
         let s = this.getStrokes();
         let scl = scale;
         let rect = this.getRect();
-        let data = [];
-        let len = s.length;
-        for (let i = 0; i < len; i++) {
-            data[i] = [];
-            if (tgtStroke != -1 && i != tgtStroke)
-                continue;
-            p5.beginShape();
-            let lim = 400;
+        let lim = 400;
+        const sample = (idx) => {
+            const pts = [];
             for (let j = 0; j <= lim; j++) {
-                let p = s[i].pointAt(j / lim);
-                let xx = (p.x - rect.x - rect.width / 2) * scl;
-                let yy = (p.y - rect.y - rect.height / 2) * scl;
-                xx += width / 2 + ox;
-                yy += height / 2 + oy;
-                data[i].push([xx, yy]);
-                p5.vertex(xx, yy);
+                let p = s[idx].pointAt(j / lim);
+                let xx = (p.x - rect.x - rect.width / 2) * scl + width / 2 + ox;
+                let yy = (p.y - rect.y - rect.height / 2) * scl + height / 2 + oy;
+                pts.push([xx, yy]);
             }
+            return pts;
+        };
+        // a single requested stroke: draw it as-is, no outer/hole grouping needed
+        if (tgtStroke != -1) {
+            if (!s[tgtStroke])
+                return;
+            p5.beginShape();
+            for (const [xx, yy] of sample(tgtStroke))
+                p5.vertex(xx, yy);
             p5.endShape();
+            return;
+        }
+        const data = s.map((_, i) => sample(i));
+        // like a font outline: contours winding the same way as the biggest one are outer boundaries,
+        // contours winding the opposite way are holes cut out of an outer boundary
+        const areas = data.map(pts => this.signedArea(pts));
+        let refIdx = 0;
+        for (let i = 1; i < areas.length; i++) {
+            if (Math.abs(areas[i]) > Math.abs(areas[refIdx]))
+                refIdx = i;
+        }
+        const refSign = Math.sign(areas[refIdx]) || 1;
+        const isHole = areas.map(a => a !== 0 && Math.sign(a) !== refSign);
+        const outerIdx = data.map((_, i) => i).filter(i => !isHole[i]);
+        const holesOf = outerIdx.map(() => []);
+        for (let i = 0; i < data.length; i++) {
+            if (!isHole[i])
+                continue;
+            // assign the hole to the smallest outer contour that contains it
+            let parent = -1;
+            let parentArea = Infinity;
+            for (const oIdx of outerIdx) {
+                const a = Math.abs(areas[oIdx]);
+                if (a < parentArea && this.pointInPolygon(data[i][0], data[oIdx])) {
+                    parent = oIdx;
+                    parentArea = a;
+                }
+            }
+            if (parent === -1) {
+                // no enclosing contour found (shouldn't normally happen) - draw it as its own shape
+                outerIdx.push(i);
+                holesOf.push([]);
+            }
+            else {
+                holesOf[outerIdx.indexOf(parent)].push(i);
+            }
+        }
+        for (let k = 0; k < outerIdx.length; k++) {
+            p5.beginShape();
+            for (const [xx, yy] of data[outerIdx[k]])
+                p5.vertex(xx, yy);
+            for (const hIdx of holesOf[k]) {
+                p5.beginContour();
+                for (const [xx, yy] of data[hIdx])
+                    p5.vertex(xx, yy);
+                p5.endContour();
+            }
+            p5.endShape(p5.CLOSE);
         }
     }
     getPoints(width, height, scale = 1, ox = 0, oy = 0, numLim = 100) {
@@ -24093,6 +24205,408 @@ class Stroke {
 
 /***/ }),
 
+/***/ "./src/html/AlphabetInputView.ts":
+/*!***************************************!*\
+  !*** ./src/html/AlphabetInputView.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AlphabetInputView": () => (/* binding */ AlphabetInputView)
+/* harmony export */ });
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/Params */ "./src/data/Params.ts");
+
+class AlphabetInputView {
+    constructor() {
+        AlphabetInputView.instance = this;
+        this.container = document.getElementById("alphabetInput");
+        this.input = document.getElementById("alphabetInputField");
+    }
+    init(data) {
+        if (!data || data.maxLetters <= 0) {
+            this.container.style.display = "none";
+            return;
+        }
+        this.container.style.display = "";
+        this.input.maxLength = data.maxLetters;
+        if (_data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.alphabet) {
+            this.input.value = _data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.alphabet;
+        }
+        else {
+            this.input.value = data.defaultLetter;
+        }
+        this.input.addEventListener("input", () => {
+            this.input.value = this.input.value.replace(/[^a-zA-Z0-9]/g, "");
+        });
+        this.input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                const params = new URLSearchParams(window.location.search);
+                if (this.input.value) {
+                    params.set("t", this.input.value);
+                }
+                else {
+                    params.delete("t");
+                }
+                window.location.search = params.toString();
+            }
+        });
+    }
+    setText(value) {
+        this.input.value = value.replace(/[^a-zA-Z0-9]/g, "");
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/html/ArrowView.ts":
+/*!*******************************!*\
+  !*** ./src/html/ArrowView.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ArrowView": () => (/* binding */ ArrowView)
+/* harmony export */ });
+/* harmony import */ var _main_Main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/Main */ "./src/main/Main.ts");
+
+class ArrowView {
+    constructor() {
+    }
+    init() {
+        this.prevBtn = document.getElementById("prevBtn");
+        this.nextBtn = document.getElementById("nextBtn");
+        this.prevBtn.addEventListener("mousedown", () => {
+            _main_Main__WEBPACK_IMPORTED_MODULE_0__.Main.prevPage();
+        });
+        this.nextBtn.addEventListener("mousedown", () => {
+            _main_Main__WEBPACK_IMPORTED_MODULE_0__.Main.nextPage();
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/html/InfoTitleView.ts":
+/*!***********************************!*\
+  !*** ./src/html/InfoTitleView.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "InfoTitleView": () => (/* binding */ InfoTitleView)
+/* harmony export */ });
+/* harmony import */ var _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mojis/00_base/TextAnim */ "./src/mojis/00_base/TextAnim.ts");
+
+class InfoTitleView {
+    constructor() {
+    }
+    init(data) {
+        this._data = data;
+        if (this._data == null)
+            return;
+        this._anim1 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_0__.TextAnim("infoMainTitle");
+        this._anim2 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_0__.TextAnim("infoSubtitle");
+        this._anim3 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_0__.TextAnim("infoYear");
+    }
+    //TitleViewと同じアニメーション
+    play() {
+        if (this._data == null)
+            return;
+        let txt = this._data.date + ", " + this._data.author;
+        if (this._data.date == "")
+            txt = this._data.author;
+        if (this._data.anotherTitle != "") {
+            txt = this._data.anotherTitle + "<br/>" + txt;
+        }
+        if (this._data.alphabet == "") {
+            this._anim1.setText("");
+            this._anim2.play(this._data.title, 0.3);
+            this._anim3.play(txt, 0.5);
+        }
+        else {
+            this._anim1.play("Algorithms from A to Z", 0.1);
+            this._anim2.play(this._data.title, 0.3);
+            this._anim3.play(txt, 0.5);
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/html/InfoView.ts":
+/*!******************************!*\
+  !*** ./src/html/InfoView.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "InfoView": () => (/* binding */ InfoView)
+/* harmony export */ });
+/* harmony import */ var _main_Main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/Main */ "./src/main/Main.ts");
+/* harmony import */ var _TextDataLoader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TextDataLoader */ "./src/html/TextDataLoader.ts");
+/* harmony import */ var _TableView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableView */ "./src/html/TableView.ts");
+/* harmony import */ var _InfoTitleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./InfoTitleView */ "./src/html/InfoTitleView.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+class InfoView {
+    constructor() {
+        this.loader = new _TextDataLoader__WEBPACK_IMPORTED_MODULE_1__.TextDataLoader();
+        this.infoTitleView = new _InfoTitleView__WEBPACK_IMPORTED_MODULE_3__.InfoTitleView();
+    }
+    init(data) {
+        this.data = data;
+        this.dom = document.getElementById("infomation");
+        this.btn = document.getElementById("infoBtn");
+        this.explanationClose = document.getElementById("explanationClose");
+        this.explanation = document.getElementById("explanation");
+        this.atozIndex = document.getElementById("atozIndex");
+        this.title = document.getElementById("title");
+        this.title2 = document.getElementById("infoTitle");
+        //atozTableはtype=0のときloadExplanation()で説明の下に移動して表示する
+        const atozTable = document.getElementById("atozTable");
+        atozTable.style.display = "none";
+        this.btn.addEventListener("mousedown", () => {
+            if (this.dom.style.display != "block") {
+                this.show();
+            }
+            else {
+                this.hide();
+            }
+        });
+        this.explanationClose.addEventListener("mousedown", () => {
+            this.hide();
+        });
+        this.table = new _TableView__WEBPACK_IMPORTED_MODULE_2__.TableView();
+        this.table.init();
+        this.initAtozIndex();
+        this.infoTitleView.init(this.data);
+        //リロード時、#infoがついていたらinfoを表示
+        if (window.location.hash == "#info") {
+            this.show();
+        }
+        else {
+            this.hide();
+        }
+        this.loadExplanation();
+    }
+    show() {
+        console.log("show info");
+        InfoView.showing = true;
+        this.btn.classList.add("open");
+        this.dom.style.display = "block";
+        this.title.style.display = "none"; //タイトル消す
+        this.infoTitleView.play();
+        history.replaceState(null, "", window.location.pathname + window.location.search + "#info");
+    }
+    hide() {
+        InfoView.showing = false;
+        this.dom.style.display = "none";
+        this.btn.classList.remove("open");
+        this.title.style.display = "block";
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    initAtozIndex() {
+        var _a;
+        const params = new URLSearchParams(window.location.search);
+        const current = ((_a = params.get("type")) !== null && _a !== void 0 ? _a : "0").toUpperCase();
+        this.atozIndex.innerHTML = "";
+        for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+            const a = document.createElement("a");
+            a.textContent = letter;
+            if (letter == current) {
+                a.classList.add("selected");
+            }
+            else {
+                //infoが表示された状態で遷移するので#infoをつける
+                a.href = "./?type=" + letter + "#info";
+            }
+            this.atozIndex.appendChild(a);
+            this.atozIndex.appendChild(document.createTextNode(" "));
+        }
+    }
+    loadExplanation() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const textDatas = yield this.loader.load();
+            const prefix = "_" + _main_Main__WEBPACK_IMPORTED_MODULE_0__.Main.type.toUpperCase();
+            const data = textDatas.find((d) => d.title.indexOf(prefix) == 0);
+            if (data == null)
+                return;
+            this.explanation.innerHTML = "";
+            for (let i = 0; i < data.lines.length; i++) {
+                let line = data.lines[i];
+                const div = document.createElement("div");
+                div.textContent = line;
+                if (line.indexOf("・") == 0) {
+                    div.style.textAlign = "center";
+                }
+                this.explanation.appendChild(div);
+            }
+            //type=0のときは説明の下にtableを移動(explanationごと縦スクロールできる)
+            if (_main_Main__WEBPACK_IMPORTED_MODULE_0__.Main.type == "0") {
+                const atozTable = document.getElementById("atozTable");
+                this.explanation.appendChild(atozTable);
+                atozTable.style.display = "table";
+            }
+        });
+    }
+}
+InfoView.showing = false;
+
+
+/***/ }),
+
+/***/ "./src/html/TableView.ts":
+/*!*******************************!*\
+  !*** ./src/html/TableView.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TableView": () => (/* binding */ TableView)
+/* harmony export */ });
+class TableView {
+    constructor() {
+    }
+    init() {
+        /*
+        this.dom = document.getElementById("atozTable") as HTMLTableElement;
+
+        const params = new URLSearchParams(window.location.search);
+        const current = (params.get("type") ?? "0").toUpperCase();
+
+        const rows = this.dom.querySelectorAll("tbody tr");
+        rows.forEach((row)=>{
+
+            const tr = row as HTMLTableRowElement;
+            const letter = tr.cells[0].textContent?.trim();
+            if(!letter) return;
+
+            if(letter == current){
+                tr.classList.add("selected");
+                return;
+            }
+
+            tr.style.cursor = "pointer";
+            tr.addEventListener("mousedown", ()=>{
+                window.location.href = "./?type=" + letter;
+            });
+
+        });*/
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/html/TextData.ts":
+/*!******************************!*\
+  !*** ./src/html/TextData.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TextData": () => (/* binding */ TextData)
+/* harmony export */ });
+class TextData {
+    constructor() {
+        this.title = "";
+        this.lines = [];
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/html/TextDataLoader.ts":
+/*!************************************!*\
+  !*** ./src/html/TextDataLoader.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TextDataLoader": () => (/* binding */ TextDataLoader)
+/* harmony export */ });
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/Params */ "./src/data/Params.ts");
+/* harmony import */ var _TextData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TextData */ "./src/html/TextData.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+class TextDataLoader {
+    constructor() {
+        this.textDatas = [];
+    }
+    load(url = "./atozalgorithm.json") {
+        return __awaiter(this, void 0, void 0, function* () {
+            const res = yield fetch(url);
+            const json = yield res.json();
+            this.textDatas = [];
+            for (const page of json.pages) {
+                if (page.title.charAt(0) == "_") {
+                    const textData = new _TextData__WEBPACK_IMPORTED_MODULE_1__.TextData();
+                    let lines = [];
+                    if (_data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.language == "en") {
+                        for (let i = 1; i < page.lines.length; i++) {
+                            //console.log(page.lines[i].indexOf('[EN]'),page.lines[i]);
+                            if (page.lines[i].indexOf('[EN]') >= 0)
+                                lines.push(page.lines[i].split('[EN]')[1]);
+                        }
+                    }
+                    else {
+                        for (let i = 1; i < page.lines.length; i++) {
+                            if (page.lines[i].indexOf('[EN]') < 0)
+                                lines.push(page.lines[i]);
+                        }
+                    }
+                    //console.log(lines);
+                    textData.title = page.title;
+                    textData.lines = lines;
+                    this.textDatas.push(textData);
+                }
+            }
+            return this.textDatas;
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/html/TitleView.ts":
 /*!*******************************!*\
   !*** ./src/html/TitleView.ts ***!
@@ -24104,9 +24618,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TitleView": () => (/* binding */ TitleView)
 /* harmony export */ });
+/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
 /* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/Params */ "./src/data/Params.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/Stage */ "./src/data/Stage.ts");
 /* harmony import */ var _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mojis/00_base/TextAnim */ "./src/mojis/00_base/TextAnim.ts");
+
 
 
 
@@ -24115,19 +24631,17 @@ class TitleView {
     }
     static init(data) {
         this._data = data;
-        if (this._data.alphabet == "")
-            return;
-        let info = document.getElementById("info");
-        this._container = info;
-        info.style.display = "block";
-        //info.style.transformOrigin = "0 0";
-        //info.style.scale = Params.isMobile ? "0.5" : "1";
-        this._anim1 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("title");
-        this._anim2 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("subtitle");
+        //if(this._data.alphabet=="") return;
+        this._container = document.getElementById("title");
+        this._container.style.display = "block";
+        this._anim1 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("mainTitle");
+        this._anim2 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("subTitle");
         this._anim3 = new _mojis_00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("year");
         this._anim1.setText("Algorithms from A to Z");
         this._anim2.setText(this._data.title);
         let txt = this._data.date + ", " + data.author;
+        if (data.date == "")
+            txt = data.author;
         if (data.anotherTitle != "") {
             txt = "" + this._data.anotherTitle + "<br/>" + txt;
         }
@@ -24153,22 +24667,38 @@ class TitleView {
             console.log("speak:", data.alphabet + ":" + data.title);
             let utterance = new SpeechSynthesisUtterance(data.alphabet + ":" + data.title);
             utterance.lang = "en-US";
+            utterance.volume = 0.25;
             //utterance.rate = 0.9;
             window.speechSynthesis.speak(utterance);
         }, 500);
     }
-    static show() {
-        document.getElementById("info").style.display = "block";
-    }
-    static hide() {
-        document.getElementById("info").style.display = "none";
-    }
     static getSize() {
         return { width: this._width, height: this._height };
     }
-    static setPosition(x, y) {
-        this._container.style.left = x + "px";
-        this._container.style.top = y + "px";
+    static setPosition() {
+        //console.log("setPosition",this._baseX,this._baseY);
+        //console.log(this._container);
+        if (!this._container) {
+            this._container = document.getElementById("title");
+            //this._container.style.display = "block";
+        }
+        this._container.style.left = this._baseX + "px";
+        this._container.style.top = this._baseY + "px";
+        console.log("setPosition", this._container.style.left, this._container.style.top);
+    }
+    static setBasePosition(x, y) {
+        this._baseX = x;
+        this._baseY = y;
+    }
+    static movePosition(tx, ty) {
+        gsap__WEBPACK_IMPORTED_MODULE_3__["default"].to(this._container, {
+            left: tx, top: ty, duration: 0.5, ease: "power2.inOut"
+        });
+    }
+    static resetPoisition() {
+        gsap__WEBPACK_IMPORTED_MODULE_3__["default"].to(this._container, {
+            left: this._baseX, top: this._baseY, duration: 0.5, ease: "power2.inOut"
+        });
     }
     /**
      * センターからの差分（オフセット）を指定！！
@@ -24208,6 +24738,8 @@ class TitleView {
             tgtX = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width - this._width - margin;
         if (tgtY + this._height + margin > _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height)
             tgtY = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height - this._height - margin;
+        this._container = document.getElementById("title");
+        //this._container.style.display = "block";
         this._container.style.left = tgtX + "px";
         this._container.style.top = tgtY + "px";
     }
@@ -24260,6 +24792,8 @@ class TitleView {
 }
 TitleView._width = 0;
 TitleView._height = 0;
+TitleView._baseX = 0;
+TitleView._baseY = 0;
 
 
 /***/ }),
@@ -24277,33 +24811,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _data_Mouse__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/Mouse */ "./src/data/Mouse.ts");
 /* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/Params */ "./src/data/Params.ts");
-/* harmony import */ var _mojis_00_title_TitleMain__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../mojis/00_title/TitleMain */ "./src/mojis/00_title/TitleMain.ts");
-/* harmony import */ var _mojis_01_a_AsciiMain__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mojis/01_a/AsciiMain */ "./src/mojis/01_a/AsciiMain.ts");
-/* harmony import */ var _mojis_02_b_BoidsMain__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mojis/02_b/BoidsMain */ "./src/mojis/02_b/BoidsMain.ts");
-/* harmony import */ var _mojis_03_c_CAMain__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../mojis/03_c/CAMain */ "./src/mojis/03_c/CAMain.ts");
-/* harmony import */ var _mojis_04_d_DifferentialGroth__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../mojis/04_d/DifferentialGroth */ "./src/mojis/04_d/DifferentialGroth.ts");
-/* harmony import */ var _mojis_05_e_ErrorDiffusionMain__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../mojis/05_e/ErrorDiffusionMain */ "./src/mojis/05_e/ErrorDiffusionMain.ts");
-/* harmony import */ var _mojis_06_f_FourierMain__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../mojis/06_f/FourierMain */ "./src/mojis/06_f/FourierMain.ts");
-/* harmony import */ var _mojis_07_g_GameOfLifeMain__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../mojis/07_g/GameOfLifeMain */ "./src/mojis/07_g/GameOfLifeMain.ts");
-/* harmony import */ var _mojis_08_h_HilbertCurveMain__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../mojis/08_h/HilbertCurveMain */ "./src/mojis/08_h/HilbertCurveMain.ts");
-/* harmony import */ var _mojis_09_i_IKMain__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../mojis/09_i/IKMain */ "./src/mojis/09_i/IKMain.ts");
-/* harmony import */ var _mojis_10_j_JarvisMarchMain__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../mojis/10_j/JarvisMarchMain */ "./src/mojis/10_j/JarvisMarchMain.ts");
-/* harmony import */ var _mojis_11_k_KDTreeMain__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../mojis/11_k/KDTreeMain */ "./src/mojis/11_k/KDTreeMain.ts");
-/* harmony import */ var _mojis_12_l_LSystemMain__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../mojis/12_l/LSystemMain */ "./src/mojis/12_l/LSystemMain.ts");
-/* harmony import */ var _mojis_13_m_MazeMain__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../mojis/13_m/MazeMain */ "./src/mojis/13_m/MazeMain.ts");
-/* harmony import */ var _mojis_14_n_NavierMain__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../mojis/14_n/NavierMain */ "./src/mojis/14_n/NavierMain.ts");
-/* harmony import */ var _mojis_15_o_OpenTypeMain__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../mojis/15_o/OpenTypeMain */ "./src/mojis/15_o/OpenTypeMain.ts");
-/* harmony import */ var _mojis_16_p_PerlinNoiseMain__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../mojis/16_p/PerlinNoiseMain */ "./src/mojis/16_p/PerlinNoiseMain.ts");
-/* harmony import */ var _mojis_17_q_QuadTreeMain__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../mojis/17_q/QuadTreeMain */ "./src/mojis/17_q/QuadTreeMain.ts");
-/* harmony import */ var _mojis_18_r_ReactionDiffusionMain__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../mojis/18_r/ReactionDiffusionMain */ "./src/mojis/18_r/ReactionDiffusionMain.ts");
-/* harmony import */ var _mojis_19_s_SpiroMain__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../mojis/19_s/SpiroMain */ "./src/mojis/19_s/SpiroMain.ts");
-/* harmony import */ var _mojis_20_t_TenPrintMain__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../mojis/20_t/TenPrintMain */ "./src/mojis/20_t/TenPrintMain.ts");
-/* harmony import */ var _mojis_21_u_UnsharpMaskMain__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../mojis/21_u/UnsharpMaskMain */ "./src/mojis/21_u/UnsharpMaskMain.ts");
-/* harmony import */ var _mojis_22_v_VerletMain__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../mojis/22_v/VerletMain */ "./src/mojis/22_v/VerletMain.ts");
-/* harmony import */ var _mojis_23_w_WaveMain__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../mojis/23_w/WaveMain */ "./src/mojis/23_w/WaveMain.ts");
-/* harmony import */ var _mojis_24_x_XORMain__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../mojis/24_x/XORMain */ "./src/mojis/24_x/XORMain.ts");
-/* harmony import */ var _mojis_25_y_YUVMain__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../mojis/25_y/YUVMain */ "./src/mojis/25_y/YUVMain.ts");
-/* harmony import */ var _mojis_26_z_ZFightingMain__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../mojis/26_z/ZFightingMain */ "./src/mojis/26_z/ZFightingMain.ts");
+/* harmony import */ var _html_ArrowView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../html/ArrowView */ "./src/html/ArrowView.ts");
+/* harmony import */ var _html_AlphabetInputView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../html/AlphabetInputView */ "./src/html/AlphabetInputView.ts");
+/* harmony import */ var _html_InfoView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../html/InfoView */ "./src/html/InfoView.ts");
+/* harmony import */ var _mojis_00_title_TitleMain__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../mojis/00_title/TitleMain */ "./src/mojis/00_title/TitleMain.ts");
+/* harmony import */ var _mojis_01_a_AsciiMain__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../mojis/01_a/AsciiMain */ "./src/mojis/01_a/AsciiMain.ts");
+/* harmony import */ var _mojis_02_b_BoidsMain__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../mojis/02_b/BoidsMain */ "./src/mojis/02_b/BoidsMain.ts");
+/* harmony import */ var _mojis_03_c_CAMain__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../mojis/03_c/CAMain */ "./src/mojis/03_c/CAMain.ts");
+/* harmony import */ var _mojis_04_d_DifferentialGroth__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../mojis/04_d/DifferentialGroth */ "./src/mojis/04_d/DifferentialGroth.ts");
+/* harmony import */ var _mojis_05_e_ErrorDiffusionMain__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../mojis/05_e/ErrorDiffusionMain */ "./src/mojis/05_e/ErrorDiffusionMain.ts");
+/* harmony import */ var _mojis_06_f_FourierMain__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../mojis/06_f/FourierMain */ "./src/mojis/06_f/FourierMain.ts");
+/* harmony import */ var _mojis_07_g_GameOfLifeMain__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../mojis/07_g/GameOfLifeMain */ "./src/mojis/07_g/GameOfLifeMain.ts");
+/* harmony import */ var _mojis_08_h_HilbertCurveMain__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../mojis/08_h/HilbertCurveMain */ "./src/mojis/08_h/HilbertCurveMain.ts");
+/* harmony import */ var _mojis_09_i_IKMain__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../mojis/09_i/IKMain */ "./src/mojis/09_i/IKMain.ts");
+/* harmony import */ var _mojis_10_j_JarvisMarchMain__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../mojis/10_j/JarvisMarchMain */ "./src/mojis/10_j/JarvisMarchMain.ts");
+/* harmony import */ var _mojis_11_k_KDTreeMain__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../mojis/11_k/KDTreeMain */ "./src/mojis/11_k/KDTreeMain.ts");
+/* harmony import */ var _mojis_12_l_LSystemMain__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../mojis/12_l/LSystemMain */ "./src/mojis/12_l/LSystemMain.ts");
+/* harmony import */ var _mojis_13_m_MazeMain__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../mojis/13_m/MazeMain */ "./src/mojis/13_m/MazeMain.ts");
+/* harmony import */ var _mojis_14_n_NavierMain__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../mojis/14_n/NavierMain */ "./src/mojis/14_n/NavierMain.ts");
+/* harmony import */ var _mojis_15_o_OpenTypeMain__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../mojis/15_o/OpenTypeMain */ "./src/mojis/15_o/OpenTypeMain.ts");
+/* harmony import */ var _mojis_16_p_PerlinNoiseMain__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../mojis/16_p/PerlinNoiseMain */ "./src/mojis/16_p/PerlinNoiseMain.ts");
+/* harmony import */ var _mojis_17_q_QuadTreeMain__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../mojis/17_q/QuadTreeMain */ "./src/mojis/17_q/QuadTreeMain.ts");
+/* harmony import */ var _mojis_18_r_ReactionDiffusionMain__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../mojis/18_r/ReactionDiffusionMain */ "./src/mojis/18_r/ReactionDiffusionMain.ts");
+/* harmony import */ var _mojis_19_s_SpiroMain__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../mojis/19_s/SpiroMain */ "./src/mojis/19_s/SpiroMain.ts");
+/* harmony import */ var _mojis_20_t_TenPrintMain__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../mojis/20_t/TenPrintMain */ "./src/mojis/20_t/TenPrintMain.ts");
+/* harmony import */ var _mojis_21_u_UnsharpMaskMain__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../mojis/21_u/UnsharpMaskMain */ "./src/mojis/21_u/UnsharpMaskMain.ts");
+/* harmony import */ var _mojis_22_v_VerletMain__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../mojis/22_v/VerletMain */ "./src/mojis/22_v/VerletMain.ts");
+/* harmony import */ var _mojis_23_w_WaveMain__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../mojis/23_w/WaveMain */ "./src/mojis/23_w/WaveMain.ts");
+/* harmony import */ var _mojis_24_x_XORMain__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ../mojis/24_x/XORMain */ "./src/mojis/24_x/XORMain.ts");
+/* harmony import */ var _mojis_25_y_YUVMain__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../mojis/25_y/YUVMain */ "./src/mojis/25_y/YUVMain.ts");
+/* harmony import */ var _mojis_26_z_ZFightingMain__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../mojis/26_z/ZFightingMain */ "./src/mojis/26_z/ZFightingMain.ts");
 
 
 
@@ -24328,7 +24865,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//import { UDFMain } from "../mojis/21_u/UDF";
+
+
+
 
 
 
@@ -24338,27 +24877,31 @@ class Main {
     constructor() {
     }
     static nextPage() {
+        console.log("next page");
         const params = new URLSearchParams(window.location.search);
         const a = params.get("auto");
+        const lang = params.get("lang");
         let str = Main.TEXTS;
         let idx = str.indexOf(Main.type);
         let nextIdx = (idx + 1) % str.length;
-        /*window.location.search = "?type=" + str[nextIdx]
-            let utterance = new SpeechSynthesisUtterance("Next");
-            utterance.lang = "en-US"
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance); */
+        let query = "?type=" + str[nextIdx];
+        if (lang) {
+            query += "&lang=" + lang;
+        }
+        window.location.search = query;
     }
     static prevPage() {
+        console.log("prev page");
+        const params = new URLSearchParams(window.location.search);
+        const lang = params.get("lang");
         let str = Main.TEXTS;
         let idx = str.indexOf(Main.type);
         let prevIdx = (idx - 1 + str.length) % str.length;
-        /*
-         window.location.search = "?type=" + str[prevIdx];
-            let utterance = new SpeechSynthesisUtterance("Previous");
-            utterance.lang = "en-US"
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);*/
+        let query = "?type=" + str[prevIdx];
+        if (lang) {
+            query += "&lang=" + lang;
+        }
+        window.location.search = query;
     }
     init() {
         _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.init();
@@ -24366,145 +24909,154 @@ class Main {
         const params = new URLSearchParams(window.location.search);
         let t = params.get("type");
         const a = params.get("auto");
+        console.log("type:", t, "auto:", a);
         //音声はtitleview
         if (t === null) {
             //return;
             Main.type = "0";
             t = "0";
+            console.log("default page: 0");
+        }
+        t = t.toLowerCase();
+        //autoがあったとき
+        if (a == "1") {
+            console.log("auto mode: next page after 10 seconds");
+            let str = Main.TEXTS;
+            let idx = str.indexOf(t);
+            let nextIdx = (idx + 1) % str.length;
+            setTimeout(() => {
+                window.location.search = "?type=" + str[nextIdx] + "&auto=1";
+            }, 10000);
         }
         else {
-            t = t.toLowerCase();
-            //autoがあったとき
-            if (a == "1") {
-                let str = Main.TEXTS;
-                let idx = str.indexOf(t);
-                let nextIdx = (idx + 1) % str.length;
-                setTimeout(() => {
-                    window.location.search = "?type=" + str[nextIdx] + "&auto=1";
-                }, 10000);
-            }
-            Main.type = t;
+            console.log("manual mode");
         }
+        Main.type = t;
         if (t == "0") {
-            document.title = t.toUpperCase() + "";
+            document.title = "Algorithms from A to Z";
         }
         else {
-            document.title = t.toUpperCase() + "";
+            document.title = t.toUpperCase() + " - Algorithms from A to Z";
         }
+        const alphabetInput = new _html_AlphabetInputView__WEBPACK_IMPORTED_MODULE_3__.AlphabetInputView();
         switch (t) {
             case "0":
-                let title = new _mojis_00_title_TitleMain__WEBPACK_IMPORTED_MODULE_2__.TitleMain();
+                let title = new _mojis_00_title_TitleMain__WEBPACK_IMPORTED_MODULE_5__.TitleMain();
                 title.init();
                 break;
             case "a":
-                let a = new _mojis_01_a_AsciiMain__WEBPACK_IMPORTED_MODULE_3__.AsciiMain();
+                let a = new _mojis_01_a_AsciiMain__WEBPACK_IMPORTED_MODULE_6__.AsciiMain();
                 a.init();
                 break;
             case "b":
-                let b = new _mojis_02_b_BoidsMain__WEBPACK_IMPORTED_MODULE_4__.BoidsMain();
+                let b = new _mojis_02_b_BoidsMain__WEBPACK_IMPORTED_MODULE_7__.BoidsMain();
                 b.init();
                 break;
             case "c":
-                let c = new _mojis_03_c_CAMain__WEBPACK_IMPORTED_MODULE_5__.CAMain();
+                let c = new _mojis_03_c_CAMain__WEBPACK_IMPORTED_MODULE_8__.CAMain();
                 c.init();
                 break;
             case "d":
-                let d = new _mojis_04_d_DifferentialGroth__WEBPACK_IMPORTED_MODULE_6__.DifferentialGrowth();
+                let d = new _mojis_04_d_DifferentialGroth__WEBPACK_IMPORTED_MODULE_9__.DifferentialGrowth();
                 d.init();
                 break;
             case "e":
-                let e = new _mojis_05_e_ErrorDiffusionMain__WEBPACK_IMPORTED_MODULE_7__.ErrorDiffusionMain();
+                let e = new _mojis_05_e_ErrorDiffusionMain__WEBPACK_IMPORTED_MODULE_10__.ErrorDiffusionMain();
                 e.init();
                 break;
             case "f":
-                let f = new _mojis_06_f_FourierMain__WEBPACK_IMPORTED_MODULE_8__.FourierMain();
+                let f = new _mojis_06_f_FourierMain__WEBPACK_IMPORTED_MODULE_11__.FourierMain();
                 f.init();
                 break;
             case "g":
-                let g = new _mojis_07_g_GameOfLifeMain__WEBPACK_IMPORTED_MODULE_9__.GameOfLifeMain();
+                let g = new _mojis_07_g_GameOfLifeMain__WEBPACK_IMPORTED_MODULE_12__.GameOfLifeMain();
                 g.init();
                 break;
             case "h":
-                let h = new _mojis_08_h_HilbertCurveMain__WEBPACK_IMPORTED_MODULE_10__.HilbertCurveMain();
+                let h = new _mojis_08_h_HilbertCurveMain__WEBPACK_IMPORTED_MODULE_13__.HilbertCurveMain();
                 h.init();
                 break;
             case "i":
-                let i = new _mojis_09_i_IKMain__WEBPACK_IMPORTED_MODULE_11__.IKMain();
+                let i = new _mojis_09_i_IKMain__WEBPACK_IMPORTED_MODULE_14__.IKMain();
                 i.init();
                 break;
             case "j":
-                let j = new _mojis_10_j_JarvisMarchMain__WEBPACK_IMPORTED_MODULE_12__.JarvisMarchMain();
+                let j = new _mojis_10_j_JarvisMarchMain__WEBPACK_IMPORTED_MODULE_15__.JarvisMarchMain();
                 j.init();
                 break;
             case "k":
-                let k = new _mojis_11_k_KDTreeMain__WEBPACK_IMPORTED_MODULE_13__.KDTreeMain();
+                let k = new _mojis_11_k_KDTreeMain__WEBPACK_IMPORTED_MODULE_16__.KDTreeMain();
                 k.init();
                 break;
             case "l":
-                let l = new _mojis_12_l_LSystemMain__WEBPACK_IMPORTED_MODULE_14__.LSystemMain();
+                let l = new _mojis_12_l_LSystemMain__WEBPACK_IMPORTED_MODULE_17__.LSystemMain();
                 l.init();
                 break;
             case "m":
-                let m = new _mojis_13_m_MazeMain__WEBPACK_IMPORTED_MODULE_15__.MazeMain();
+                let m = new _mojis_13_m_MazeMain__WEBPACK_IMPORTED_MODULE_18__.MazeMain();
                 m.init();
                 break;
             case "n":
-                let n = new _mojis_14_n_NavierMain__WEBPACK_IMPORTED_MODULE_16__.NavierMain();
+                let n = new _mojis_14_n_NavierMain__WEBPACK_IMPORTED_MODULE_19__.NavierMain();
                 n.init();
                 break;
             case "o":
-                let o = new _mojis_15_o_OpenTypeMain__WEBPACK_IMPORTED_MODULE_17__.OpenTypeMain();
+                let o = new _mojis_15_o_OpenTypeMain__WEBPACK_IMPORTED_MODULE_20__.OpenTypeMain();
                 o.init();
                 break;
             case "p":
-                let p = new _mojis_16_p_PerlinNoiseMain__WEBPACK_IMPORTED_MODULE_18__.PerlinNoiseMain();
+                let p = new _mojis_16_p_PerlinNoiseMain__WEBPACK_IMPORTED_MODULE_21__.PerlinNoiseMain();
                 p.init();
                 break;
             case "q":
-                let q = new _mojis_17_q_QuadTreeMain__WEBPACK_IMPORTED_MODULE_19__.QuadTreeMain();
+                let q = new _mojis_17_q_QuadTreeMain__WEBPACK_IMPORTED_MODULE_22__.QuadTreeMain();
                 q.init();
                 break;
             case "r":
-                let r = new _mojis_18_r_ReactionDiffusionMain__WEBPACK_IMPORTED_MODULE_20__.ReactionDiffusionMain();
+                let r = new _mojis_18_r_ReactionDiffusionMain__WEBPACK_IMPORTED_MODULE_23__.ReactionDiffusionMain();
                 r.init();
                 break;
             case "s":
-                let s = new _mojis_19_s_SpiroMain__WEBPACK_IMPORTED_MODULE_21__.SpiroMain();
+                let s = new _mojis_19_s_SpiroMain__WEBPACK_IMPORTED_MODULE_24__.SpiroMain();
                 s.init();
                 break;
             case "t":
-                let t = new _mojis_20_t_TenPrintMain__WEBPACK_IMPORTED_MODULE_22__.TenPrintMain();
+                let t = new _mojis_20_t_TenPrintMain__WEBPACK_IMPORTED_MODULE_25__.TenPrintMain();
                 t.init();
                 break;
             case "u":
-                let u = new _mojis_21_u_UnsharpMaskMain__WEBPACK_IMPORTED_MODULE_23__.UnsharpMaskMain();
+                let u = new _mojis_21_u_UnsharpMaskMain__WEBPACK_IMPORTED_MODULE_26__.UnsharpMaskMain();
                 u.init();
                 break;
             case "v":
-                let v = new _mojis_22_v_VerletMain__WEBPACK_IMPORTED_MODULE_24__.VerletMain();
+                let v = new _mojis_22_v_VerletMain__WEBPACK_IMPORTED_MODULE_27__.VerletMain();
                 v.init();
                 break;
             case "w":
-                let w = new _mojis_23_w_WaveMain__WEBPACK_IMPORTED_MODULE_25__.WaveMain();
+                let w = new _mojis_23_w_WaveMain__WEBPACK_IMPORTED_MODULE_28__.WaveMain();
                 w.init();
                 break;
             case "x":
-                let xx = new _mojis_24_x_XORMain__WEBPACK_IMPORTED_MODULE_26__.XORMain();
+                let xx = new _mojis_24_x_XORMain__WEBPACK_IMPORTED_MODULE_29__.XORMain();
                 xx.init();
                 break;
             case "y":
-                let yy = new _mojis_25_y_YUVMain__WEBPACK_IMPORTED_MODULE_27__.YUVMain();
+                let yy = new _mojis_25_y_YUVMain__WEBPACK_IMPORTED_MODULE_30__.YUVMain();
                 yy.init();
                 break;
             case "z":
-                let z = new _mojis_26_z_ZFightingMain__WEBPACK_IMPORTED_MODULE_28__.ZFightingMain();
+                let z = new _mojis_26_z_ZFightingMain__WEBPACK_IMPORTED_MODULE_31__.ZFightingMain();
                 z.init();
                 break;
         }
-        //window.addEventListener("click", (event) => {
-        // Handle click events
-        //document.documentElement.requestFullscreen();
-        //});
+        this.info = new _html_InfoView__WEBPACK_IMPORTED_MODULE_4__.InfoView();
+        this.info.init(_data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.currentData);
+        const arrow = new _html_ArrowView__WEBPACK_IMPORTED_MODULE_2__.ArrowView();
+        arrow.init();
+        alphabetInput.init(_data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.currentData);
+        this.addKeyEventListener();
+    }
+    addKeyEventListener() {
         window.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 // Handle escape key press
@@ -24514,16 +25066,26 @@ class Main {
                 window.location.search = "?type=0&auto=1";
                 return;
             }
-            if (event.key === "Enter") {
-                window.location.search = "?type=0&auto=1";
+            const target = event.target;
+            const isTextInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA");
+            if (!isTextInput && event.key === "ArrowRight") {
+                Main.nextPage();
                 return;
             }
+            if (!isTextInput && event.key === "ArrowLeft") {
+                Main.prevPage();
+                return;
+            }
+            //if(event.key==="Enter"){
+            //    window.location.search = "?type=0&auto=1";
+            //    return;
+            //}
             //console.log(event.key);
             let t = event.key;
             if (!/^[a-z0]$/.test(t))
                 return;
-            window.location.search = "?type=" + t;
-            return;
+            //    window.location.search = "?type=" + t;
+            //    return;
         });
     }
 }
@@ -24608,12 +25170,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "WorkBase": () => (/* binding */ WorkBase)
 /* harmony export */ });
-/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+
 
 class WorkBase {
     constructor(data) {
         this._data = data;
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_0__.TitleView.init(this._data);
+        _data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.currentData = this._data;
+    }
+    showTitle() {
+        console.log("showTitle");
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_1__.TitleView.init(this._data);
     }
     init() {
     }
@@ -24684,7 +25252,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _data_InfoData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../data/InfoData */ "./src/data/InfoData.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
-/* harmony import */ var _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../00_base/TextAnim */ "./src/mojis/00_base/TextAnim.ts");
+/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
 /* harmony import */ var _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../00_base/WorkBase */ "./src/mojis/00_base/WorkBase.ts");
 
 
@@ -24694,33 +25262,38 @@ class TitleMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__.WorkBase 
     //private asciiP5: AsciiMainP5;
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.TITLE);
+        //this.createRandomTitleWords();
+        this.showTitle();
+        this._loop();
+    }
+    _loop() {
+        this._setPosition();
         setTimeout(() => {
-            //console.log("speak:",data.alphabet+":"+data.title);
-            let utterance = new SpeechSynthesisUtterance("Algorithms from A to Z by Kitasenju Design");
-            utterance.lang = "en-US";
-            //utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        }, 500);
-        this.init();
-        document.getElementById("about").style.display = "flex";
-        document.getElementById("about").style.width = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width + "px";
-        let animA1 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("a1");
-        let animA2 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("a2");
-        let animA3 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("a3");
-        let animB1 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("b1");
-        let animB2 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("b2");
-        let animB3 = new _00_base_TextAnim__WEBPACK_IMPORTED_MODULE_2__.TextAnim("b3");
-        let ww = document.getElementById("a1").getBoundingClientRect().width;
-        console.log("W" + ww + "," + _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 2);
-        let space = (_data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width - ww * 2) / 3;
-        document.getElementById("centerCon1").style.marginLeft = (space) + "px";
-        document.getElementById("centerCon2").style.marginLeft = (space / 2) + "px";
-        animA1.play(document.getElementById("a1").innerHTML);
-        animA2.play(document.getElementById("a2").innerHTML, 0.3);
-        animA3.play(document.getElementById("a3").innerHTML, 0.6);
-        animB1.play(document.getElementById("b1").innerHTML);
-        animB2.play(document.getElementById("b2").innerHTML, 0.3);
-        animB3.play(document.getElementById("b3").innerHTML, 0.6);
+            this._loop();
+        }, 3000);
+    }
+    _setPosition() {
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 2 + _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 4 * (Math.random() - 0.5), _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height / 2 + _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height / 4 * (-Math.random()));
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setPosition();
+        let xx = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 2 + _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 4 * (Math.random() - 0.5);
+        let yy = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height / 2 + _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height / 4 * (Math.random());
+        document.getElementById("year").style.position = "fixed";
+        document.getElementById("year").style.left = xx + "px";
+        document.getElementById("year").style.top = yy + "px";
+    }
+    createRandomTitleWords() {
+        const texts = ["Algorithms", "from", "A to Z", "by Kitasenju Design"];
+        let idx = 0;
+        for (const text of texts) {
+            const div = document.createElement("div");
+            div.className = "titleWord shadow";
+            div.textContent = text;
+            document.body.appendChild(div);
+            //div.style.rotate = (Math.random()*60-30) + "deg";
+            div.style.left = (200 + idx * 200) + "px";
+            div.style.top = (200 + Math.random() * (_data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height - 400)) + "px";
+            idx++;
+        }
     }
 }
 
@@ -24751,13 +25324,23 @@ __webpack_require__.r(__webpack_exports__);
 class AsciiMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.A);
-        this.init();
+        this._ox = 0;
+        this._oy = 0;
+        this.showTitle();
+        //this.init();
     }
     init() {
+        if (this.asciiThree)
+            return;
         this.asciiThree = new _AsciiThree__WEBPACK_IMPORTED_MODULE_4__.AsciiThree();
+        this._ox = 1200;
+        this._oy = 600;
+        this.asciiThree._ox = this._ox;
+        this.asciiThree._oy = this._oy;
         this.asciiThree.init();
         this.loop();
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setPosition(200, 200);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setBasePosition(200, 200);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setPosition();
         this.resize();
         window.addEventListener("resize", () => this.resize());
     }
@@ -24765,13 +25348,13 @@ class AsciiMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__.WorkBase 
         let e = document.getElementById("ascii");
         if (e) {
             let img = this.asciiThree.captureImageData();
-            // convert to ascii (5 tones)
             const ascii = this.imageDataToAscii(img, this.asciiThree.WIDTH, this.asciiThree.HEIGHT);
             // ensure monospace / preserve whitespace
             e.style.whiteSpace = "pre";
             e.style.fontFamily = "monospace, monospace";
             e.style.fontSize = (_data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width / 1920 * 33) + "px";
             e.textContent = ascii;
+            this.resize();
         }
         setTimeout(() => {
             this.loop();
@@ -24788,7 +25371,7 @@ class AsciiMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__.WorkBase 
         if (w === 0 || h === 0)
             return "";
         // character set for non-edge (light -> dark)
-        const charset = [" ", ".", ":", "-", " "]; // length should be == levels
+        const charset = [" ", ".", "+", ":", "=", " "]; // length should be == levels
         const chars = charset.length >= levels ? charset : (new Array(levels).fill(0).map((_, i) => charset[Math.floor(i / levels * charset.length)]));
         // build grayscale image
         const data = img.data;
@@ -24899,7 +25482,7 @@ class AsciiMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_3__.WorkBase 
         const bh = box.offsetHeight;
         const left = (vw - bw) / 2;
         const top = (vh - bh) / 2;
-        box.style.position = "absolute";
+        box.style.position = "fixed";
         box.style.left = left + "px";
         box.style.top = top + "px";
     }
@@ -24920,9 +25503,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AsciiThree": () => (/* binding */ AsciiThree)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
-/* harmony import */ var three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three/examples/jsm/loaders/FontLoader */ "./node_modules/three/examples/jsm/loaders/FontLoader.js");
-/* harmony import */ var three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! three/examples/jsm/geometries/TextGeometry */ "./node_modules/three/examples/jsm/geometries/TextGeometry.js");
+/* harmony import */ var three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three/examples/jsm/loaders/FontLoader */ "./node_modules/three/examples/jsm/loaders/FontLoader.js");
+/* harmony import */ var three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three/examples/jsm/geometries/TextGeometry */ "./node_modules/three/examples/jsm/geometries/TextGeometry.js");
+/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
 /* harmony import */ var _font_FontManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../font/FontManager */ "./src/font/FontManager.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
 /* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
@@ -24944,14 +25527,21 @@ class AsciiThree {
         this._rotX = 0;
         this._rotY = 0;
         this._rotZ = 0;
+        this._ox = 0;
+        this._oy = 0;
         //this.init();
         this._rotX = 0.003 * (Math.random() > 0.5 ? -1 : 1);
         this._rotY = 0.002 * (Math.random() > 0.5 ? -1 : 1);
         this._rotZ = 0.001 * (Math.random() > 0.5 ? -1 : 1);
     }
     init() {
+        let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+        if (letter == "") {
+            letter = "A";
+        }
+        console.log("letter = ", letter);
         this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_0__.FontManager();
-        this._fontManager.init("A", (path) => {
+        this._fontManager.init(letter, (path) => {
             this._path = path;
             this.makeLetter();
         });
@@ -24977,10 +25567,9 @@ class AsciiThree {
         var stgW = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width * 0.4;
         var stgH = _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height * 0.4;
         this.oCamera = new three__WEBPACK_IMPORTED_MODULE_3__.OrthographicCamera(-stgW, stgW, stgH, -stgH, 1, 10000);
-        this.oCamera.position.x = 300 * (Math.random() - 0.5);
-        this.oCamera.position.y = 300 * (Math.random() - 0.5);
-        this.control = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_4__.OrbitControls(this.oCamera, dom);
-        //        this.control.enabled = false;
+        this.oCamera.position.x = 0; // * (Math.random()-0.5);
+        this.oCamera.position.y = 0; // * (Math.random()-0.5);
+        //this.control = new OrbitControls(this.oCamera,dom);
         this.resetCam();
         this.tick();
         this.ambientLight = new three__WEBPACK_IMPORTED_MODULE_3__.AmbientLight(0xffffff, 0.2);
@@ -24994,12 +25583,12 @@ class AsciiThree {
         this.onWindowResize();
     }
     makeLetter() {
-        const txt = 'A';
-        const loader = new three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_5__.FontLoader();
+        const txt = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet || "A";
+        const loader = new three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_4__.FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.
         loader.load('./data/helvetiker_regular.typeface.json', (font) => {
             let height = 10;
-            const geom = new three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_6__.TextGeometry(txt, {
+            const geom = new three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_5__.TextGeometry(txt, {
                 font: font,
                 size: 30,
                 height: height,
@@ -25018,14 +25607,38 @@ class AsciiThree {
             //            this.scene.add(mesh);
             this._container = new three__WEBPACK_IMPORTED_MODULE_3__.Object3D();
             this._container.add(mesh);
-            this._container.scale.set(2, 2, 2);
+            this._container.scale.set(0.5, 0.5, 0.5);
+            gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(this._container.scale, {
+                x: 2,
+                y: 2,
+                z: 2,
+                duration: 3,
+                ease: "power2.out"
+            });
             this._container.position.set(0, 0, 0);
             this.scene.add(this._container);
-            this.meshes.push(this._container);
+            this._container2 = new three__WEBPACK_IMPORTED_MODULE_3__.Object3D();
+            this._container2.add(this._container);
+            this.scene.add(this._container2);
+            this.meshes.push(this._container2);
+            this.rotateAnim(0, "power2.out");
             //let d:DirectionalLight = new DirectionalLight(0xffffff);
             //this.scene.add(d);
         }, undefined, (err) => {
             console.warn('FontLoader failed, using canvas fallback', err);
+        });
+    }
+    rotateAnim(delay = 0, ease = "power2.inOut") {
+        gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(this._container2.rotation, {
+            x: this._container2.rotation.x - this._rotX * 1500,
+            y: this._container2.rotation.y - this._rotY * 1500,
+            z: this._container2.rotation.z - this._rotZ * 1500,
+            duration: 4,
+            delay: delay,
+            ease: ease,
+            onComplete: () => {
+                this.rotateAnim(12);
+            }
         });
     }
     resetCam() {
@@ -25033,8 +25646,7 @@ class AsciiThree {
         this.oCamera.position.z = 3000;
     }
     tick() {
-        var _a;
-        (_a = this.control) === null || _a === void 0 ? void 0 : _a.update();
+        //this.control?.update();
         this.renderer.render(this.scene, this.oCamera); //this.oCamera);//this.camera);    
         if (this._container) {
             this._container.rotation.x += this._rotX;
@@ -25284,6 +25896,7 @@ __webpack_require__.r(__webpack_exports__);
 class BoidsMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.B);
+        this.showTitle();
     }
     init() {
         let boids = new _BoidsP5__WEBPACK_IMPORTED_MODULE_2__.BoidsP5();
@@ -25317,6 +25930,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _html_InfoView__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../html/InfoView */ "./src/html/InfoView.ts");
+
 
 
 
@@ -25349,16 +25964,21 @@ class BoidsP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_6__.p5Base {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("B", () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.alphabet;
+                if (letter == "")
+                    letter = "B";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp(p);
                 });
+                this._callback();
             };
             /** フレームごとの描画処理 */
             p.draw = () => {
                 this.draw();
             };
             p.mouseClicked = () => {
-                this.click();
+                //this.click();
             };
             p.windowResized = () => {
                 this.resize();
@@ -25376,7 +25996,7 @@ class BoidsP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_6__.p5Base {
     onLoad() {
     }
     click() {
-        this.reset();
+        //this.reset();
     }
     reset() {
         this._p5.background(this.bgColor);
@@ -25394,6 +26014,11 @@ class BoidsP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_6__.p5Base {
             const y = pp[1];
             this._boids.push(new _Boid__WEBPACK_IMPORTED_MODULE_5__.Boid(this._p5, x, y));
         }
+        _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.mojiCenterX = this._ox;
+        _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.mojiCenterY = this._oy;
+        if (!_html_InfoView__WEBPACK_IMPORTED_MODULE_10__.InfoView.showing) {
+            _html_TitleView__WEBPACK_IMPORTED_MODULE_8__.TitleView.setCenter(this._ox, this._oy);
+        }
     }
     draw() {
         if (!this._isInitialized)
@@ -25407,14 +26032,11 @@ class BoidsP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_6__.p5Base {
         }
         this._p5.noFill();
         this._p5.stroke(this.strokeColor);
-        _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.mojiCenterX = this._ox;
-        _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.mojiCenterY = this._oy;
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_8__.TitleView.setCenter(this._ox, this._oy);
         if (this._boids[0].count <= 1) {
             this.drawFont(this._p5.width, this._p5.height, this._os, this._ox, this._oy);
         }
         if (this._boids[0].count > 30 * 11) {
-            this.reset();
+            //this.reset();
         }
     }
     drawBoids() {
@@ -25470,6 +26092,7 @@ class CAMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         //this.init();
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.C);
+        this.showTitle();
     }
     init() {
         const main = new _main_MainCA1d__WEBPACK_IMPORTED_MODULE_2__.MainCA1d();
@@ -25679,6 +26302,7 @@ class CACalculator {
         this.rule = 0;
         this.isInit = false;
         console.log("CACalculator!!!!!!", textureWidth, planeWidth);
+        this.renderer = renderer;
         this.gpuCompute = new three_examples_jsm_misc_GPUComputationRenderer__WEBPACK_IMPORTED_MODULE_3__.GPUComputationRenderer(textureWidth, textureWidth, renderer);
         const textureLifeGame = this.gpuCompute.createTexture();
         let l = textureLifeGame.image.data.length;
@@ -25743,11 +26367,42 @@ class CACalculator {
         //this.p5Main._qTree.update(5);
         //this.p5Main._qTree.swapRandomly();
     }
+    /**
+     * 任意のタイミングでtextureLifeGameの特定のピクセル(x,y)だけ書き換える。
+     * GPUComputationRendererはピンポン方式で2枚のレンダーターゲットを使い回すため、
+     * 両方に書き込まないと次のcompute()で上書き/巻き戻りが起きる。
+     */
+    setPixel(x, y, r, g, b, a = 1) {
+        const data = new Float32Array([r, g, b, a]);
+        const pixelTex = new three__WEBPACK_IMPORTED_MODULE_4__.DataTexture(data, 1, 1, three__WEBPACK_IMPORTED_MODULE_4__.RGBAFormat, three__WEBPACK_IMPORTED_MODULE_4__.FloatType);
+        pixelTex.needsUpdate = true;
+        const pos = new three__WEBPACK_IMPORTED_MODULE_4__.Vector2(x, y);
+        this.renderer.copyTextureToTexture(pos, pixelTex, this.gpuCompute.getCurrentRenderTarget(this.variableLifeGame).texture);
+        this.renderer.copyTextureToTexture(pos, pixelTex, this.gpuCompute.getAlternateRenderTarget(this.variableLifeGame).texture);
+    }
+    //生死のみで扱いたいとき用のショートカット(コンストラクタでの初期化と同じ値の付け方)
+    setCell(x, y, alive) {
+        let v = alive ? 1 : 0;
+        this.setPixel(x, y, v, v, v, 1);
+    }
     update() {
         if (!this.isInit)
             return;
         if (this.p5MainCA.getCanvasTex() == null)
             return;
+        /*
+        if(this.p5MainCA._p5.frameCount>=100){
+            for(let i=0;i<ParamsC.resolution;i++){
+                this.setPixel(
+                    i,
+                    ParamsC.resolution-1,
+                    i%32==0 ? 1 : 0,
+                    i%32==0 ? 1 : 0,
+                    i%32==0 ? 1 : 0,
+                    1
+                );
+            }
+        }*/
         //return;
         this.variableLifeGame.material.uniforms.areaTex.value = this.p5MainCA.getCanvasTex();
         //this.material.uniforms.areaTex.value = this.p5Main.getCanvasTex();
@@ -25989,12 +26644,13 @@ class RuleTex {
         for (let i = 0; i < 256; i++) {
             let str = "" + _data_ParamsC__WEBPACK_IMPORTED_MODULE_0__.ParamsC.zeroPadding(_data_ParamsC__WEBPACK_IMPORTED_MODULE_0__.ParamsC.convertToBinary(i), 8);
             list.push(str);
-            //console.log(str);
+            console.log(str);
         }
         for (let j = 0; j < ruleTexHeight; j++) {
             let output = "";
             for (let i = 0; i < ruleTexWidth; i++) {
-                let stride = (j * ruleTexWidth + i) * 4;
+                let idx = i; //ruleTexWidth-1-i;
+                let stride = (j * ruleTexWidth + idx) * 4;
                 //console.log( list[j].substring(i,1),parseInt( list[j].substring(i,1) ) )
                 output += "" + parseInt(list[j].substring(i, i + 1));
                 data[stride + 0] = parseInt(list[j].substring(i, i + 1));
@@ -26043,10 +26699,10 @@ class MainCA1d {
         _data_ParamsC__WEBPACK_IMPORTED_MODULE_0__.ParamsC.init();
         this.renderer = new three__WEBPACK_IMPORTED_MODULE_3__.WebGLRenderer({
             canvas: document.querySelector('#webgl'),
-            antialias: false,
+            antialias: true,
             preserveDrawingBuffer: true
         });
-        this.renderer.setPixelRatio(1);
+        this.renderer.setPixelRatio(2);
         this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_3__.Color(0x000000));
         this.renderer.setSize(_data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.height);
         this.caMain = new _lifegame_CAMain__WEBPACK_IMPORTED_MODULE_1__.CAMain();
@@ -26123,9 +26779,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "caRect": () => (/* binding */ caRect)
 /* harmony export */ });
-/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
-/* harmony import */ var _p5MainCA__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./p5MainCA */ "./src/mojis/03_c/myP5/p5MainCA.ts");
-
+/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
 
 class caRect {
     constructor(idxBG, idxA, idxB, idxC) {
@@ -26138,6 +26792,14 @@ class caRect {
         this.idxC = 0;
         this.idxBG = 0;
         this.flag = false;
+        this._listBG = [
+            150, 18, 186, 5
+        ];
+        this._listLetter = [
+            147
+        ];
+        this._bgIndex = 0;
+        this._letterIndex = 0;
         this.idxBG = idxBG;
         this.idxA = idxA;
         this.idxB = idxB;
@@ -26145,22 +26807,31 @@ class caRect {
     }
     hide(duration = 0.1, delay = 0) {
         this.h = 0;
-        gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this, {
+        gsap__WEBPACK_IMPORTED_MODULE_0__["default"].to(this, {
             delay: delay,
             h: 512,
             duration: duration,
             ease: "linear"
         });
-        gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(3, () => {
+        gsap__WEBPACK_IMPORTED_MODULE_0__["default"].delayedCall(3, () => {
             this.flag = true;
         });
     }
     draw(p5, parent) {
-        p5.fill(_p5MainCA__WEBPACK_IMPORTED_MODULE_0__.p5MainCA.RULES[this.idxBG], 0, 0);
+        if (p5.frameCount % 180 == 0) {
+            this._bgIndex++;
+            this._letterIndex++;
+        }
+        p5.fill(this._listBG[this._bgIndex % this._listBG.length], 0, 0);
         p5.rect(this.x, this.y, this.w, this.h);
-        p5.fill(0, //p5MainCA.RULES[this.idxA],
-        0, //p5MainCA.RULES[this.idxB],
-        _p5MainCA__WEBPACK_IMPORTED_MODULE_0__.p5MainCA.RULES[this.idxC]);
+        //文字を書く
+        //if(p5.frameCount%50==30){
+        p5.fill(this._listLetter[this._letterIndex % this._listLetter.length], 
+        //p5MainCA.RULES[1],//p5MainCA.RULES[this.idxA],
+        255, //p5MainCA.RULES[this.idxB],
+        //p5MainCA.RULES[this.idxC],
+        0, 255);
+        //}
         if (p5.frameCount >= 50) {
             parent.drawFont(p5.width, p5.height, 2.5, 0, -p5.height / 6);
         }
@@ -26215,8 +26886,13 @@ class p5MainCA extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         new (p5__WEBPACK_IMPORTED_MODULE_0___default())((p) => {
             /** 初期化処理 */
             p.setup = () => {
-                this.loadFont("C", () => {
-                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - 100 - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().width, 100);
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+                if (letter == "")
+                    letter = "C";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
+                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - 100 - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().width, 100);
+                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition();
                     this._isInitialized = true;
                     this.setUp();
                     this._callback();
@@ -26251,8 +26927,10 @@ class p5MainCA extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this._rectA = new _caRect__WEBPACK_IMPORTED_MODULE_3__.caRect(5, 0, 16, 16);
         this._rectB = new _caRect__WEBPACK_IMPORTED_MODULE_3__.caRect(12, 0, 5, 5);
         //this._rectC = new caRect(5,0,16,16);
-        this._rectC = new _caRect__WEBPACK_IMPORTED_MODULE_3__.caRect(12, 0, //p5MainCA.RULES.length-9,//6
-        p5MainCA.RULES.length - 9, p5MainCA.RULES.length - 9);
+        this._rectC = new _caRect__WEBPACK_IMPORTED_MODULE_3__.caRect(12, //126
+        0, //p5MainCA.RULES.length-9,//6
+        p5MainCA.RULES.length - 9, //86
+        p5MainCA.RULES.length - 9); //86
         this.drawCA();
         this.loop1();
     }
@@ -26268,21 +26946,9 @@ class p5MainCA extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this.drawCA();
     }
     drawCA() {
-        //console.log("drawCA");
         this._p5.noStroke();
         this._p5.background(0, 0, 0);
-        let xx = Math.random() * 255;
-        let yy = Math.random() * 255;
-        /*
-        
-        this._p5.fill(
-            p5MainCA.RULES[this._bgIndex],
-            0,0
-        );
-        this._p5.rect(0,0,this._p5.width,this._p5.height);
-        */
-        //this._rectA.draw(this._p5,this);
-        //this._rectB.draw(this._p5,this);
+        //Cのみ
         if (this._rectC) {
             this._rectC.draw(this._p5, this);
         }
@@ -26300,7 +26966,12 @@ class p5MainCA extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         return this._canvasTex;
     }
 }
-p5MainCA.RULES = [0, 18, 22, 30, 41, 45, 54, 62, 73, 86, 90, 110, 124, 126, 137, 193, 231, 184];
+p5MainCA.RULES = [
+    150, 18, 22, 30, 41,
+    45, 54, 62, 73, 86,
+    90, 110, 122, 126, 137,
+    193, 231, 184
+];
 
 
 /***/ }),
@@ -26325,6 +26996,7 @@ __webpack_require__.r(__webpack_exports__);
 class DifferentialGrowth extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.D);
+        this.showTitle();
         //this.init();
     }
     init() {
@@ -26394,7 +27066,11 @@ class DifferentialGrothP5 {
                 }
                 this._p5 = p;
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_2__.FontManager();
-                this._fontManager.init("D", (path) => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.alphabet;
+                if (letter == "")
+                    letter = "D";
+                console.log("letter = ", letter);
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this._width = _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width;
                     this._height = _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height;
@@ -26441,7 +27117,7 @@ class DifferentialGrothP5 {
                 }
             }*/
         });
-        console.log("Params gui setup", _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.gui);
+        //console.log("Params gui setup",Params.gui);
         //Params.gui.add(this,"copyToClipboard").name("SVGをコピー");
         //Params.gui.add(this,"downloadSVG").name("SVGを保存");
         _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.gui.add(this, "reset");
@@ -26450,7 +27126,7 @@ class DifferentialGrothP5 {
     }
     setUp() {
         //@ts-ignore
-        console.log(" ----mode:", window.SVG);
+        //console.log(" ----mode:", window.SVG);      
         let r = this._p5.createCanvas(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height);
         this._width = r.width;
         this._height = r.height;
@@ -26486,7 +27162,7 @@ class DifferentialGrothP5 {
         console.log("addPoints data:", data.length);
         for (let i = 0; i < data.length; i++) {
             const path = data[i];
-            console.log("path:", path);
+            //console.log("path:", path);
             for (let j = 0; j < path.length; j++) {
                 const point = path[j];
                 //console.log("point:", point);
@@ -27225,6 +27901,7 @@ __webpack_require__.r(__webpack_exports__);
 class ErrorDiffusionMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.E);
+        this.showTitle();
     }
     init() {
         this._edP5 = new _ErrorDiffusionP5__WEBPACK_IMPORTED_MODULE_2__.ErrorDiffusionP5();
@@ -27251,6 +27928,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var p5__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(p5__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ErrorDiffusionP5src__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ErrorDiffusionP5src */ "./src/mojis/05_e/ErrorDiffusionP5src.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -27267,7 +27946,11 @@ class ErrorDiffusionP5 {
                 this._p5 = p;
                 const W = 140;
                 this._src = new _ErrorDiffusionP5src__WEBPACK_IMPORTED_MODULE_1__.ErrorDiffusionP5src();
-                this._src.start("E", W, Math.floor(W * window.innerHeight / innerWidth), () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.alphabet;
+                if (letter == "")
+                    letter = "E";
+                console.log("letter = ", letter);
+                this._src.start(letter, W, Math.floor(W * window.innerHeight / innerWidth), () => {
                     this._isInit = true;
                     //console.log("start2")
                     this._callback();
@@ -27312,80 +27995,47 @@ class ErrorDiffusionP5 {
     }
     resize() {
     }
-    imageIndex(img, x, y) {
-        return 4 * (x + y * img.width);
-    }
-    getColorAtindex(img, x, y) {
-        let idx = this.imageIndex(img, x, y);
-        let pix = img.pixels;
-        let red = pix[idx];
-        let green = pix[idx + 1];
-        let blue = pix[idx + 2];
-        let alpha = pix[idx + 3];
-        return this._p5.color(red, green, blue, alpha);
-    }
-    setColorAtIndex(img, x, y, clr) {
-        let idx = this.imageIndex(img, x, y);
-        let pix = img.pixels;
-        pix[idx] = this._p5.red(clr);
-        pix[idx + 1] = this._p5.green(clr);
-        pix[idx + 2] = this._p5.blue(clr);
-        pix[idx + 3] = this._p5.alpha(clr);
-    }
     // Finds the closest step for a given value
     // The step 0 is always included, so the number of steps
     // is actually steps + 1
     closestStep(max, steps, value) {
         return Math.round(steps * value / 255) * Math.floor(255 / steps);
     }
+    //描画負荷対策: p5.Colorの生成やred()/green()/blue()呼び出しはピクセル毎に非常に重いので、
+    //pixels[]配列を直接読み書きする。元の実装もaddError内でG/BをRの値からしか作っていなかった
+    //(事実上グレースケール処理)ので、誤差もR成分だけを伝搬させれば同じ結果になる
     makeDithered(img, steps) {
         img.loadPixels();
-        for (let y = 0; y < img.height; y++) {
-            for (let x = 0; x < img.width; x++) {
-                let clr = this.getColorAtindex(img, x, y);
-                let oldR = this._p5.red(clr);
-                let oldG = this._p5.green(clr);
-                let oldB = this._p5.blue(clr);
-                let newR = this.closestStep(255, steps, oldR);
-                let newG = this.closestStep(255, steps, oldG);
-                let newB = this.closestStep(255, steps, oldB);
-                let newClr = this._p5.color(newR, newG, newB);
-                this.setColorAtIndex(img, x, y, newClr);
-                let errR = oldR - newR;
-                let errG = oldG - newG;
-                let errB = oldB - newB;
-                this.distributeError(img, x, y, errR, errG, errB);
+        const pixels = img.pixels;
+        const w = img.width;
+        const h = img.height;
+        const vv = 2;
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const idx = 4 * (x + y * w);
+                const oldR = pixels[idx];
+                const newR = this.closestStep(255, steps, oldR);
+                pixels[idx] = newR;
+                pixels[idx + 1] = newR;
+                pixels[idx + 2] = newR;
+                pixels[idx + 3] = 255;
+                const errR = (oldR - newR) + (Math.random() * (vv * 2) - vv);
+                this.addErrorFast(pixels, w, h, x + 1, y, errR * (7 / 16));
+                this.addErrorFast(pixels, w, h, x - 1, y + 1, errR * (3 / 16));
+                this.addErrorFast(pixels, w, h, x, y + 1, errR * (5 / 16));
+                this.addErrorFast(pixels, w, h, x + 1, y + 1, errR * (1 / 16));
             }
         }
         img.updatePixels();
     }
-    distributeError(img, x, y, errR, errG, errB) {
-        let n1 = 7 / 16;
-        let n2 = 3 / 16;
-        let n3 = 5 / 16;
-        let n4 = 1 / 16;
-        let vv = 2; //this._p5.mouseX;
-        errR += this._p5.random(-vv, vv);
-        errG += this._p5.random(-vv, vv);
-        errB += this._p5.random(-vv, vv);
-        this.addError(img, n1, x + 1, y, errR, errG, errB);
-        this.addError(img, n2, x - 1, y + 1, errR, errG, errB);
-        this.addError(img, n3, x, y + 1, errR, errG, errB);
-        this.addError(img, n4, x + 1, y + 1, errR, errG, errB);
-    }
-    addError(img, factor, x, y, errR, errG, errB) {
-        if (x < 0 || x >= img.width || y < 0 || y >= img.height)
+    addErrorFast(pixels, w, h, x, y, err) {
+        if (x < 0 || x >= w || y < 0 || y >= h)
             return;
-        let clr = this.getColorAtindex(img, x, y);
-        let r = this._p5.red(clr);
-        let g = this._p5.green(clr);
-        let b = this._p5.blue(clr);
-        clr.setRed(r + errR * factor);
-        //clr.setGreen(g + errG * factor);
-        //clr.setBlue(b + errB * factor);
-        clr.setGreen(r + errR * factor);
-        clr.setBlue(r + errR * factor);
-        this.setColorAtIndex(img, x, y, clr);
+        const idx = 4 * (x + y * w);
+        const v = pixels[idx] + err;
+        pixels[idx] = v;
+        pixels[idx + 1] = v;
+        pixels[idx + 2] = v;
     }
 }
 ErrorDiffusionP5.FPS = 12;
@@ -27440,8 +28090,12 @@ class ErrorDiffusionP5src {
                 if (!_data_Params__WEBPACK_IMPORTED_MODULE_5__.Params.isStation) {
                     this._os = 0.7 + Math.random() * 0.1;
                 }
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_5__.Params.alphabet;
+                if (letter == "")
+                    letter = "E";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("E", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this.setUp(p);
                     callback();
@@ -27515,11 +28169,14 @@ class ErrorDiffusionP5src {
         };
     }
     setImage(img) {
+        //get()/set()をピクセル数分呼ぶと非常に重い(内部でColor生成やcanvas読み出しが走る)ため、
+        //pixels[]配列を直接コピーする。imgとこのcanvasは常に同じ幅・高さで作られている前提
+        this._p5.loadPixels();
         img.loadPixels();
-        for (let j = 0; j < this._height; j++) {
-            for (let i = 0; i < this._width; i++) {
-                img.set(i, j, this._p5.get(i, j));
-            }
+        const src = this._p5.pixels;
+        const dst = img.pixels;
+        for (let i = 0; i < src.length; i++) {
+            dst[i] = src[i];
         }
         img.updatePixels();
     }
@@ -27730,7 +28387,7 @@ class FourierCircles {
             p5.strokeWeight(3);
             for (let i = 1; i < 4; i++) {
                 const arr = this.partialPaths[i];
-                console.log(arr.length);
+                //console.log(arr.length);
                 if (!arr || arr.length === 0)
                     continue;
                 const tnorm = i / Math.max(1, terms.length - 1);
@@ -27825,10 +28482,11 @@ __webpack_require__.r(__webpack_exports__);
 class FourierMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_2__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.F);
+        this.showTitle();
     }
     init() {
         let f = new _FourierP5__WEBPACK_IMPORTED_MODULE_3__.FourierP5();
-        f.init("F", _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height, () => {
+        f.init(_data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_1__.Stage.height, () => {
             console.log("FourierP5 initialized");
         });
     }
@@ -27853,6 +28511,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../00_base/p5Base */ "./src/mojis/00_base/p5Base.ts");
 /* harmony import */ var _FourierCircles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FourierCircles */ "./src/mojis/06_f/FourierCircles.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -27865,7 +28525,7 @@ class FourierP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this._ratio = 0.0;
         //this._waveSimulation = new WaveSimulation();
     }
-    init(moji, width, height, callback) {
+    init(width, height, callback) {
         this._callback = callback;
         this._width = width;
         this._height = height;
@@ -27873,7 +28533,11 @@ class FourierP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("F", () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+                if (letter == "")
+                    letter = "F";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp(this._p5);
                     this._isInitialized = true;
                     callback();
@@ -27949,6 +28613,7 @@ __webpack_require__.r(__webpack_exports__);
 class GameOfLifeMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.G);
+        this.showTitle();
     }
     init() {
         this._gameOfLife = new _MainGameOfLife__WEBPACK_IMPORTED_MODULE_2__.MainGameOfLife();
@@ -27999,7 +28664,7 @@ class GameOfLifeP5src {
                 this._p5 = p;
                 this._os = 0.6 + 0.05 * (Math.random());
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("G", (path) => {
+                this._fontManager.init(str, (path) => {
                     this._path = path;
                     this.setUp(p);
                     callback();
@@ -28091,12 +28756,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "MainGameOfLife": () => (/* binding */ MainGameOfLife)
 /* harmony export */ });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
 /* harmony import */ var _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data/ParamsG */ "./src/mojis/07_g/data/ParamsG.ts");
 /* harmony import */ var _lifegame_CAMain__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lifegame/CAMain */ "./src/mojis/07_g/lifegame/CAMain.ts");
 /* harmony import */ var _GameOfLifeP5src__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GameOfLifeP5src */ "./src/mojis/07_g/GameOfLifeP5src.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -28115,19 +28782,23 @@ class MainGameOfLife {
             this.onInit();
         });*/
         this.src = new _GameOfLifeP5src__WEBPACK_IMPORTED_MODULE_2__.GameOfLifeP5src();
-        this.src.start("G", _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.resolution, _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.resolution, () => {
+        let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+        if (letter == "")
+            letter = "G";
+        console.log("letter = ", letter);
+        this.src.start(letter, _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.resolution, _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.resolution, () => {
             this.onInit();
         });
     }
     onInit() {
         _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.init();
         //Params.bitmapData = this.bitmapData;
-        this.renderer = new three__WEBPACK_IMPORTED_MODULE_4__.WebGLRenderer({
+        this.renderer = new three__WEBPACK_IMPORTED_MODULE_5__.WebGLRenderer({
             canvas: document.querySelector('#webgl'),
             antialias: false
         });
         this.renderer.setPixelRatio(1);
-        this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_4__.Color(0));
+        this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_5__.Color(0));
         this.renderer.setSize(_data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height);
         this.caMain = new _lifegame_CAMain__WEBPACK_IMPORTED_MODULE_1__.CAMain();
         this.caMain.init(this.src, this.renderer, () => {
@@ -28136,26 +28807,26 @@ class MainGameOfLife {
     }
     init2() {
         //window.alert('a')
-        this.clock = new three__WEBPACK_IMPORTED_MODULE_4__.Clock(true);
+        this.clock = new three__WEBPACK_IMPORTED_MODULE_5__.Clock(true);
         this.clock.start();
-        this.scene = new three__WEBPACK_IMPORTED_MODULE_4__.Scene();
+        this.scene = new three__WEBPACK_IMPORTED_MODULE_5__.Scene();
         this.scene.add(this.caMain);
-        this.oCamera = new three__WEBPACK_IMPORTED_MODULE_4__.OrthographicCamera(-1, 1, 1, -1, 1, 2000);
+        this.oCamera = new three__WEBPACK_IMPORTED_MODULE_5__.OrthographicCamera(-1, 1, 1, -1, 1, 2000);
         this.oCamera.position.set(0, 0, 500);
-        this.oCamera.lookAt(new three__WEBPACK_IMPORTED_MODULE_4__.Vector3());
-        this.controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_5__.OrbitControls(this.oCamera, this.renderer.domElement);
+        this.oCamera.lookAt(new three__WEBPACK_IMPORTED_MODULE_5__.Vector3());
+        this.controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_6__.OrbitControls(this.oCamera, this.renderer.domElement);
         this.controls.enabled = false;
         window.addEventListener('resize', () => {
             this.onWindowResize();
         }, false);
         this.onWindowResize();
-        this.light = new three__WEBPACK_IMPORTED_MODULE_4__.DirectionalLight(0xffcccc);
+        this.light = new three__WEBPACK_IMPORTED_MODULE_5__.DirectionalLight(0xffcccc);
         this.light.intensity = 0.7;
         this.light.position.x = 10;
         this.light.position.y = 10;
         this.light.position.z = 10;
         this.scene.add(this.light);
-        let aa = new three__WEBPACK_IMPORTED_MODULE_4__.AmbientLight(0xbbbbbb);
+        let aa = new three__WEBPACK_IMPORTED_MODULE_5__.AmbientLight(0xbbbbbb);
         this.scene.add(aa);
         _data_ParamsG__WEBPACK_IMPORTED_MODULE_0__.ParamsG.gui.add(this, "reset");
         this.reset();
@@ -28176,8 +28847,8 @@ class MainGameOfLife {
         //でかい方に合わせるあれ
         let ww = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width;
         let hh = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height;
-        let cw = ww * 0.05;
-        let ch = hh * 0.05;
+        let cw = ww * 0.044;
+        let ch = hh * 0.044;
         this.oCamera.left = -cw;
         this.oCamera.right = cw;
         this.oCamera.top = ch;
@@ -28784,6 +29455,318 @@ class p5Main {
 
 /***/ }),
 
+/***/ "./src/mojis/08_h/HilbertAlphabet.ts":
+/*!*******************************************!*\
+  !*** ./src/mojis/08_h/HilbertAlphabet.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HilbertAlphabet": () => (/* binding */ HilbertAlphabet)
+/* harmony export */ });
+class HilbertAlphabet {
+    static getAlphabet(str) {
+        let A = 7;
+        let B = 5;
+        let C = 6;
+        str = str.toUpperCase();
+        switch (str) {
+            case "A":
+                return [
+                    [B, B, C, A, A, C, B, B],
+                    [B, C, A, C, C, A, C, B],
+                    [C, A, B, B, B, B, A, C],
+                    [A, C, B, C, C, B, C, A],
+                    [C, A, C, B, B, C, A, C],
+                    [A, C, A, A, A, A, C, A],
+                    [C, A, B, B, B, B, A, C],
+                    [A, C, B, B, B, B, C, A]
+                ];
+            case "B":
+                return [
+                    [C, A, C, A, C, A, C, B],
+                    [A, B, B, B, B, B, B, A],
+                    [A, B, B, B, B, B, B, A],
+                    [C, A, C, A, C, A, C, B],
+                    [C, A, C, A, C, A, C, B],
+                    [A, B, B, B, B, B, B, A],
+                    [A, B, B, B, B, B, B, A],
+                    [C, A, C, A, C, A, C, B]
+                ];
+            case "C":
+                return [
+                    [B, C, A, A, A, A, C, B],
+                    [C, A, A, A, A, A, A, C],
+                    [A, A, B, B, B, B, B, A],
+                    [A, B, B, B, B, B, B, B],
+                    [A, B, B, B, B, B, B, B],
+                    [A, A, B, B, B, B, B, A],
+                    [C, A, A, A, A, A, A, C],
+                    [B, C, A, A, A, A, C, B]
+                ];
+            case "D":
+                return [
+                    [C, A, C, A, C, A, B, B],
+                    [A, C, A, C, A, C, A, B],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, C, A, C, A, C, B],
+                    [A, C, A, C, A, C, B, B]
+                ];
+            case "E":
+                return [
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, A, A, A, B, B, B],
+                    [A, C, A, A, A, B, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, C, A, C, A, C, A]
+                ];
+            case "F":
+                return [
+                    [C, A, C, A, C, A, C, A],
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, C, A, C, A, B, B],
+                    [A, C, A, C, A, C, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B]
+                ];
+            case "G":
+                return [
+                    [B, C, A, A, A, A, A, B],
+                    [C, A, A, A, A, A, A, A],
+                    [A, A, B, B, B, B, B, B],
+                    [A, A, B, B, B, B, B, B],
+                    [A, A, B, B, A, A, A, A],
+                    [A, A, B, B, B, B, C, A],
+                    [C, A, A, A, A, A, A, A],
+                    [B, C, A, A, A, A, B, A]
+                ];
+            case "H":
+                return [
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, C, A, C, A, C, A],
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A]
+                ];
+            case "I":
+                return [
+                    [B, B, A, C, A, C, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, C, A, C, A, B, B],
+                ];
+            case "J":
+                return [
+                    [B, A, C, A, C, A, C, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [A, B, B, C, A, B, B, B],
+                    [C, A, B, A, C, B, B, B],
+                    [B, C, A, C, B, B, B, B],
+                ];
+            case "K":
+                return [
+                    [C, A, B, B, B, B, A, A],
+                    [A, C, B, B, B, A, C, C],
+                    [C, A, B, B, A, C, B, B],
+                    [A, C, A, C, C, B, B, B],
+                    [C, A, C, A, C, B, B, B],
+                    [A, C, B, B, A, C, B, B],
+                    [C, A, B, B, B, A, C, C],
+                    [A, C, B, B, B, B, A, A],
+                ];
+            case "L":
+                return [
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, C, A, C, A, C, A],
+                ];
+            case "M":
+                return [
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, A, B, B, A, A, C],
+                    [C, A, A, A, A, A, C, A],
+                    [A, C, B, A, A, B, A, C],
+                    [C, A, B, A, A, B, C, A],
+                    [A, C, B, A, A, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                ];
+            case "N":
+                return [
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, A, B, B, B, A, C],
+                    [C, A, A, A, B, B, C, A],
+                    [A, C, B, A, A, B, A, C],
+                    [C, A, B, B, A, A, C, A],
+                    [A, C, B, B, B, A, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                ];
+            case "O":
+                return [
+                    [B, C, C, A, A, C, C, B],
+                    [C, A, A, A, A, A, A, C],
+                    [C, A, B, B, B, B, A, C],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [C, A, B, B, B, B, A, C],
+                    [C, A, A, A, A, A, A, C],
+                    [B, C, C, A, A, C, C, B]
+                ];
+            case "P":
+                return [
+                    [A, C, A, C, A, C, A, B],
+                    [C, A, C, A, C, A, C, A],
+                    [A, C, B, B, B, B, B, C],
+                    [C, A, B, B, B, B, B, A],
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, C, A, C, A, C, B],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, B, B, B, B, B, B]
+                ];
+            case "Q":
+                return [
+                    [B, B, A, A, A, A, B, B],
+                    [B, A, A, A, A, A, A, B],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, A, B, A, A],
+                    [A, A, B, B, B, A, A, A],
+                    [B, A, A, A, A, A, A, B],
+                    [B, B, A, A, A, A, B, A]
+                ];
+            case "R":
+                return [
+                    [C, A, C, A, C, A, C, B],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, C, A, C, A, C, B],
+                    [A, C, B, B, A, C, B, B],
+                    [C, A, B, B, B, A, C, B],
+                    [A, C, B, B, B, B, A, C]
+                ];
+            case "S":
+                return [
+                    [B, A, C, A, C, A, C, A],
+                    [A, C, B, B, B, B, B, B],
+                    [C, A, B, B, B, B, B, B],
+                    [A, C, A, C, A, C, A, C],
+                    [C, A, C, A, C, A, C, A],
+                    [B, B, B, B, B, B, A, C],
+                    [B, B, B, B, B, B, C, A],
+                    [A, C, A, C, A, C, A, B],
+                ];
+            case "T":
+                return [
+                    [C, A, C, A, C, A, C, A],
+                    [A, C, A, C, A, C, A, C],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                    [B, B, B, A, C, B, B, B],
+                    [B, B, B, C, A, B, B, B],
+                ];
+            case "U":
+                return [
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, C, B, B, C, A, A],
+                    [A, A, A, A, A, A, A, A],
+                    [C, A, A, A, A, A, A, C],
+                ];
+            case "V":
+                return [
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [B, C, A, B, B, C, A, B],
+                    [B, A, C, B, B, A, C, B],
+                    [B, B, A, C, A, C, B, B],
+                    [B, B, B, A, C, B, B, B],
+                ];
+            case "W":
+                return [
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, B, B, B, C, A],
+                    [A, C, B, B, B, B, A, C],
+                    [C, A, B, A, A, B, C, A],
+                    [A, C, B, A, A, B, A, C],
+                    [C, A, B, A, A, B, C, A],
+                    [A, C, A, B, B, A, A, C],
+                    [A, A, B, B, B, B, C, A],
+                ];
+            case "X":
+                return [
+                    [A, C, B, B, B, B, C, A],
+                    [A, A, B, B, B, B, A, A],
+                    [C, A, B, B, B, B, A, C],
+                    [B, B, A, C, C, A, B, B],
+                    [B, B, A, C, C, A, B, B],
+                    [C, A, B, B, B, B, A, C],
+                    [A, A, B, B, B, B, A, A],
+                    [A, C, B, B, B, B, C, A],
+                ];
+            case "Y":
+                return [
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [A, A, B, B, B, B, A, A],
+                    [B, B, A, A, A, A, B, B],
+                    [B, B, A, A, A, A, A, A],
+                    [B, B, B, A, A, B, B, B],
+                    [B, B, B, A, A, B, B, B],
+                    [B, B, B, A, A, B, B, B],
+                ];
+            case "Z":
+                return [
+                    [C, A, C, A, C, A, C, A],
+                    [B, B, B, B, B, B, A, A],
+                    [B, B, B, B, B, A, A, B],
+                    [B, B, B, A, A, A, B, B],
+                    [B, B, A, A, B, B, B, B],
+                    [B, A, A, B, B, B, B, B],
+                    [A, A, B, B, B, B, B, B],
+                    [A, C, A, C, A, C, A, C],
+                ];
+        }
+        return [];
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/mojis/08_h/HilbertCurveMain.ts":
 /*!********************************************!*\
   !*** ./src/mojis/08_h/HilbertCurveMain.ts ***!
@@ -28804,6 +29787,7 @@ __webpack_require__.r(__webpack_exports__);
 class HilbertCurveMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.H);
+        this.showTitle();
     }
     init() {
         let h = new _HilbertCurveP5__WEBPACK_IMPORTED_MODULE_2__.HilbertCurveP5();
@@ -28832,6 +29816,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _HilbertAlphabet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HilbertAlphabet */ "./src/mojis/08_h/HilbertAlphabet.ts");
+
 
 
 
@@ -28847,6 +29833,9 @@ class HilbertCurveP5 {
         this.path = [];
         this.bgColor = "#000";
         this.strokeColor = "#fff";
+        //表示/消滅アニメーション用
+        this._phase = "grow"; //grow:描画されていく / hold:完成状態で待機 / shrink:消えていく
+        this._animFrame = 0;
         if (_data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.color) {
             this.bgColor = "rgba(34, 34, 155, 1)";
             this.strokeColor = "#ffe";
@@ -28881,21 +29870,14 @@ class HilbertCurveP5 {
         this._p5.createCanvas(this._width, this._height);
         this._p5.pixelDensity(1);
         this._p5.frameRate(60);
-        let A = 7;
-        let B = 5;
-        let C = 6;
-        this.orderMap = [
-            [A, C, B, B, B, B, A, C],
-            [C, A, B, B, B, B, C, A],
-            [A, C, B, B, B, B, A, C],
-            [C, A, C, A, C, A, C, A],
-            [A, C, A, C, A, C, A, C],
-            [C, A, B, B, B, B, C, A],
-            [A, C, B, B, B, B, A, C],
-            [C, A, B, B, B, B, C, A]
-        ];
+        let letter = _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.alphabet;
+        if (letter == "")
+            letter = "H";
+        console.log("letter = ", letter);
+        this.orderMap = _HilbertAlphabet__WEBPACK_IMPORTED_MODULE_4__.HilbertAlphabet.getAlphabet(letter.substring(0, 1));
         this.generateMultiOrderHilbert();
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition(this._marginX + (_data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.width - 2 * this._marginX) / 16 * 4, this._marginY + (_data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.height - 2 * this._marginY) / 16 * 4);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setBasePosition(this._marginX + (_data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.width - 2 * this._marginX) / 16 * 4, this._marginY + (_data_Stage__WEBPACK_IMPORTED_MODULE_2__.Stage.height - 2 * this._marginY) / 16 * 4);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition();
     }
     onLoad() {
     }
@@ -28909,27 +29891,56 @@ class HilbertCurveP5 {
         this._p5.strokeWeight(2);
         this._p5.stroke(this.strokeColor);
         // 描画
-        let end1 = (this._p5.frameCount * 8);
-        if (end1 > this.path.length / 2) {
-            end1 = this.path.length / 2;
+        const len = this.path.length;
+        const half1 = len / 2; //線1の折り返し(排他)
+        const half2 = Math.floor(len / 2) + 1; //線2の折り返し
+        const end2min = len - half2; //線2の下限インデックス
+        this._animFrame++;
+        const f = this._animFrame;
+        //線1は[seg1From, seg1To)を昇順、線2は[seg2To, seg2From]を降順に描く
+        let seg1From = 0;
+        let seg1To = half1;
+        let seg2From = len - 1;
+        let seg2To = end2min;
+        if (this._phase == "grow") {
+            //両端から中央へ描画されていく
+            seg1To = Math.min(f * 8, half1);
+            seg2To = Math.max(len - f * 7, end2min);
+            if (seg1To >= half1 && seg2To <= end2min) {
+                this._phase = "hold";
+                this._animFrame = 0;
+            }
         }
-        let end2 = this._p5.frameCount * 7;
-        if (end2 >= this.path.length / 2 + 1) {
-            end2 = Math.floor(this.path.length / 2) + 1;
+        else if (this._phase == "hold") {
+            //完成状態のまま約5秒待機
+            if (f >= HilbertCurveP5.HOLD_FRAMES) {
+                this._phase = "shrink";
+                this._animFrame = 0;
+            }
         }
-        end2 = this.path.length - end2;
-        //for (let v of path) {
+        else {
+            //両端から中央へ消えていく
+            seg1From = Math.min(f * 8, half1);
+            seg2From = Math.max(len - 1 - f * 7, end2min);
+            if (seg1From >= half1 && seg2From <= end2min) {
+                //消え切ったらまた表示する
+                this._phase = "grow";
+                this._animFrame = 0;
+            }
+        }
         this._p5.beginShape();
-        for (let i = 0; i < end1; i++) {
+        for (let i = seg1From; i < seg1To; i++) {
             let v = this.path[i];
             let ox = this._p5.noise(v.x + this._p5.frameCount * 0.01, v.y);
             let oy = this._p5.noise(v.x, v.y + this._p5.frameCount * 0.01);
-            this._p5.vertex(v.x + ox * 5, v.y + oy * 5);
+            let amp1 = 5; //Math.random()*10;
+            let amp2 = 5; //Math.random()*10;
+            this._p5.vertex(v.x + ox * amp1, v.y + oy * amp2);
             //this._p5.circle(v.x,v.y,2);
         }
         this._p5.endShape();
         this._p5.beginShape();
-        for (let i = this.path.length - 1; i >= end2; i--) {
+        for (let i = seg2From; i >= seg2To; i--) {
             let v = this.path[i];
             let ox = this._p5.noise(v.x + this._p5.frameCount * 0.01, v.y);
             let oy = this._p5.noise(v.x, v.y + this._p5.frameCount * 0.01);
@@ -28983,6 +29994,7 @@ class HilbertCurveP5 {
     resize() {
     }
 }
+HilbertCurveP5.HOLD_FRAMES = 300; //約5秒(60fps)
 
 
 /***/ }),
@@ -29184,11 +30196,11 @@ __webpack_require__.r(__webpack_exports__);
 class IKMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.I);
+        this.showTitle();
     }
     init() {
         let k = new _IKMainP5__WEBPACK_IMPORTED_MODULE_2__.IKMainP5();
         k.start(() => {
-            //            console.log("IKMainP5 started");
         });
     }
 }
@@ -29239,9 +30251,13 @@ class IKMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("IK", () => {
-                    //"IK",()=>{
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+                if (letter == "")
+                    letter = "IK";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp(p);
+                    this._callback();
                 });
             };
             /** フレームごとの描画処理 */
@@ -29436,6 +30452,7 @@ class JarvisMarchMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.Wor
     constructor() {
         //gift wrapping 
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.J);
+        this.showTitle();
     }
     init() {
         //console.log("j")
@@ -29488,6 +30505,8 @@ class JarvisMarchP5 {
         this._oy = 0;
         this._noiseAmp = 0;
         this._radius = 20;
+        this._isFreeMode = false;
+        this._blink = 0;
     }
     init(callback) {
         this._control = new _JarvisPointControl__WEBPACK_IMPORTED_MODULE_4__.JavisPointControl(this);
@@ -29499,8 +30518,12 @@ class JarvisMarchP5 {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.alphabet;
+                if (letter == "")
+                    letter = "J";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("J", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this._isInit = true;
                     this.setUp(this._p5);
@@ -29538,12 +30561,19 @@ class JarvisMarchP5 {
         this._control.loopA();
         _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.gui.add(this, "_radius", 0, 300).name("radius");
         _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.gui.add(this, "_noiseAmp", 0, 300).name("noiseAmp");
+        _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.gui.add(this, "applyImpulse");
     }
     onLoad() {
     }
     click() {
     }
     reset() {
+    }
+    setFreeMode(b) {
+        //this._isFreeMode = b;
+    }
+    setBlink(b) {
+        this._blink = b;
     }
     draw() {
         if (!this._isInit)
@@ -29558,19 +30588,57 @@ class JarvisMarchP5 {
         let rect = this._path.getRect(); //
         let list = [];
         this._p5.stroke(255);
+        this._p5.strokeWeight(2);
         //TitleView.setCenter(this._ox, this._oy);
         _html_TitleView__WEBPACK_IMPORTED_MODULE_5__.TitleView.setCenter(this._ox, this._oy);
         for (let i = 0; i < s.length; i++) {
             let num = this._points.length;
             for (let j = 0; j < num; j++) {
+                /*
+                this._points[j].offsetX += this._points[j].vx;
+                this._points[j].offsetY += this._points[j].vy;
+                */
                 let ratio = this._points[j].ratio + this._p5.frameCount * 0.002;
-                let p = s[i].pointAt(ratio % 1);
-                let xx = (p.x - rect.x - rect.width / 2) * scl;
-                let yy = (p.y - rect.y - rect.height / 2) * scl;
+                let p = s[i].pointAt(ratio % 1); //比率から位置を割り出す
+                if (!this._isFreeMode) {
+                    //this._points[j].x += (p.x - this._points[j].x)/4;
+                    //this._points[j].y += (p.y - this._points[j].y)/4;
+                    this._points[j].x = p.x;
+                    this._points[j].y = p.y;
+                    this._points[j].updateV();
+                }
+                else {
+                    //freeMode
+                    this._points[j].x += this._points[j].vx;
+                    this._points[j].y += this._points[j].vy;
+                    //画面をはみ出したら跳ね返る
+                    //(外へ向かうときだけ反転するので、すでにはみ出ていても内側へ戻ってくる)
+                    let sx = (this._points[j].x - rect.x - rect.width / 2) * scl + this._width / 2 + this._ox;
+                    let sy = (this._points[j].y - rect.y - rect.height / 2) * scl + this._height / 2 + this._oy;
+                    let r = this._radius;
+                    if (sx - r < 0 && this._points[j].vx < 0) {
+                        this._points[j].vx *= -1;
+                    }
+                    if (sx + r > this._width && this._points[j].vx > 0) {
+                        this._points[j].vx *= -1;
+                    }
+                    if (sy - r < 0 && this._points[j].vy < 0) {
+                        this._points[j].vy *= -1;
+                    }
+                    if (sy + r > this._height && this._points[j].vy > 0) {
+                        this._points[j].vy *= -1;
+                    }
+                }
+                let tgtX = this._points[j].x;
+                let tgtY = this._points[j].y;
+                let xx = (tgtX - rect.x - rect.width / 2) * scl;
+                let yy = (tgtY - rect.y - rect.height / 2) * scl;
                 xx += this._width / 2 + this._ox;
                 yy += this._height / 2 + this._oy;
-                xx += (this._p5.noise(p.x, 999 + this._p5.frameCount * 0.2 + j / 10) - 0.5) * this._noiseAmp;
-                yy += (this._p5.noise(p.y, 100 + this._p5.frameCount * 0.2 + j / 10) - 0.5) * this._noiseAmp;
+                //xx += this._points[j].offsetX;
+                //yy += this._points[j].offsetY;
+                //xx += (this._p5.noise(p.x,999+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
+                //yy += (this._p5.noise(p.y,100+this._p5.frameCount*0.2+j/10)-0.5)*this._noiseAmp;
                 //this._points[j].update();
                 //xx += this._points[j].offsetX;
                 //yy += this._points[j].offsetY;
@@ -29587,11 +30655,15 @@ class JarvisMarchP5 {
             }
         }
         let wrapped = _GiftWrapping__WEBPACK_IMPORTED_MODULE_2__.GiftWrapping.getWrappedPoints(list);
-        this._p5.stroke(255);
-        this._p5.strokeWeight(2);
         for (let i = 0; i < wrapped.length; i++) {
             this._p5.line(wrapped[i].x, wrapped[i].y, wrapped[(i + 1) % wrapped.length].x, wrapped[(i + 1) % wrapped.length].y);
         }
+        this._p5.stroke(255, 255, 255, this._p5.frameCount % 2 == 0 ? this._blink : this._blink * 0.5);
+        this._blink -= 10;
+        if (this._blink < 0)
+            this._blink = 0;
+        this._p5.noFill();
+        this._path.draw(this._p5, this._width, this._height, scl, this._ox, this._oy);
     }
     getPixel(i, j) {
         let img = this._p5.drawingContext.getImageData(i, j, 1, 1);
@@ -29630,12 +30702,16 @@ class JavisPoint {
         this.vx = Math.random() * 2 - 1;
         this.vy = Math.random() * 2 - 1;
         this.random = false;
+        this.x = 0;
+        this.y = 0;
+        this.px = 0;
+        this.py = 0;
     }
-    update() {
-        this.offsetX += this.vx;
-        this.offsetY += this.vy;
-        this.vx *= 0.99;
-        this.vy *= 0.99;
+    updateV() {
+        this.vx = this.x - this.px;
+        this.vy = this.y - this.py;
+        this.px = this.x;
+        this.py = this.y;
     }
 }
 
@@ -29661,6 +30737,7 @@ class JavisPointControl {
     //public _noiseAmp:number = 0;
     constructor(main) {
         this._points = [];
+        this._flag = true;
         this._main = main;
         _data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.gui.add(this, "playA");
         _data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.gui.add(this, "playB");
@@ -29676,13 +30753,24 @@ class JavisPointControl {
         this._points = points;
     }
     loopA() {
+        this._flag = !this._flag;
         this.playA();
         gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(1, () => {
             this.playB();
         });
+        if (this._flag) {
+            gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(3, () => {
+                this._main.setFreeMode(true);
+            });
+        }
         gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(5, () => {
             this.playD();
         });
+        if (this._flag) {
+            gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(6, () => {
+                this._main.setFreeMode(false);
+            });
+        }
         gsap__WEBPACK_IMPORTED_MODULE_1__["default"].delayedCall(8, () => {
             this.playA();
         });
@@ -29693,8 +30781,9 @@ class JavisPointControl {
     //量を変える
     playA() {
         console.log("playA");
+        //this._main.setBlink(255);
         //this._main._noiseAmp = 0;
-        //gsap.to(this._main, { duration: 1, _noiseAmp: 50 });
+        gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this._main, { duration: 1, _noiseAmp: 50 });
         //gsap.to(this._main, { duration: 1, _noiseAmp: 0, delay: 1 });
         for (let i = 0; i < this._points.length; i++) {
             gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this._points[i], {
@@ -29708,6 +30797,7 @@ class JavisPointControl {
         //this._main._noiseAmp = 0;
         //gsap.to(this._main, { duration: 1, _noiseAmp: 50 });
         //gsap.to(this._main, { duration: 1, _noiseAmp: 0, delay: 1 });  
+        this._main.setBlink(255);
         let nn = 3; //Math.floor(Math.random()*3+2);
         for (let i = 0; i < this._points.length; i++) {
             gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this._points[i], {
@@ -29718,6 +30808,7 @@ class JavisPointControl {
         }
     }
     playC() {
+        this._main.setBlink(255);
         for (let i = 0; i < this._points.length; i++) {
             gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this._points[i], {
                 duration: 2,
@@ -29727,6 +30818,7 @@ class JavisPointControl {
         }
     }
     playD() {
+        //this._main.setBlink(255);
         let num = 5;
         let targets = [];
         for (let i = 0; i < num; i++) {
@@ -29765,6 +30857,7 @@ __webpack_require__.r(__webpack_exports__);
 class KDTreeMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.K);
+        this.showTitle();
     }
     init() {
         this._kd = new _p5MainKD__WEBPACK_IMPORTED_MODULE_2__.p5MainKD();
@@ -29803,9 +30896,10 @@ class AnimKD {
         this._graphics = p5.createGraphics(this._p5.width, this._p5.height);
         this._graphics.noSmooth();
     }
-    start(img) {
+    start(font, letter) {
         console.log("kdtree");
-        //SoundManager.instance.play(32); 
+        this._sprite = this.createTextSprite(font, letter);
+        //SoundManager.instance.play(32);
         this._kdTree = new _kdtree_KDTree__WEBPACK_IMPORTED_MODULE_0__.KDTree(8);
         this._kdTree.setRandomBottom();
         let list = this._kdTree._tree.getAllChildren();
@@ -29815,14 +30909,12 @@ class AnimKD {
             child.weight = 0.5;
             child.topdown = false;
         }
-        this.update(img);
+        this.update();
         this.setCol();
         this.animLoop();
         if (_data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.debug) {
             _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "test1");
             _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "test2");
-            _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "test3");
-            _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "test4");
             _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "setCol");
         }
     }
@@ -29898,7 +30990,7 @@ class AnimKD {
                 delay: i * 0.01 + Math.random(),
                 weight: size,
                 duration: 1,
-                ease: flag ? "elastic.out(1,0.5)" : "linear"
+                ease: flag ? "elastic.out(1,0.4)" : "linear"
             });
         }
     }
@@ -29913,8 +31005,25 @@ class AnimKD {
             });
         }
     }
-    update(img) {
-        this._graphics.image(img, 0, 0, this._p5.width, this._p5.height);
+    //フォントから文字の形をぴったりのサイズの小さいグラフィックに焼き込み、
+    //あとで画面いっぱいに拡大して貼る(noSmoothなのでkd.pngの時と同じくブロック状に荒れる)
+    createTextSprite(font, letter) {
+        const size = 8;
+        const bounds = font.textBounds(letter, 0, 0, size);
+        const w = Math.max(1, Math.ceil(bounds.w));
+        const h = Math.max(1, Math.ceil(bounds.h));
+        const g = this._p5.createGraphics(w, h);
+        g.noSmooth();
+        g.background(0);
+        g.noStroke();
+        g.fill(255);
+        g.textFont(font);
+        g.textSize(size);
+        g.text(letter, -bounds.x, -bounds.y);
+        return g;
+    }
+    update() {
+        this._graphics.image(this._sprite, 0, 0, this._p5.width, this._p5.height);
         this._p5.textAlign(this._p5.CENTER, this._p5.CENTER);
         this._p5.textSize(10);
         this._p5.fill(255, 255, 255, 255);
@@ -30300,9 +31409,9 @@ class KDTreeData {
         this.ratio = 0;
         this.isLast = false; // Indicates if this node is a leaf node
         this.topdown = false;
-        this.rr = 255;
-        this.gg = 255;
-        this.bb = 255;
+        this.rr = 235;
+        this.gg = 235;
+        this.bb = 235;
         this.aa = 0;
         this.rr2 = 255;
         this.gg2 = 0;
@@ -30316,6 +31425,7 @@ class KDTreeData {
         this.w = 0;
         this.h = 0;
         this.fill = 1;
+        this.offsetColor = 0;
         this.ratio = Math.random() ? 1 : 0; // Randomly set ratio to either 0 or 1
         let colors = _data_Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.getRandomColor();
         this.rr = colors[0];
@@ -30441,7 +31551,7 @@ class KDTreeData {
                 p5.rotate(this.or); // ラジアンで指定
                 // 色を設定
                 //this.fill=0.5
-                p5.fill(this.rr, this.gg, this.bb, this.aa); //this.aa);
+                p5.fill(this.rr + this.offsetColor, this.gg + this.offsetColor, this.bb + this.offsetColor, this.aa); //this.aa);
                 // rect を描画 (中心を基準に描画)
                 p5.rect(-w / 2, -h / 2, w * this.fill, h);
                 p5.fill(this.rr2, this.gg2, this.bb2, this.aa2); //this.aa);
@@ -30489,6 +31599,13 @@ class KDTreeData {
         this.bb = color[2] > 50 ? 255 : 0;
         this.aa = color[3] > 50 ? 255 : 0;
     }
+    blink() {
+        this.offsetColor = 15;
+        gsap.to(this, {
+            offsetColor: 0,
+            duration: 0.2
+        });
+    }
 }
 
 
@@ -30511,9 +31628,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _anim_AnimKD__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./anim/AnimKD */ "./src/mojis/11_k/anim/AnimKD.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
 
 
 //import { Animations } from "./anim/Animations";
+
 
 
 
@@ -30526,11 +31645,12 @@ class p5MainKD {
         this._callback = callback;
         new (p5__WEBPACK_IMPORTED_MODULE_0___default())((p) => {
             p.preload = () => {
-                this._kdText = p.loadImage("./data/kd.png");
+                this._font = p.loadFont("./data/8xx8.ttf");
             };
             /** 初期化処理 */
             p.setup = () => {
                 this.setUp();
+                this._callback();
             };
             /** フレームごとの描画処理 */
             p.draw = () => {
@@ -30554,7 +31674,8 @@ class p5MainKD {
     }
     setUp() {
         //Params.init();
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / 16);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / 16);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition();
         this._kdTree = new _kdtree_KDTree__WEBPACK_IMPORTED_MODULE_1__.KDTree();
         let r = this._p5.createCanvas(_kdtree_KDTree__WEBPACK_IMPORTED_MODULE_1__.KDTree.WIDTH, _kdtree_KDTree__WEBPACK_IMPORTED_MODULE_1__.KDTree.HEIGHT);
         this._width = r.width;
@@ -30569,12 +31690,15 @@ class p5MainKD {
         Params.gui.add(this,"addImpuse2");
         Params.gui.add(this,"breakRects");
         */
+        let letter = _data_Params__WEBPACK_IMPORTED_MODULE_5__.Params.alphabet;
+        if (letter == "")
+            letter = "Kd";
         this._anim = new _anim_AnimKD__WEBPACK_IMPORTED_MODULE_2__.AnimKD(this._p5);
-        this._anim.start(this._kdText);
-        this._anim.update(this._kdText);
+        this._anim.start(this._font, letter);
+        this._anim.update();
     }
     draw() {
-        this._anim.update(this._kdText);
+        this._anim.update();
     }
     drawTest() {
     }
@@ -30603,6 +31727,7 @@ __webpack_require__.r(__webpack_exports__);
 class LSystemMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.L);
+        this.showTitle();
     }
     init() {
         let lSystem = new _LSystemP5__WEBPACK_IMPORTED_MODULE_2__.LSystemP5();
@@ -30666,9 +31791,6 @@ class LSystemP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
     setUp(p) {
         this._isInitialized = true;
         let canvas = this._p5.createCanvas(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height);
-        //canvas.style.display = "block";
-        //this._p5.frameRate(30);
-        //this._p5.noSmooth();
         //ポイントの取得
         let points = [];
         let ww = _LSystemP5src__WEBPACK_IMPORTED_MODULE_3__.LSystemP5src.W;
@@ -30687,7 +31809,8 @@ class LSystemP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
             let t = new _LSystemTree__WEBPACK_IMPORTED_MODULE_1__.LSystemTree(p.x * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, p.y * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height, 0); //Math.PI*2*Math.random());
             this._trees.push(t);
         }
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().width - 200, 200);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().width - 200, 200);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition();
         this._p5.frameRate(20);
     }
     onLoad() {
@@ -30699,7 +31822,7 @@ class LSystemP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
     draw() {
         if (!this._isInitialized)
             return;
-        console.log("draw", this._trees);
+        //console.log("draw",this._trees);
         this._p5.background(0, 0, 0);
         this._p5.fill(255, 0, 255);
         this._p5.stroke(255, 255, 255);
@@ -30742,7 +31865,11 @@ class LSystemP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("L", () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+                if (letter == "")
+                    letter = "L";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp(p);
                     this._callback();
                 });
@@ -30803,6 +31930,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class LSystemTree {
     constructor(startX, startY, angle, type) {
+        //生成アニメーション用(0~1でsentenceの描画範囲を広げる)
+        this.progress = 0;
+        this.delay = Math.floor(Math.random() * 30); //frames
+        this.growSpeed = 0.008 + Math.random() * 0.008;
+        //grow:先端に向かって生える / hold:全体表示のまま待機 / shrink:根っこ側から消える
+        this.phase = "grow";
+        this.holdTimer = 0;
         this.startX = startX;
         this.startY = startY;
         this.angleDeg = angle;
@@ -30894,6 +32028,19 @@ class LSystemTree {
         this.baseStepLength *= lenRatio;
         // decay length each generation similar to reference
         this.lengthDecay = 0.6 + Math.random() * 0.15;
+        //bambooなどswitch内でaxiomを変えたケースにも対応
+        this.sentence = this.axiom;
+    }
+    //消滅後、新しい木として再生成する
+    regenerate() {
+        this.type = this.randomType();
+        this.createSystem(this.type);
+        this.generate();
+        this.stepLength = this.baseStepLength * Math.pow(this.lengthDecay, this.iterations);
+        this.progress = 0;
+        this.delay = Math.floor(Math.random() * 30);
+        this.growSpeed = 0.008 + Math.random() * 0.008;
+        this.phase = "grow";
     }
     generate() {
         for (let i = 0; i < this.iterations; i++) {
@@ -30915,6 +32062,41 @@ class LSystemTree {
     draw(p, degree) {
         if (!p)
             return;
+        //生成アニメーション:delayフレーム待ってからprogressを進める
+        if (this.delay > 0) {
+            this.delay--;
+            return;
+        }
+        //drawStart~drawEndの範囲だけ線を描く
+        let drawStart = 0;
+        let drawEnd = this.sentence.length;
+        if (this.phase == "grow") {
+            //先端に向かって生える
+            this.progress = Math.min(1, this.progress + this.growSpeed);
+            drawEnd = Math.floor(this.sentence.length * this.progress);
+            if (this.progress >= 1) {
+                this.phase = "hold";
+                this.holdTimer = LSystemTree.HOLD_FRAMES;
+            }
+        }
+        else if (this.phase == "hold") {
+            //全体表示のまま待機
+            this.holdTimer--;
+            if (this.holdTimer <= 0) {
+                this.phase = "shrink";
+                this.progress = 0;
+            }
+        }
+        else if (this.phase == "shrink") {
+            //根っこ側から消えていく
+            this.progress = Math.min(1, this.progress + this.growSpeed);
+            drawStart = Math.floor(this.sentence.length * this.progress);
+            if (this.progress >= 1) {
+                //消え切ったら新しい木として再生成
+                this.regenerate();
+                return;
+            }
+        }
         p.push();
         p.translate(this.startX, this.startY);
         // initial orientation: angleDeg is treated as radians (LSystemP5 passes radians)
@@ -30926,11 +32108,21 @@ class LSystemTree {
         // local mutable length so drawing doesn't change instance state
         const lenStack = [];
         let len = this.stepLength;
+        //途中でbreakしたときにpush/popのバランスを取るための深さカウント
+        let pushDepth = 0;
+        let charIndex = 0;
         for (const ch of this.sentence) {
+            if (charIndex >= drawEnd)
+                break;
+            //根っこ側が消えても枝先の位置がずれないよう、非表示でも変形は適用する
+            const visible = charIndex >= drawStart;
+            charIndex++;
             if (ch === 'F' || ch === 'G') {
-                const sw = Math.max(0.5, Math.min(6, len / 18));
-                p.strokeWeight(sw);
-                p.line(0, 0, 0, -len);
+                if (visible) {
+                    const sw = Math.max(0.5, Math.min(6, len / 18));
+                    p.strokeWeight(sw);
+                    p.line(0, 0, 0, -len);
+                }
                 p.translate(0, -len);
                 if (this.type === 'weeping')
                     p.rotate(-Math.PI / 180 * 0.5);
@@ -30948,19 +32140,26 @@ class LSystemTree {
             }
             else if (ch === '[') {
                 p.push();
+                pushDepth++;
                 lenStack.push(len);
                 len = len * this.lengthDecay;
             }
             else if (ch === ']') {
                 p.pop();
+                pushDepth--;
                 const last = lenStack.pop();
                 if (last !== undefined)
                     len = last;
             }
         }
+        //break時に閉じられていないpushを戻す
+        for (let i = 0; i < pushDepth; i++) {
+            p.pop();
+        }
         p.pop();
     }
 }
+LSystemTree.HOLD_FRAMES = 200; //約10秒(20fps)
 
 
 /***/ }),
@@ -30985,6 +32184,7 @@ __webpack_require__.r(__webpack_exports__);
 class MazeMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.M);
+        this.showTitle();
     }
     init() {
         console.log("MazeMain init");
@@ -31032,6 +32232,12 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this.startCell = null;
         this.goalCell = null;
         this.solutionPath = [];
+        //迷路生成(バックトラッキング法)の途中経過を保持し、1フレームずつ進める
+        this.stack = [];
+        this.generating = false;
+        this.stepsPerFrame = 3;
+        //実際に動いた軌跡(行き止まりで戻った枝も含め、通った区間をすべて記録)
+        this.trace = [];
         this._count = 0;
     }
     init(callback) {
@@ -31039,9 +32245,13 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         let sketch = (p) => {
             p.setup = () => {
                 this._p5 = p;
-                _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / 2 - _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.getSize().height / 2);
-                let str = "M"; //"ABCDEFGHIHKJKOMNOPQRSTUVWXYZ"
-                this.loadFont(str[Math.floor(Math.random() * str.length)], () => {
+                _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setBasePosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / 2 - _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.getSize().height / 2);
+                _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition();
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+                if (letter == "")
+                    letter = "M";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp(p);
                     this.reset();
                     this.onLoad();
@@ -31100,33 +32310,65 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             }
         }
     }
+    //生成開始:左下あたりのセルからスタートし、右下あたりのセルをゴールにする
+    //以降はdraw()からstepMaze()を毎フレーム呼んで少しずつ進める
     generateMaze() {
-        const stack = [];
-        const start = this.findAnyValidCell();
+        this.stack = [];
+        this.solutionPath = [];
+        this.trace = [];
+        const start = this.findBottomLeftValidCell();
         if (!start)
             return;
+        this.startCell = start;
+        this.goalCell = this.findBottomRightValidCell();
         this.visited[start.c][start.r] = true;
-        stack.push(start);
-        while (stack.length > 0) {
-            const cur = stack[stack.length - 1];
-            const nbs = this.getUnvisitedNeighbors(cur.c, cur.r);
-            if (nbs.length === 0) {
-                stack.pop();
-            }
-            else {
-                const next = this._p5.random(nbs);
-                this.removeWall(cur, next);
-                this.visited[next.c][next.r] = true;
-                stack.push({ c: next.c, r: next.r });
+        this.stack.push(start);
+        this.generating = true;
+    }
+    //バックトラッキング法を1歩だけ進める
+    stepMaze() {
+        if (this.stack.length === 0) {
+            this.generating = false;
+            return;
+        }
+        const cur = this.stack[this.stack.length - 1];
+        const nbs = this.getUnvisitedNeighbors(cur.c, cur.r);
+        if (nbs.length === 0) {
+            //行き止まり→1歩戻る
+            this.stack.pop();
+        }
+        else {
+            //未訪問の隣接セルへランダムに1歩進む
+            const next = this._p5.random(nbs);
+            this.removeWall(cur, next);
+            this.visited[next.c][next.r] = true;
+            this.trace.push({ a: { c: cur.c, r: cur.r }, b: { c: next.c, r: next.r } });
+            this.stack.push({ c: next.c, r: next.r });
+            //ゴールに着いたら、そこまでたどってきたスタック=ルートとして確定し生成を終了
+            if (this.goalCell && next.c === this.goalCell.c && next.r === this.goalCell.r) {
+                this.solutionPath = this.stack.slice();
+                this.generating = false;
+                return;
             }
         }
-        // after maze generated, compute start/goal and solution path
-        this.computeSolutionPath();
+        if (this.stack.length === 0) {
+            this.generating = false;
+        }
     }
-    findAnyValidCell() {
-        //for (let r = 0; r < this.rows; r++) {
-        for (let r = this.rows - 1; r >= 0; r--) {
-            for (let c = 0; c < this.cols; c++) {
+    //文字の一番左の列のうち、一番下にある有効セルをスタートとして探す
+    findBottomLeftValidCell() {
+        for (let c = 0; c < this.cols; c++) {
+            for (let r = this.rows - 1; r >= 0; r--) {
+                if (this.valid[c][r])
+                    return { c, r };
+            }
+        }
+        return null;
+    }
+    //文字の一番右の列のうち、一番下にある有効セルをゴールとして探す
+    findBottomRightValidCell() {
+        for (let c = this.cols - 1; c >= 0; c--) {
+            for (let r = this.rows - 1; r >= 0; r--) {
                 if (this.valid[c][r])
                     return { c, r };
             }
@@ -31165,62 +32407,6 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             wb.E = false;
         }
     }
-    // compute start (some valid cell), goal (farthest reachable), and the path between them
-    computeSolutionPath() {
-        this.solutionPath = [];
-        this.startCell = this.findAnyValidCell();
-        if (!this.startCell) {
-            this.goalCell = null;
-            return;
-        }
-        // BFS over the maze graph using opened walls
-        const queue = [];
-        const parent = Array.from({ length: this.cols }, () => Array(this.rows).fill(null));
-        const dist = Array.from({ length: this.cols }, () => Array(this.rows).fill(-1));
-        queue.push(this.startCell);
-        dist[this.startCell.c][this.startCell.r] = 0;
-        let head = 0;
-        let farthest = this.startCell;
-        while (head < queue.length) {
-            const cur = queue[head++];
-            const d = dist[cur.c][cur.r];
-            if (d > dist[farthest.c][farthest.r])
-                farthest = cur;
-            const w = this.walls[cur.c][cur.r];
-            // neighbors where wall is removed
-            if (!w.N && cur.r > 0 && dist[cur.c][cur.r - 1] === -1) {
-                dist[cur.c][cur.r - 1] = d + 1;
-                parent[cur.c][cur.r - 1] = cur;
-                queue.push({ c: cur.c, r: cur.r - 1 });
-            }
-            if (!w.E && cur.c < this.cols - 1 && dist[cur.c + 1][cur.r] === -1) {
-                dist[cur.c + 1][cur.r] = d + 1;
-                parent[cur.c + 1][cur.r] = cur;
-                queue.push({ c: cur.c + 1, r: cur.r });
-            }
-            if (!w.S && cur.r < this.rows - 1 && dist[cur.c][cur.r + 1] === -1) {
-                dist[cur.c][cur.r + 1] = d + 1;
-                parent[cur.c][cur.r + 1] = cur;
-                queue.push({ c: cur.c, r: cur.r + 1 });
-            }
-            if (!w.W && cur.c > 0 && dist[cur.c - 1][cur.r] === -1) {
-                dist[cur.c - 1][cur.r] = d + 1;
-                parent[cur.c - 1][cur.r] = cur;
-                queue.push({ c: cur.c - 1, r: cur.r });
-            }
-        }
-        this.goalCell = farthest;
-        // reconstruct path from goal back to start
-        if (this.goalCell) {
-            let cur = this.goalCell;
-            while (cur) {
-                this.solutionPath.push(cur);
-                cur = parent[cur.c][cur.r];
-            }
-            // path currently from goal->start, reverse to start->goal
-            this.solutionPath.reverse();
-        }
-    }
     draw() {
         const p = this._p5;
         p.background(0);
@@ -31228,6 +32414,12 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         p.strokeWeight(2);
         if (_data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.debug) {
             this._p5.image(this.maskG, 0, 0, 100, 100);
+        }
+        //生成の途中経過を1フレームにつき数歩ずつ進める
+        if (this.generating) {
+            for (let i = 0; i < this.stepsPerFrame && this.generating; i++) {
+                this.stepMaze();
+            }
         }
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
@@ -31246,29 +32438,42 @@ class MazeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
                     p.line(x, y, x, y + this.cellSize);
             }
         }
-        // draw solution path as a line (through cell centers)
-        if (this.solutionPath && this.solutionPath.length > 0) {
-            p.stroke(255, 0, 0); //ここ
+        //実際に動いた軌跡を灰色の線で表示(行き止まりで戻った枝もそのまま残す)
+        if (this.trace.length > 0) {
+            p.stroke(150);
+            p.strokeWeight(3);
+            for (const seg of this.trace) {
+                const ax = seg.a.c * this.cellSize + this.cellSize * 0.5;
+                const ay = seg.a.r * this.cellSize + this.cellSize * 0.5;
+                const bx = seg.b.c * this.cellSize + this.cellSize * 0.5;
+                const by = seg.b.r * this.cellSize + this.cellSize * 0.5;
+                p.line(ax, ay, bx, by);
+            }
+        }
+        //現在バックトラッキング中のセル(スタック先頭)を赤丸でハイライト
+        if (this.generating && this.stack.length > 0) {
+            const cur = this.stack[this.stack.length - 1];
+            p.noStroke();
+            p.fill(255, 0, 0);
+            p.circle(cur.c * this.cellSize + this.cellSize * 0.5, cur.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
+            p.fill(255);
+        }
+        //ゴールに到達した後、そこまで実際に動いたルートを赤い線で表示
+        if (this.solutionPath.length > 0) {
+            p.stroke(255, 0, 0);
             p.strokeWeight(3);
             p.noFill();
             p.beginShape();
-            let len = this._p5.frameCount * 1.5;
-            if (len >= this.solutionPath.length) {
-                len = this.solutionPath.length;
-            }
-            for (let i = 0; i < len; i++) {
-                const cell = this.solutionPath[i];
+            for (const cell of this.solutionPath) {
                 const cx = cell.c * this.cellSize + this.cellSize * 0.5;
                 const cy = cell.r * this.cellSize + this.cellSize * 0.5;
                 p.vertex(cx, cy);
             }
             p.endShape();
-            // optionally draw start/goal markers
             p.noStroke();
             p.fill(255, 0, 0);
             if (this.startCell)
                 p.circle(this.startCell.c * this.cellSize + this.cellSize * 0.5, this.startCell.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
-            p.fill(255, 0, 0);
             if (this.goalCell)
                 p.circle(this.goalCell.c * this.cellSize + this.cellSize * 0.5, this.goalCell.r * this.cellSize + this.cellSize * 0.5, this.cellSize * 0.6);
             p.fill(255);
@@ -31374,7 +32579,11 @@ class NMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         new (p5__WEBPACK_IMPORTED_MODULE_0___default())((p) => {
             /** 初期化処理 */
             p.setup = () => {
-                this.loadFont("Navier", () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.alphabet;
+                if (letter == "")
+                    letter = "Navier";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
                     this.setUp();
                     callback();
                 });
@@ -31479,6 +32688,7 @@ __webpack_require__.r(__webpack_exports__);
 class NavierMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.N);
+        this.showTitle();
     }
     init() {
         let n = new _MainN__WEBPACK_IMPORTED_MODULE_2__.MainN();
@@ -31968,8 +33178,8 @@ class Mouse {
         }
     }
     static motion() {
-        let scl = 0.5;
-        let tScl = 0.5;
+        let scl = 1.5;
+        let tScl = 1.5;
         gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(this, {
             duration: 1 * tScl,
             targetX: -1 * scl,
@@ -32536,6 +33746,7 @@ __webpack_require__.r(__webpack_exports__);
 class OpenTypeMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.O);
+        this.showTitle();
     }
     init() {
         let openTypeP5 = new _OpenTypeP5__WEBPACK_IMPORTED_MODULE_2__.OpenTypeP5();
@@ -32560,14 +33771,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var p5__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! p5 */ "./node_modules/p5/lib/p5.min.js");
 /* harmony import */ var p5__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(p5__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../00_base/p5Base */ "./src/mojis/00_base/p5Base.ts");
-/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
-/* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _font_FontManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../font/FontManager */ "./src/font/FontManager.ts");
+/* harmony import */ var _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../00_base/p5Base */ "./src/mojis/00_base/p5Base.ts");
+/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
 
 
 
 
-class OpenTypeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
+
+
+class OpenTypeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
     constructor() {
         super();
         this._width = 0;
@@ -32584,21 +33799,26 @@ class OpenTypeP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
     }
     init(callback) {
         this._callback = callback;
-        this._width = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width;
-        this._height = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height;
+        this._width = _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width;
+        this._height = _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height;
         let sketch = (p) => {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("Opentype", () => {
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_5__.Params.alphabet;
+                if (letter == "")
+                    letter = "Opentype";
+                console.log("letter = ", letter);
+                this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
+                this.loadFont(letter, () => {
                     console.log("font loaded");
                     this._isInit = true;
                     this.setUp(this._p5);
                     let rect = this._path.getRect();
-                    this._scale = 4 * _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width / 1920;
+                    this._scale = 4 * _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / 1920;
                     this._offset.x = this._p5.width / 2 - rect.width * 0.505 * this._scale;
                     this._offset.y = this._p5.height / 2 + rect.height / 4 * this._scale;
-                    _html_TitleView__WEBPACK_IMPORTED_MODULE_2__.TitleView.setCenter(0, 0);
+                    _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setCenter(0, 0);
                     this._callback();
                 });
             };
@@ -32873,6 +34093,7 @@ __webpack_require__.r(__webpack_exports__);
 class PerlinNoiseMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.P);
+        this.showTitle();
     }
     init() {
         let perlin = new _PerlinP5__WEBPACK_IMPORTED_MODULE_2__.PerlinP5();
@@ -32944,7 +34165,8 @@ class PerlinP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         let canvas = this._p5.createCanvas(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height, this._p5.WEBGL);
         //this._p5.frameRate(30);
         this._p5.noSmooth();
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().width - 100, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().height - 100);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().width - 100, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().height - 100);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setPosition();
         this._perlin = new _Perlin__WEBPACK_IMPORTED_MODULE_2__.Perlin(this._p5);
         this._p5.frameRate(20);
         // --- simple vertex / fragment shader with 2D "Perlin-like" noise (fbm) ---
@@ -32980,12 +34202,15 @@ void main() {
         }
 
         float noise2d(vec2 p, float line){
+
           vec2 i = floor(p);
           vec2 f = fract(p);
 
           
+          //点を書く
           if(line>0.5){
-            if(length(i-p)<0.01)return 11.0;
+            if(length(i.x-p.x)<0.02 && length(i.y-p.y)<0.03)return 11.0;
+            
           }
 
           vec2 u = f * f * (3.0 - 2.0 * f);
@@ -32993,7 +34218,11 @@ void main() {
           float n10 = dot(hash2(i + vec2(1.0,0.0)), f - vec2(1.0,0.0));
           float n01 = dot(hash2(i + vec2(0.0,1.0)), f - vec2(0.0,1.0));
           float n11 = dot(hash2(i + vec2(1.0,1.0)), f - vec2(1.0,1.0));
-          return mix(mix(n00, n10, u.x), mix(n01, n11, u.x), u.y);
+          return mix(
+            mix(n00, n10, u.x),
+            mix(n01, n11, u.x), 
+            u.y
+          );
         }
 
         // fbm (fractal noise)
@@ -33041,6 +34270,10 @@ void main() {
         if (this._shader) {
             this._shader.setUniform('u_scale', this._scale);
         }
+        window.addEventListener('resize', () => {
+            this.resize();
+        }, false);
+        this.resize();
     }
     onLoad() {
     }
@@ -33117,17 +34350,27 @@ __webpack_require__.r(__webpack_exports__);
 class PerlinP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
     constructor() {
         super();
+        this._letter = "P";
+        this._textSize = 80;
+        this._textX = 0;
+        this._textY = 0;
     }
     start(callback) {
         this._callback = callback;
         let sketch = (p) => {
+            p.preload = () => {
+                this._font = p.loadFont("./data/FreeSans.otf");
+            };
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                this.loadFont("P", () => {
-                    this.setUp(p);
-                    this._callback();
-                });
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+                if (letter == "")
+                    letter = "P";
+                console.log("letter = ", letter);
+                this._letter = letter;
+                this.setUp(p);
+                this._callback();
             };
             /** フレームごとの描画処理 */
             p.draw = () => {
@@ -33142,6 +34385,10 @@ class PerlinP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this._isInitialized = true;
         let canvas = this._p5.createCanvas(160, 90);
         this._graphics = this._p5.createGraphics(160, 90);
+        this._graphics.textFont(this._font);
+        this._graphics.textSize(this._textSize);
+        this._graphics.noStroke();
+        this.layoutText();
         this._p5.pixelDensity(1);
         canvas.id('p5canvasSrc');
         document.getElementById("p5canvasSrc").style.display = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.debug ? "block" : "none";
@@ -33149,8 +34396,13 @@ class PerlinP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         document.getElementById("p5canvasSrc").style.top = "0";
         document.getElementById("p5canvasSrc").style.left = "0";
         document.getElementById("p5canvasSrc").style.zIndex = "10000";
-        //this._p5.noLoop();
-        //this.drawFont(this._p5.width,this._p5.height,1,0,0);
+    }
+    //textAlign(CENTER,CENTER)はフォントのascent/descentを基準に揃えるため、
+    //フォントによって見た目の中心とずれる。実際のグリフの見た目のbboxで中心を計算する
+    layoutText() {
+        const bounds = this._font.textBounds(this._letter, 0, 0, this._textSize);
+        this._textX = this._graphics.width / 2 - (bounds.x + bounds.w / 2);
+        this._textY = this._graphics.height / 2 - (bounds.y + bounds.h / 2);
     }
     onLoad() {
     }
@@ -33161,14 +34413,9 @@ class PerlinP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
     draw() {
         if (!this._isInitialized)
             return;
-        //this._p5.background(0);
-        //this._p5.fill(255);
-        //this._p5.stroke(255,0,0);
         this._graphics.background(0);
         this._graphics.fill(255);
-        this._path.draw(this._graphics, this._graphics.width, this._graphics.height, 1, 0, 0, 0);
-        this._graphics.fill(0);
-        this._path.draw(this._graphics, this._graphics.width, this._graphics.height, 1, 0, 0, 1);
+        this._graphics.text(this._letter, this._textX, this._textY);
         this._p5.image(this._graphics, 0, 0, this._p5.width, this._p5.height);
     }
     resize() {
@@ -33201,6 +34448,7 @@ __webpack_require__.r(__webpack_exports__);
 class QuadTreeMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.Q);
+        this.showTitle();
     }
     init() {
         this.qtreeP5 = new _QuadTreeP5__WEBPACK_IMPORTED_MODULE_2__.QuadTreeP5();
@@ -33250,7 +34498,8 @@ class QuadTreeP5 {
                 this._src = new _QuadTreeThree__WEBPACK_IMPORTED_MODULE_1__.QuadTreeThree();
                 this._src.init(() => {
                     this.setUp(p);
-                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width / 8, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height / 8);
+                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width / 8, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height / 8);
+                    _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition();
                     this._isInit = true;
                     callback();
                 });
@@ -33271,17 +34520,18 @@ class QuadTreeP5 {
         n.id('p5canvas');
         document.getElementById("p5canvas").style.position = "absolute";
         this._splitter = new _QuadTreeSplitter__WEBPACK_IMPORTED_MODULE_2__.QuadTreeSplitter();
-        this._p5.frameRate(12);
+        this._p5.frameRate(24);
         this.loopAnim();
     }
     loopAnim() {
         this._splitter._maxDepth = 0;
         this._splitter.animParams(7, 2, 1);
         this._src.rotate(4, 4);
+        this._src.rotate(4, 8);
         //this._splitter.animColor(60,0.5,5.5);
         //this._splitter.animColor(255,0.5,8.5);
-        this._splitter.animParams(0, 1, 8.5);
-        gsap__WEBPACK_IMPORTED_MODULE_5__["default"].delayedCall(10.5, this.loopAnim.bind(this));
+        this._splitter.animParams(0, 2, 12.5);
+        gsap__WEBPACK_IMPORTED_MODULE_5__["default"].delayedCall(14.5, this.loopAnim.bind(this));
     }
     onLoad() {
     }
@@ -33334,6 +34584,7 @@ class QuadTreeSplitter {
         this.bgColor = 255;
         this.strokeColor = "#ffffff";
         this.drawColorTh = 0;
+        this.pastRects = {};
         _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "_hensaTh", 0, 2).listen();
         _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "_maxDepth", 0, 10).step(1).listen();
         _data_Params__WEBPACK_IMPORTED_MODULE_1__.Params.gui.add(this, "drawColorTh", 0, 255).listen();
@@ -33376,6 +34627,17 @@ class QuadTreeSplitter {
                     else
                         this._p5.stroke(this.strokeColor);
                     this._p5.rect(x * ssX, y * ssY, ww * ssX, hh * ssY);
+                    if (this.pastRects[`${x}_${y}_${ww}_${hh}`] == null) {
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`] = 120;
+                    }
+                    else {
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`] -= 10;
+                    }
+                    this._p5.fill(255, 255, 255, this.pastRects[`${x}_${y}_${ww}_${hh}`]);
+                    if (this.pastRects[`${x}_${y}_${ww}_${hh}`] <= 0) {
+                        this.pastRects[`${x}_${y}_${ww}_${hh}`] = 0;
+                    }
+                    ;
                     this._p5.ellipse(x * ssX + ww * ssX / 2, y * ssY + hh * ssY / 2, ww * ssX, hh * ssY);
                 }
             }
@@ -33461,6 +34723,7 @@ class QuadTreeThree {
         this.bgColor = { color: 0xcccccc };
         this.opacity = 1;
         this.meshes = [];
+        this._counter = 0;
         //this.init();
     }
     init(callback) {
@@ -33504,7 +34767,7 @@ class QuadTreeThree {
         this.onWindowResize();
     }
     makeLetter() {
-        const txt = 'Q';
+        const txt = _data_Params__WEBPACK_IMPORTED_MODULE_0__.Params.alphabet || "Q";
         const loader = new three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_4__.FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.
         loader.load('./data/helvetiker_regular.typeface.json', (font) => {
@@ -33547,13 +34810,25 @@ class QuadTreeThree {
         this.oCamera.position.set(0, 0, 3000);
     }
     rotate(duration, delay) {
-        this._container.rotation.y = 0;
-        gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(this._container.rotation, {
-            duration: duration,
-            delay: delay,
-            y: Math.PI * 2,
-            ease: "power2.inOut"
-        });
+        if (this._counter % 2 == 0) {
+            this._container.rotation.y = 0;
+            gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(this._container.rotation, {
+                duration: duration,
+                delay: delay,
+                y: Math.PI * 2,
+                ease: "power2.inOut"
+            });
+        }
+        else {
+            this._container.rotation.x = 0;
+            gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(this._container.rotation, {
+                duration: duration,
+                delay: delay,
+                x: Math.PI * 2,
+                ease: "power2.inOut"
+            });
+        }
+        this._counter++;
     }
     animScale() {
         this._container.scale.set(0.5, 0.5, 0.5);
@@ -33642,21 +34917,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ReactionDiffusionMain": () => (/* binding */ ReactionDiffusionMain)
 /* harmony export */ });
 /* harmony import */ var _data_InfoData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../data/InfoData */ "./src/data/InfoData.ts");
-/* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
-/* harmony import */ var _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../00_base/WorkBase */ "./src/mojis/00_base/WorkBase.ts");
-/* harmony import */ var _main_MainRd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./main/MainRd */ "./src/mojis/18_r/main/MainRd.ts");
+/* harmony import */ var _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../00_base/WorkBase */ "./src/mojis/00_base/WorkBase.ts");
+/* harmony import */ var _main_MainRd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./main/MainRd */ "./src/mojis/18_r/main/MainRd.ts");
 
 
 
-
-class ReactionDiffusionMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_2__.WorkBase {
+class ReactionDiffusionMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.R);
+        this.showTitle();
     }
     init() {
         // Initialization logic here
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_1__.TitleView.hide();
-        let mainRd = new _main_MainRd__WEBPACK_IMPORTED_MODULE_3__.MainRd();
+        //TitleView.hide();
+        let mainRd = new _main_MainRd__WEBPACK_IMPORTED_MODULE_2__.MainRd();
         mainRd.init();
     }
 }
@@ -33769,13 +35043,13 @@ class ParamsRd {
         }
     }
 }
-ParamsRd.width = 512; //*2;
-ParamsRd.height = 512; //*2;
+ParamsRd.width = 512 * 2;
+ParamsRd.height = 512 * 2;
 ParamsRd.colorId = 0;
 ParamsRd.colorMax = 8;
 ParamsRd.isPreviewed = false;
-ParamsRd.stageWidth = 540 * 2; //512;
-ParamsRd.stageHeight = 540 * 2; //512;
+ParamsRd.stageWidth = 540; //512;
+ParamsRd.stageHeight = 540; //512;
 ParamsRd.rdParams = [
     new three__WEBPACK_IMPORTED_MODULE_2__.Vector4(0.015, 0.049, 0.21, 0.105),
     new three__WEBPACK_IMPORTED_MODULE_2__.Vector4(0.018, 0.0476, 0.21, 0.105),
@@ -33833,7 +35107,7 @@ class MainRd {
             canvas: document.querySelector('#webgl'),
             antialias: false
         });
-        this.renderer.setPixelRatio(2);
+        this.renderer.setPixelRatio(1);
         this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_4__.Color(0x000000));
         this.renderer.setSize(_data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height);
         this.scene = new three__WEBPACK_IMPORTED_MODULE_4__.Scene();
@@ -33893,7 +35167,7 @@ class MainRd {
         //});
         window.setTimeout(() => {
             this.tick();
-        }, 1000 / 30);
+        }, 1000 / 60);
     }
     onWindowResize() {
         /*
@@ -33961,6 +35235,10 @@ class p5MainRd extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
         this.debugBg = 8;
         this._ox = 0;
         this._oy = 0;
+        this._letter = "R";
+        this._textSize = 300;
+        this._textX = 0;
+        this._textY = 0;
     }
     init(callback) {
         p5MainRd.Instance = this;
@@ -33972,11 +35250,17 @@ class p5MainRd extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
         //}
         this._callback = callback;
         new (p5__WEBPACK_IMPORTED_MODULE_0___default())((p) => {
+            p.preload = () => {
+                this._font = p.loadFont("./data/FreeSans.otf");
+            };
             /** 初期化処理 */
             p.setup = () => {
-                this.loadFont("R", () => {
-                    this.setUp();
-                });
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+                if (letter == "")
+                    letter = "R";
+                console.log("letter = ", letter);
+                this._letter = letter;
+                this.setUp();
             };
             /** フレームごとの描画処理 */
             p.draw = () => {
@@ -34001,6 +35285,7 @@ class p5MainRd extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
         this._p5.pixelDensity(1);
         this._p5.frameRate(3);
         this._p5.noSmooth();
+        this.layoutText();
         //console.log(r.elt);
         this.canvasElement = r.elt; //scopeがよくわからない
         this.isInit = true;
@@ -34017,20 +35302,32 @@ class p5MainRd extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_2__.p5Base {
     }
     reset() {
     }
+    //textAlign(CENTER,CENTER)はフォントによって見た目とずれるので、
+    //実際のグリフの見た目のbboxを基準に中心(+ランダムオフセット)を計算しておく
+    layoutText() {
+        const bounds = this._font.textBounds(this._letter, 0, 0, this._textSize);
+        const cx = this._width / 2 + this._ox;
+        const cy = this._height / 2 + this._oy;
+        this._textX = cx - (bounds.x + bounds.w / 2);
+        this._textY = cy - (bounds.y + bounds.h / 2);
+    }
     draw() {
         if (!this.isInit)
             return;
         this._p5.blendMode(this._p5.BLEND);
-        this._p5.background(this.debugBg / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 0, 0, 255);
-        this._p5.fill(this.debugIndex / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 255, 0, 255);
-        this._p5.noStroke();
-        let scale = 3;
-        this.drawFont(this._width, this._height, scale, this._ox, this._oy, 0);
-        if (this._path.getStrokes().length >= 2) {
-            this._p5.fill(this.debugBg / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 0, 0, 255);
-            this.drawFont(this._width, this._height, scale, this._ox, this._oy, 1);
+        if (this._p5.frameCount % 60 < 30) {
+            this._p5.background(this.debugBg / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 0, 0, 255);
+            this._p5.fill(this.debugIndex / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 255, 0, 255);
         }
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.show();
+        else {
+            this._p5.background(this.debugIndex / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 0, 0, 255);
+            this._p5.fill(this.debugBg / _data_ParamsRd__WEBPACK_IMPORTED_MODULE_1__.ParamsRd.rdParams.length * 255, 255, 0, 255);
+        }
+        this._p5.noStroke();
+        this._p5.textFont(this._font);
+        this._p5.textSize(this._textSize);
+        this._p5.text(this._letter, this._textX, this._textY);
+        //TitleView.show();
         _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setCenter(this._ox, this._oy);
     }
     getRandomPos() {
@@ -34320,9 +35617,6 @@ class RdShaderMat extends three__WEBPACK_IMPORTED_MODULE_5__.ShaderMaterial {
     //private _fr:number = 0;
     //private _kr:number = 0;
     constructor() {
-        //let loader:TextureLoader = new TextureLoader();
-        //var t:THREE.Texture = loader.load("./topimg/nuki.png");
-        //t.format = THREE.RGBAFormat;
         super({
             vertexShader: _glsl_rd_vert__WEBPACK_IMPORTED_MODULE_0__["default"],
             fragmentShader: _glsl_encode_decode_frag__WEBPACK_IMPORTED_MODULE_2__["default"] + _glsl_rd_frag__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -34573,11 +35867,12 @@ class SpiroMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase 
     constructor() {
         //https://kitasenjudesign.com/tool/06_spiro/
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.S);
+        this.showTitle();
+    }
+    init() {
         this.spiroP5 = new _SpiroP5__WEBPACK_IMPORTED_MODULE_2__.SpiroP5();
         this.spiroP5.start(() => {
         });
-    }
-    init() {
     }
 }
 
@@ -34626,8 +35921,12 @@ class SpiroP5 {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.alphabet;
+                if (letter == "")
+                    letter = "S";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("S", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this.setUp(p);
                     this._ox = this._p5.width * 0.2 * (Math.random() - 0.5);
                     this._oy = this._p5.height * 0.2 * (Math.random() - 0.5);
@@ -34767,8 +36066,7 @@ class SpiroP5 {
                 //yy += Math.sin(rad) * this._p5.mouseX/10;
                 xx += this.getX(rad + this._p5.frameCount * 0.1);
                 yy += this.getY(rad + this._p5.frameCount * 0.1);
-                //xx += Math.cos(rad) * this._p5.mouseY/10;
-                //yy += Math.sin(rad) * this._p5.mouseY/10;
+                //this._p5.circle(xx,yy,5);
                 rad += 0.05;
                 if (px == 0 && py == 0) {
                     px = xx;
@@ -34833,6 +36131,7 @@ class TenPrintMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBa
     //private 
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.T);
+        this.showTitle();
     }
     init() {
         this.tenPrintP5 = new _TenPrintP5__WEBPACK_IMPORTED_MODULE_2__.TenPrintP5();
@@ -34867,7 +36166,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class TenPrintP5 {
-    //private _imageData: ImageData | null;
     constructor() {
         this._width = 32;
         this._height = 18;
@@ -34875,6 +36173,11 @@ class TenPrintP5 {
         this._list = [];
         this._count = 0;
         this._type = 0;
+        //private _imageData: ImageData | null;
+        //線モード⇔トルシェタイルモードの切り替え(0:線 1:弧)。既存の行アップデートのラインに合わせてワイプする
+        this._family = 0; //アップデート済みの行に適用するモード
+        this._prevFamily = 0; //まだアップデートされていない行に適用するモード(前回の続き)
+        this._sweepRow = -1; //今回のパスでアップデートが到達した行(-1はまだ未到達)
     }
     start(callback) {
         console.log("start!!!");
@@ -34908,7 +36211,8 @@ class TenPrintP5 {
         let r = this._p5.createCanvas(_data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height);
         r.id('p5canvas');
         r.elt.display = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.debug ? "block" : "none";
-        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition(_data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / this._width * 18, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / this._height * 17 - _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.getSize().height);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setBasePosition(_data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / this._width * 20, _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / this._height * 17 - _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.getSize().height);
+        _html_TitleView__WEBPACK_IMPORTED_MODULE_3__.TitleView.setPosition();
         //this._p5.frameRate(30);
         //this._p5.noSmooth();
         //this._p5.noLoop();
@@ -34931,6 +36235,8 @@ class TenPrintP5 {
         //console.log("draw");
         let ww = _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.width / this._width;
         let hh = _data_Stage__WEBPACK_IMPORTED_MODULE_4__.Stage.height / this._height;
+        //今回のフレームでアップデートされる行(このフレームの更新前のcountから算出)
+        let rowThisFrame = Math.floor(this._count / this._src._width);
         let num = this._src._width;
         for (let i = 0; i < num; i++) {
             let idx = this._count % (this._src._width * this._src._height);
@@ -34948,15 +36254,24 @@ class TenPrintP5 {
                     this._list[j][i] = this._src.getPixel(i, j).r > 128 ? Math.random() > 0.5 ? 1 : 0 : 1;
                     break;
             }
-            for (let j = 0; j < this._src._height; j++) {
-                for (let i = 0; i < this._src._width; i++) {
-                    this.drawPrint(i, j, ww, hh, this._list[j][i]);
-                }
+        }
+        //このフレームでアップデートが到達した行までスイープを進める
+        this._sweepRow = rowThisFrame;
+        for (let j = 0; j < this._src._height; j++) {
+            //アップデート済みの行は新モード、まだの行は前回のモードのまま(=縦に動くアップデートラインに合わせて切り替わる)
+            const family = (j <= this._sweepRow) ? this._family : this._prevFamily;
+            for (let i = 0; i < this._src._width; i++) {
+                this.drawPrint(i, j, ww, hh, this._list[j][i], family);
             }
         }
         if (this._count >= this._src._width * this._src._height) {
             this._count = 0;
+            //このパスの間にすべての行がthis._familyへ切り替わっているので、それを新しい基準にする
+            this._prevFamily = this._family;
+            this._sweepRow = -1;
             this._type++;
+            //線モード(0~2)⇔弧モード(3~5)が切り替わったら、次のパスの目標モードを更新
+            this._family = Math.floor((this._type % 6) / 3);
         }
         /*
                      let pixel = this._src.getPixel(i,j);
@@ -34966,14 +36281,34 @@ class TenPrintP5 {
                          this.drawPrint(i,j,ww,hh,Math.random()>0.5 ? 0 : 1);
                      }*/
     }
-    drawPrint(xx, yy, sizeX, sizeY, type = 0) {
+    drawPrint(xx, yy, sizeX, sizeY, type = 0, family = 0) {
         xx *= sizeX;
         yy *= sizeY;
+        if (family == 1) {
+            //トルシェタイルモード(1/4円がふたつ)
+            this.drawTruchet(xx, yy, sizeX, sizeY, type);
+            return;
+        }
         if (type == 0) {
             this._p5.line(xx, yy, xx + sizeX, yy + sizeY);
         }
         else {
             this._p5.line(xx + sizeX, yy, xx, yy + sizeY);
+        }
+    }
+    //トルシェタイル:辺の中点同士を1/4円弧でつなぐ
+    drawTruchet(xx, yy, sizeX, sizeY, type = 0) {
+        const p = this._p5;
+        p.noFill();
+        if (type == 0) {
+            //左上コーナーと右下コーナー中心の1/4円
+            p.arc(xx, yy, sizeX, sizeY, 0, p.HALF_PI);
+            p.arc(xx + sizeX, yy + sizeY, sizeX, sizeY, p.PI, p.PI + p.HALF_PI);
+        }
+        else {
+            //右上コーナーと左下コーナー中心の1/4円
+            p.arc(xx + sizeX, yy, sizeX, sizeY, p.HALF_PI, p.PI);
+            p.arc(xx, yy + sizeY, sizeX, sizeY, p.PI + p.HALF_PI, p.TWO_PI);
         }
     }
     resize() {
@@ -35006,16 +36341,24 @@ class TenPrintP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base 
         //super();
         super();
         this.isInit = false;
+        //32x18
         this._width = 32;
         this._height = 18;
     }
     init(callback) {
         this._callback = callback;
         new (p5__WEBPACK_IMPORTED_MODULE_0___default())((p) => {
+            p.preload = () => {
+                this._sheet = p.loadImage("./data/abc.png");
+            };
             /** 初期化処理 */
             p.setup = () => {
-                this.loadFont("T", () => {
-                    this.setUp();
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.alphabet;
+                if (letter == "")
+                    letter = "T";
+                console.log("letter = ", letter);
+                this.loadFont(letter, () => {
+                    this.setUp(letter);
                 });
             };
             /** フレームごとの描画処理 */
@@ -35025,7 +36368,7 @@ class TenPrintP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base 
             this._p5 = p;
         });
     }
-    setUp() {
+    setUp(letter) {
         let r = this._p5.createCanvas(this._width, this._height);
         r.id('p5canvasSrc');
         r.elt.style.display = _data_Params__WEBPACK_IMPORTED_MODULE_2__.Params.debug ? "block" : "none";
@@ -35036,9 +36379,30 @@ class TenPrintP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base 
         this._p5.frameRate(30);
         this._p5.noSmooth();
         this._p5.pixelDensity(1);
+        this.setLetter(letter);
         this.isInit = true;
         //this._bg = 0;
         this._callback();
+    }
+    //スプライトシートから1文字を切り出し、黒インクを白に塗り替えて保持する
+    //(getPixel()での明るさ判定は「白=文字の形」を前提にしているため)
+    setLetter(letter) {
+        let code = letter.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
+        if (code < 0 || code > 25)
+            code = "T".charCodeAt(0) - "A".charCodeAt(0);
+        const cw = TenPrintP5src.CHAR_W;
+        const ch = TenPrintP5src.CHAR_H;
+        const g = this._p5.createGraphics(cw, ch);
+        g.clear();
+        g.image(this._sheet, 0, 0, cw, ch, 0, code * ch, cw, ch);
+        //透明部分はそのままに、インク(不透明)部分だけを白へ塗り替える
+        const ctx = g.drawingContext;
+        ctx.globalCompositeOperation = "source-in";
+        g.noStroke();
+        g.fill(255);
+        g.rect(0, 0, cw, ch);
+        ctx.globalCompositeOperation = "source-over";
+        this._letterGraphics = g;
     }
     reset() {
     }
@@ -35046,13 +36410,14 @@ class TenPrintP5src extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base 
         if (!this.isInit)
             return;
         this._p5.background(0, 0, 255);
-        this._p5.fill(255);
-        this._p5.noStroke();
-        //this.drawFont(this._width,this._height,0.3,0,0);
-        this._p5.rect(2, 2, 28, 4);
-        this._p5.rect(13, 4, 5, 13);
+        if (this._letterGraphics) {
+            this._p5.image(this._letterGraphics, 0, 0, this._width, this._height);
+        }
     }
 }
+//abc.pngは1文字100x60のスプライトシート(A~Zが縦に並んでいる)
+TenPrintP5src.CHAR_W = 100;
+TenPrintP5src.CHAR_H = 60;
 
 
 /***/ }),
@@ -35078,6 +36443,7 @@ __webpack_require__.r(__webpack_exports__);
 class UnsharpMaskMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.U);
+        this.showTitle();
     }
     init() {
         let unsharp = new _UnsharpMaskP5__WEBPACK_IMPORTED_MODULE_2__.UnsharpMaskP5();
@@ -35332,8 +36698,12 @@ class UnsharpMaskP5src {
                 this._ox = (Math.random() - 0.5) * this._width * 0.2;
                 this._oy = (Math.random() - 0.5) * this._height * 0.2;
                 this._os = 1.8; //+Math.random()*0.2;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+                if (letter == "")
+                    letter = "U";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("U", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this.setUp(p);
                     this._callback();
@@ -35450,14 +36820,10 @@ __webpack_require__.r(__webpack_exports__);
 class VerletMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_2__.InfoData.V);
+        this.showTitle();
         this.p5MainV = new _p5MainV__WEBPACK_IMPORTED_MODULE_0__.p5MainV();
         this.p5MainV.init(() => {
         });
-        /*
-        this.p5 = new VerletMainP5();
-        this.p5.init("V",()=>{
-
-        });*/
     }
     init() {
     }
@@ -35579,8 +36945,12 @@ class p5MainV extends _p5MainBase__WEBPACK_IMPORTED_MODULE_1__.p5MainBase {
                 this._p5 = p;
                 this._width = _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width;
                 this._height = _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.alphabet;
+                if (letter == "")
+                    letter = "V";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_4__.FontManager();
-                this._fontManager.init("V", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this._ox = 200 * (Math.random() - 0.5);
                     this._oy = 50 * (Math.random() - 0.5);
@@ -35638,8 +37008,9 @@ class p5MainV extends _p5MainBase__WEBPACK_IMPORTED_MODULE_1__.p5MainBase {
         this._callback();
         _data_Params__WEBPACK_IMPORTED_MODULE_3__.Params.gui.add(this, "reset");
     }
-    getPosition(ratio) {
-        let s = this._path.getStrokes()[0];
+    getPosition(ratio, idx) {
+        let strokes = this._path.getStrokes();
+        let s = strokes[idx % strokes.length]; //0番目のストローク
         let scl = 10.5;
         let rect = this._path.getRect();
         let p1 = s.pointAt(ratio);
@@ -35751,8 +37122,8 @@ class VMain {
         for (let j = 0; j < 50; j++) {
             let ratio1 = Math.random();
             let ratio2 = Math.random();
-            let p1 = _p5MainV__WEBPACK_IMPORTED_MODULE_3__.p5MainV.instance.getPosition(ratio1);
-            let p2 = _p5MainV__WEBPACK_IMPORTED_MODULE_3__.p5MainV.instance.getPosition(ratio2);
+            let p1 = _p5MainV__WEBPACK_IMPORTED_MODULE_3__.p5MainV.instance.getPosition(ratio1, j);
+            let p2 = _p5MainV__WEBPACK_IMPORTED_MODULE_3__.p5MainV.instance.getPosition(ratio2, j);
             this.currentPoints = [];
             this.isRec = true;
             let num = 30; //２０分割する
@@ -35793,7 +37164,7 @@ class VMain {
         //pp.stroke(0,0,0,128)
         pp.strokeWeight(1);
         for (let i = 0; i < this.sticksList.length; i++) {
-            this.sticksList[i].update(pp);
+            this.sticksList[i].update(pp, i);
         }
         //描画
         for (let i = 0; i < this.sticks.length; i++) {
@@ -36076,7 +37447,7 @@ class VStickControl {
     }
     init() {
     }
-    update(p5) {
+    update(p5, idx) {
         this.ratioS += this.v1 * this.spd;
         this.ratioE += this.v2 * this.spd;
         if (this.ratioS > 1) {
@@ -36085,8 +37456,8 @@ class VStickControl {
         if (this.ratioE > 1) {
             this.ratioE = 0;
         }
-        let p1 = _p5MainV__WEBPACK_IMPORTED_MODULE_0__.p5MainV.instance.getPosition(this.ratioS);
-        let p2 = _p5MainV__WEBPACK_IMPORTED_MODULE_0__.p5MainV.instance.getPosition(this.ratioE);
+        let p1 = _p5MainV__WEBPACK_IMPORTED_MODULE_0__.p5MainV.instance.getPosition(this.ratioS, idx);
+        let p2 = _p5MainV__WEBPACK_IMPORTED_MODULE_0__.p5MainV.instance.getPosition(this.ratioE, idx);
         this.start._basePos.x = p1.x;
         this.start._basePos.y = p1.y;
         this.end._basePos.x = p2.x;
@@ -36152,6 +37523,7 @@ __webpack_require__.r(__webpack_exports__);
 class WaveMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.W);
+        this.showTitle();
         //console.log("W");
         this.init();
     }
@@ -36183,6 +37555,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _00_base_p5Base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../00_base/p5Base */ "./src/mojis/00_base/p5Base.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -36204,8 +37578,12 @@ class WaveMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_3__.p5Base {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_6__.Params.alphabet;
+                if (letter == "")
+                    letter = "W";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("W", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this.setUp(p);
                     this._ox = this._p5.width * 0.4 * (Math.random() - 0.5);
                     this._oy = this._p5.height * 0.4 * (Math.random() - 0.5);
@@ -36266,8 +37644,9 @@ class WaveMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_3__.p5Base {
         this._p5.beginShape();
         let sum = 0;
         this._path.getStrokes().forEach((stroke) => {
-            for (let t = 0; t < 500; t++) {
-                let rr = t / 500 + this._p5.frameCount * 0.001;
+            let num = 500;
+            for (let t = 0; t < num; t++) {
+                let rr = t / num + this._p5.frameCount * 0.001;
                 let p1 = stroke.pointAt(rr % 1);
                 let p2 = stroke.pointAt((rr + 0.002) % 1);
                 let tx = p2.x - p1.x;
@@ -36280,7 +37659,7 @@ class WaveMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_3__.p5Base {
                 ny /= len;
                 let cx = p1.x * scale + centerX - w / 2;
                 let cy = p1.y * scale + centerY + h / 2;
-                let amp = this._waveSimulation.pos[t % 500] * 90.05;
+                let amp = this._waveSimulation.pos[t % num] * 90.05;
                 /*
                 this._p5.line(
                     cx,
@@ -36293,7 +37672,7 @@ class WaveMainP5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_3__.p5Base {
             }
             this._p5.endShape(this._p5.CLOSE);
         });
-        this._flowY += sum * 0.0004;
+        this._flowY += sum * 0.0001;
         this._flowY += (0 - this._flowY) / 10;
     }
     resize() {
@@ -36318,7 +37697,7 @@ __webpack_require__.r(__webpack_exports__);
 class WaveSimulation {
     constructor() {
         this.k = 0.8;
-        this.attenuation = 0.98; //げんすい
+        this.attenuation = 0.96; //げんすい
         this.impulseStrength = 8;
         this.pos = [];
         this.vel = [];
@@ -36330,7 +37709,7 @@ class WaveSimulation {
     }
     impulse() {
         let idx = Math.floor(this.MAX * Math.random());
-        let num = 1 + Math.floor(2 * Math.random());
+        let num = 4 + Math.floor(2 * Math.random());
         let value = this.impulseStrength * Math.sign(Math.random() - 0.5);
         for (let i = -num; i <= num; i++) {
             if (idx + i >= 0 && idx + i < this.MAX) {
@@ -36487,6 +37866,7 @@ __webpack_require__.r(__webpack_exports__);
 class XORMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.X);
+        this.showTitle();
     }
     init() {
         this._xorMainP5 = new _XORMainP5__WEBPACK_IMPORTED_MODULE_2__.XORMainP5();
@@ -36514,6 +37894,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _font_FontManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../font/FontManager */ "./src/font/FontManager.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -36532,8 +37914,12 @@ class XORMainP5 {
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
+                let letter = _data_Params__WEBPACK_IMPORTED_MODULE_4__.Params.alphabet;
+                if (letter == "")
+                    letter = "X";
+                console.log("letter = ", letter);
                 this._fontManager = new _font_FontManager__WEBPACK_IMPORTED_MODULE_1__.FontManager();
-                this._fontManager.init("X", (path) => {
+                this._fontManager.init(letter, (path) => {
                     this._path = path;
                     this.setUp(this._p5);
                     this._isInit = true;
@@ -36575,12 +37961,12 @@ class XORMainP5 {
         let s = this._path.getStrokes();
         let scl = this._os;
         let num = 1 + 80 * Math.pow(0.5 + 0.5 * Math.sin(this._p5.frameCount * 0.001 + Math.PI / 12), 3);
-        let radius = 120; // + 79 * Math.sin(this._p5.frameCount * 0.015);
+        let radius = 120;
         for (let i = 0; i < s.length; i++) {
             for (let j = 0; j <= num; j++) {
                 let ratio = j / num + this._p5.frameCount * 0.001;
                 ratio %= 1;
-                let ss = s[0].pointAt(ratio);
+                let ss = s[i].pointAt(ratio);
                 let xx = (ss.x - rect.x - rect.width / 2) * scl;
                 let yy = (ss.y - rect.y - rect.height / 2) * scl;
                 xx += this._ox;
@@ -36617,6 +38003,7 @@ __webpack_require__.r(__webpack_exports__);
 class YUVMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkBase {
     constructor() {
         super(_data_InfoData__WEBPACK_IMPORTED_MODULE_0__.InfoData.Y);
+        this.showTitle();
     }
     init() {
         //YUV
@@ -36649,6 +38036,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _yuv_frag__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./yuv.frag */ "./src/mojis/25_y/yuv.frag");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -36666,10 +38055,14 @@ class YUVp5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
     start(callback) {
         this._callback = callback;
         let sketch = (p) => {
+            p.preload = () => {
+                this._font = p.loadJSON("./data/onestroke-font.json");
+            };
             /** 初期化処理 */
             p.setup = () => {
                 this._p5 = p;
-                _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setPosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().height - 100);
+                _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setBasePosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.getSize().height - 100);
+                _html_TitleView__WEBPACK_IMPORTED_MODULE_6__.TitleView.setPosition();
                 this._src = new _YUVp5src__WEBPACK_IMPORTED_MODULE_2__.YUVp5src();
                 this._src.start(() => {
                     this.setUp();
@@ -36720,15 +38113,12 @@ class YUVp5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
             this._shader.setUniform('u_resolution', [p.width, p.height]);
             this._shader.setUniform('u_scale', this._scale);
             this._shader.setUniform('u_frameCount', this._p5.frameCount);
-            let lines = [];
-            lines.push(0, 0);
-            lines.push(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height / 2);
-            lines.push(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height / 2);
-            lines.push(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, 0);
-            lines.push(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height / 2);
-            lines.push(_data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width / 2, _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height);
+            let letter = _data_Params__WEBPACK_IMPORTED_MODULE_7__.Params.alphabet;
+            if (letter == "")
+                letter = "Y";
+            let lines = this.getStrokeLines(letter);
             this._shader.setUniform('u_lines', lines);
-            this._shader.setUniform('u_lineCount', 3); //lines.length);
+            this._shader.setUniform('u_lineCount', lines.length / 4);
             this._shader.setUniform('u_image', this._src.getGraphics());
             //this._shader.setUniform('u_image', this._src.getGraphics());
             // draw fullscreen quad (WEBGL coords centered)
@@ -36759,6 +38149,31 @@ class YUVp5 extends _00_base_p5Base__WEBPACK_IMPORTED_MODULE_1__.p5Base {
         this._scale = s;
         if (this._shader)
             this._shader.setUniform('u_scale', this._scale);
+    }
+    //onestroke-font.jsonのグリフ(0〜1に正規化されたストロークの折れ線)を、
+    //u_lines用のフラットな配列[x0,y0,x1,y1, ...](2点で1本の線分)に変換する。
+    //0〜1が画面いっぱい(Stage.width x Stage.height)になるように引き伸ばす(複数文字の場合は先頭の1文字のみ使用)
+    //シェーダ側は vec2 u_lines[200] (=最大100本) までしか読まないので、超えた分は切り捨てる
+    getStrokeLines(text) {
+        const lines = [];
+        if (!this._font || text.length === 0)
+            return lines;
+        const maxSegments = 100;
+        const strokes = this._font.glyphs[text[0].toUpperCase()];
+        if (!strokes)
+            return lines;
+        for (const stroke of strokes) {
+            for (let i = 0; i < stroke.length - 1; i++) {
+                if (lines.length / 4 >= maxSegments)
+                    return lines;
+                const [x0, y0] = stroke[i];
+                const [x1, y1] = stroke[i + 1];
+                //フォントはy=0が下端・y=1が上端(数学的な向き)なので、
+                //上が0になる画面のピクセル座標に合わせて上下反転する
+                lines.push(x0 * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, (1 - y0) * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height, x1 * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.width, (1 - y1) * _data_Stage__WEBPACK_IMPORTED_MODULE_5__.Stage.height);
+            }
+        }
+        return lines;
     }
 }
 
@@ -36863,16 +38278,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ZFightingMain": () => (/* binding */ ZFightingMain)
 /* harmony export */ });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
-/* harmony import */ var three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! three/examples/jsm/loaders/FontLoader */ "./node_modules/three/examples/jsm/loaders/FontLoader.js");
-/* harmony import */ var three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! three/examples/jsm/geometries/TextGeometry */ "./node_modules/three/examples/jsm/geometries/TextGeometry.js");
-/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
+/* harmony import */ var three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! three/examples/jsm/loaders/FontLoader */ "./node_modules/three/examples/jsm/loaders/FontLoader.js");
+/* harmony import */ var three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! three/examples/jsm/geometries/TextGeometry */ "./node_modules/three/examples/jsm/geometries/TextGeometry.js");
+/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
 /* harmony import */ var _font_FontManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../font/FontManager */ "./src/font/FontManager.ts");
 /* harmony import */ var _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../00_base/WorkBase */ "./src/mojis/00_base/WorkBase.ts");
 /* harmony import */ var _data_InfoData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../data/InfoData */ "./src/data/InfoData.ts");
 /* harmony import */ var _data_Stage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../data/Stage */ "./src/data/Stage.ts");
 /* harmony import */ var _html_TitleView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../html/TitleView */ "./src/html/TitleView.ts");
+/* harmony import */ var _data_Params__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/Params */ "./src/data/Params.ts");
+
 
 
 
@@ -36892,8 +38309,9 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
         this.bgColor = { color: 0xcccccc };
         this.opacity = 1;
         this.meshes = [];
-        this._rot1 = new three__WEBPACK_IMPORTED_MODULE_5__.Vector3();
-        this._rot2 = new three__WEBPACK_IMPORTED_MODULE_5__.Vector3();
+        this._rot1 = new three__WEBPACK_IMPORTED_MODULE_6__.Vector3();
+        this._rot2 = new three__WEBPACK_IMPORTED_MODULE_6__.Vector3();
+        this.showTitle();
         //this.init();
     }
     init() {
@@ -36901,32 +38319,33 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
         this._fontManager.init("A", (path) => {
             this._path = path;
             this.makeLetter();
-            _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().height - 100);
+            _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setBasePosition(100, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height - _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.getSize().height - 100);
+            _html_TitleView__WEBPACK_IMPORTED_MODULE_4__.TitleView.setPosition();
         });
-        this.clock = new three__WEBPACK_IMPORTED_MODULE_5__.Clock(true);
+        this.clock = new three__WEBPACK_IMPORTED_MODULE_6__.Clock(true);
         this.clock.start();
         let dom = document.getElementById("webgl");
-        this.renderer = new three__WEBPACK_IMPORTED_MODULE_5__.WebGLRenderer({
+        this.renderer = new three__WEBPACK_IMPORTED_MODULE_6__.WebGLRenderer({
             canvas: dom,
             antialias: false,
             preserveDrawingBuffer: true
         });
         this.renderer.setPixelRatio(1);
         this.renderer.setPixelRatio(1);
-        this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_5__.Color(0x000000));
+        this.renderer.setClearColor(new three__WEBPACK_IMPORTED_MODULE_6__.Color(0x000000));
         this.renderer.setSize(_data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width, _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height);
-        this.scene = new three__WEBPACK_IMPORTED_MODULE_5__.Scene();
-        this.camera = new three__WEBPACK_IMPORTED_MODULE_5__.PerspectiveCamera(40, 640 / 480, 0.001, 1000000);
+        this.scene = new three__WEBPACK_IMPORTED_MODULE_6__.Scene();
+        this.camera = new three__WEBPACK_IMPORTED_MODULE_6__.PerspectiveCamera(40, 640 / 480, 0.001, 1000000);
         var stgW = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.width * 0.4;
         var stgH = _data_Stage__WEBPACK_IMPORTED_MODULE_3__.Stage.height * 0.4;
-        this.oCamera = new three__WEBPACK_IMPORTED_MODULE_5__.OrthographicCamera(-stgW, stgW, stgH, -stgH, 1, 10000);
+        this.oCamera = new three__WEBPACK_IMPORTED_MODULE_6__.OrthographicCamera(-stgW, stgW, stgH, -stgH, 1, 10000);
         this.resetCam();
-        this.control = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_6__.OrbitControls(this.oCamera, dom);
+        this.control = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_7__.OrbitControls(this.oCamera, dom);
         this.control.enabled = false;
         this.tick();
-        this.ambientLight = new three__WEBPACK_IMPORTED_MODULE_5__.AmbientLight(0xffffff, 0.5);
+        this.ambientLight = new three__WEBPACK_IMPORTED_MODULE_6__.AmbientLight(0xffffff, 0.5);
         this.scene.add(this.ambientLight);
-        let dd = new three__WEBPACK_IMPORTED_MODULE_5__.DirectionalLight(0xffffff, 1.5);
+        let dd = new three__WEBPACK_IMPORTED_MODULE_6__.DirectionalLight(0xffffff, 1.5);
         dd.position.set(1.2, 3, 1);
         this.scene.add(dd);
         window.addEventListener('resize', () => {
@@ -36936,8 +38355,8 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
         //this.resetCam();
     }
     makeLetter() {
-        const txt = 'Z';
-        const loader = new three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_7__.FontLoader();
+        const txt = _data_Params__WEBPACK_IMPORTED_MODULE_5__.Params.alphabet || "Z";
+        const loader = new three_examples_jsm_loaders_FontLoader__WEBPACK_IMPORTED_MODULE_8__.FontLoader();
         // try to load a local typeface JSON. Provide a fallback to canvas text if it fails.
         loader.load('./data/helvetiker_regular.typeface.json', (font) => {
             this._container = this.makeMesh(txt, font, 0xffffff);
@@ -36960,13 +38379,13 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
         });
     }
     motion1() {
-        gsap__WEBPACK_IMPORTED_MODULE_8__["default"].to(this._container.position, {
+        gsap__WEBPACK_IMPORTED_MODULE_9__["default"].to(this._container.position, {
             x: Math.random() * 0.0001,
             y: Math.random() * 0.0001,
             z: Math.random() * 0.0001,
             duration: 8
         });
-        gsap__WEBPACK_IMPORTED_MODULE_8__["default"].to(this._container2.position, {
+        gsap__WEBPACK_IMPORTED_MODULE_9__["default"].to(this._container2.position, {
             x: Math.random() * 0.0001,
             y: Math.random() * 0.0001,
             z: Math.random() * 0.0001,
@@ -36979,13 +38398,13 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
     motion2() {
         let tgtX = 20 * (Math.random() - 0.5);
         let tgtY = 20 * (Math.random() - 0.5);
-        gsap__WEBPACK_IMPORTED_MODULE_8__["default"].to(this._container.position, {
+        gsap__WEBPACK_IMPORTED_MODULE_9__["default"].to(this._container.position, {
             x: tgtX,
             y: tgtY,
             duration: 3,
             ease: "power1.inOut"
         });
-        gsap__WEBPACK_IMPORTED_MODULE_8__["default"].to(this._container2.position, {
+        gsap__WEBPACK_IMPORTED_MODULE_9__["default"].to(this._container2.position, {
             x: -tgtX,
             y: -tgtY,
             duration: 3,
@@ -36997,7 +38416,7 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
     }
     makeMesh(txt, font, col) {
         let height = 10;
-        const geom = new three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_9__.TextGeometry(txt, {
+        const geom = new three_examples_jsm_geometries_TextGeometry__WEBPACK_IMPORTED_MODULE_10__.TextGeometry(txt, {
             font: font,
             size: 150,
             height: height,
@@ -37010,17 +38429,17 @@ class ZFightingMain extends _00_base_WorkBase__WEBPACK_IMPORTED_MODULE_1__.WorkB
             const offsetY = -0.5 * (geom.boundingBox.max.y - geom.boundingBox.min.y);
             geom.translate(offsetX, offsetY, 0);
         }
-        const mat = new three__WEBPACK_IMPORTED_MODULE_5__.MeshPhongMaterial({ color: col });
-        const mesh = new three__WEBPACK_IMPORTED_MODULE_5__.Mesh(geom, mat);
+        const mat = new three__WEBPACK_IMPORTED_MODULE_6__.MeshPhongMaterial({ color: col });
+        const mesh = new three__WEBPACK_IMPORTED_MODULE_6__.Mesh(geom, mat);
         mesh.position.set(0, 0, -height / 2);
-        var container = new three__WEBPACK_IMPORTED_MODULE_5__.Object3D();
+        var container = new three__WEBPACK_IMPORTED_MODULE_6__.Object3D();
         container.add(mesh);
         container.position.set(0, 0, 0);
         return container;
     }
     resetCam() {
         this.oCamera.position.set(-1200, -1200, 3000);
-        this.oCamera.lookAt(new three__WEBPACK_IMPORTED_MODULE_5__.Vector3(0, 0, 0));
+        this.oCamera.lookAt(new three__WEBPACK_IMPORTED_MODULE_6__.Vector3(0, 0, 0));
     }
     tick() {
         var _a;

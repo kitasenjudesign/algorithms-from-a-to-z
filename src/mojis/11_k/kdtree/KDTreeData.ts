@@ -15,9 +15,9 @@ export class KDTreeData{
     ratio:number = 0;
     isLast:boolean = false; // Indicates if this node is a leaf node
     topdown:boolean = false;
-    rr: number = 255;
-    gg: number = 255;
-    bb: number = 255;
+    rr: number = 235;
+    gg: number = 235;
+    bb: number = 235;
     aa: number = 0;
 
     rr2:number = 255;
@@ -35,6 +35,7 @@ export class KDTreeData{
     h:number = 0;
 
     fill:number = 1;
+    offsetColor:number = 0;
     
     constructor(parent:KDTreeData,depth:number = 0){
 
@@ -212,7 +213,12 @@ export class KDTreeData{
         
                 // 色を設定
                 //this.fill=0.5
-                p5.fill(this.rr, this.gg, this.bb, this.aa);//this.aa);
+                p5.fill(
+                    this.rr+this.offsetColor,
+                    this.gg+this.offsetColor,
+                    this.bb+this.offsetColor,
+                    this.aa
+                );//this.aa);
         
                 // rect を描画 (中心を基準に描画)
                 p5.rect(-w / 2, -h / 2, w* this.fill, h);
@@ -316,7 +322,15 @@ export class KDTreeData{
 
     }
 
+    blink(){
 
+        this.offsetColor = 15;
+        gsap.to(this,{
+            offsetColor:0,
+            duration:0.2
+        });
+
+    }
     
 
 }

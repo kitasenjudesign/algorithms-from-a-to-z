@@ -5,14 +5,14 @@ import { Params } from '../../../data/Params';
 export class ParamsRd {
 
     public static gui:GUI;
-    public static width:number = 512;//*2;
-    public static height:number = 512;//*2;
+    public static width:number = 512*2;
+    public static height:number = 512*2;
     public static colorId:number = 0;
     public static colorMax:number=8;
     public static isPreviewed:boolean=false;
 
-    public static stageWidth:number = 540*2;//512;
-    public static stageHeight:number = 540*2;//512;
+    public static stageWidth:number = 540;//512;
+    public static stageHeight:number = 540;//512;
 
     public static rdParams:THREE.Vector4[] =
         [

@@ -33,10 +33,12 @@ export class GameOfLifeP5src{
         let sketch = (p: p5)=>{
             /** 初期化処理 */
             p.setup = ()=>{
+
                 this._p5 = p;
                 this._os=0.6+0.05*(Math.random());
+                
                 this._fontManager = new FontManager();
-                this._fontManager.init("G",(path)=>{     
+                this._fontManager.init(str,(path)=>{     
                     
                     this._path = path;
                     this.setUp(p);

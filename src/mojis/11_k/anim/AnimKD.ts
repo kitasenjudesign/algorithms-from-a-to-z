@@ -11,6 +11,7 @@ export class AnimKD{
     private _p5: p5;
     private flag:boolean = false;
     private _graphics: p5.Graphics;
+    private _sprite!: p5.Graphics;
     //private _tree:KDTree;
     private _strokeColor:string = "#fff";
     private _bgColor:string = "#000";
@@ -21,12 +22,14 @@ export class AnimKD{
        this._graphics.noSmooth();
     }
 
-    start(img:p5.Image){
+    start(font:p5.Font, letter:string){
 
         console.log("kdtree");
 
-            //SoundManager.instance.play(32); 
-            this._kdTree = new KDTree(8);        
+            this._sprite = this.createTextSprite(font, letter);
+
+            //SoundManager.instance.play(32);
+            this._kdTree = new KDTree(8);
             this._kdTree.setRandomBottom();
 
             let list = this._kdTree._tree.getAllChildren();
@@ -35,9 +38,9 @@ export class AnimKD{
                 child.topdown=false;
                 child.weight=0.5;
                 child.topdown = false;
-            }   
+            }
 
-            this.update(img);
+            this.update();
 
             this.setCol();
  
@@ -46,8 +49,6 @@ export class AnimKD{
             if(Params.debug){
                 Params.gui.add(this,"test1");
                 Params.gui.add(this,"test2");
-                Params.gui.add(this,"test3");
-                Params.gui.add(this,"test4");
                 Params.gui.add(this,"setCol");
             }
 
@@ -94,8 +95,7 @@ export class AnimKD{
             gsap.to(bottoms[i],{
                 delay: i*0.005+Math.random(),
                 weight:Math.random()<0.1 ? 5+Math.random() : 0.2+0.2*Math.random(),//ww*0.1,//bottoms[i].weight,
-                duration: 1+0.2*Math.random(),
-                
+                duration: 1+0.2*Math.random(),                
                 ease: "elastic.out(1,0.8)"
             });
 
@@ -136,6 +136,7 @@ export class AnimKD{
         
             let size:number = 1+Math.random();
             let flag:boolean = false;
+            
             if(bottoms[i].bb>128){
                 flag=true;
                 size = 5+5*Math.random();
@@ -144,7 +145,7 @@ export class AnimKD{
                 delay: i*0.01+Math.random(),
                 weight:size,//ww*0.1,//bottoms[i].weight,
                 duration: 1,
-                ease: flag ? "elastic.out(1,0.5)" : "linear"
+                ease: flag ? "elastic.out(1,0.4)" : "linear"
             });
 
         }
@@ -170,9 +171,32 @@ export class AnimKD{
 
     
 
-    update(img:p5.Image){
+    //フォントから文字の形をぴったりのサイズの小さいグラフィックに焼き込み、
+    //あとで画面いっぱいに拡大して貼る(noSmoothなのでkd.pngの時と同じくブロック状に荒れる)
+    private createTextSprite(font:p5.Font, letter:string): p5.Graphics{
 
-        this._graphics.image(img,0,0,this._p5.width,this._p5.height);
+        const size = 8;
+        const bounds = font.textBounds(letter, 0, 0, size) as {x:number,y:number,w:number,h:number};
+
+        const w = Math.max(1, Math.ceil(bounds.w));
+        const h = Math.max(1, Math.ceil(bounds.h));
+
+        const g = this._p5.createGraphics(w, h);
+        g.noSmooth();
+        g.background(0);
+        g.noStroke();
+        g.fill(255);
+        g.textFont(font);
+        g.textSize(size);
+        g.text(letter, -bounds.x, -bounds.y);
+
+        return g;
+
+    }
+
+    update(){
+
+        this._graphics.image(this._sprite,0,0,this._p5.width,this._p5.height);
 
         this._p5.textAlign(this._p5.CENTER,this._p5.CENTER);
         this._p5.textSize(10);

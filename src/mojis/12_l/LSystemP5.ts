@@ -53,17 +53,10 @@ export class LSystemP5 extends p5Base{
     setUp(p: p5){
         
         this._isInitialized=true;
-
         let canvas = this._p5.createCanvas(
             Stage.width,
             Stage.height
         );
-
-        
-        //canvas.style.display = "block";
-
-        //this._p5.frameRate(30);
-        //this._p5.noSmooth();
 
         //ポイントの取得
         let points:{x:number,y:number}[] = [];
@@ -89,10 +82,12 @@ export class LSystemP5 extends p5Base{
                 0);//Math.PI*2*Math.random());
             this._trees.push(t);
         }
-        TitleView.setPosition(
+        
+        TitleView.setBasePosition(
             Stage.width - TitleView.getSize().width-200,
             200
         );
+        TitleView.setPosition();
 
         
         this._p5.frameRate(20);
@@ -115,7 +110,7 @@ export class LSystemP5 extends p5Base{
 
         if(!this._isInitialized)return;
 
-        console.log("draw",this._trees);
+        //console.log("draw",this._trees);
 
         this._p5.background(0,0,0);
         this._p5.fill(255,0,255);
@@ -127,7 +122,10 @@ export class LSystemP5 extends p5Base{
                 this._p5,
                 Math.sin(this._p5.frameCount*0.02)*0.2
             );
+
         }
+
+
 
     }
 

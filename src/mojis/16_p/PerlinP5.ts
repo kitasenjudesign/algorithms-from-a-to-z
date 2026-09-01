@@ -63,8 +63,9 @@ export class PerlinP5 extends p5Base{
         //this._p5.frameRate(30);
         this._p5.noSmooth();
 
-        TitleView.setPosition(Stage.width-TitleView.getSize().width-100,Stage.height-TitleView.getSize().height-100);
-
+        TitleView.setBasePosition(Stage.width-TitleView.getSize().width-100,Stage.height-TitleView.getSize().height-100);
+        TitleView.setPosition();
+        
         this._perlin = new Perlin(this._p5);
 
         this._p5.frameRate(20);
@@ -103,12 +104,15 @@ void main() {
         }
 
         float noise2d(vec2 p, float line){
+
           vec2 i = floor(p);
           vec2 f = fract(p);
 
           
+          //点を書く
           if(line>0.5){
-            if(length(i-p)<0.01)return 11.0;
+            if(length(i.x-p.x)<0.02 && length(i.y-p.y)<0.03)return 11.0;
+            
           }
 
           vec2 u = f * f * (3.0 - 2.0 * f);
@@ -116,7 +120,11 @@ void main() {
           float n10 = dot(hash2(i + vec2(1.0,0.0)), f - vec2(1.0,0.0));
           float n01 = dot(hash2(i + vec2(0.0,1.0)), f - vec2(0.0,1.0));
           float n11 = dot(hash2(i + vec2(1.0,1.0)), f - vec2(1.0,1.0));
-          return mix(mix(n00, n10, u.x), mix(n01, n11, u.x), u.y);
+          return mix(
+            mix(n00, n10, u.x),
+            mix(n01, n11, u.x), 
+            u.y
+          );
         }
 
         // fbm (fractal noise)
@@ -165,6 +173,12 @@ void main() {
         if(this._shader){
           this._shader.setUniform('u_scale', this._scale);
         }
+
+        window.addEventListener('resize', ()=>{
+            this.resize();
+        }, false)
+        
+        this.resize();
     }
 
     onLoad(){
@@ -222,7 +236,7 @@ void main() {
 
     resize(){
 
-
+      
     
         
     }

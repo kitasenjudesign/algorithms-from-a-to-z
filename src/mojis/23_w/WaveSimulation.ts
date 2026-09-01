@@ -6,7 +6,7 @@ import p5 from "p5";
 export class WaveSimulation{
 
     k:number = 0.8;
-    attenuation:number = 0.98;//げんすい
+    attenuation:number = 0.96;//げんすい
     impulseStrength:number = 8;
     public pos:number[] = [];
     vel:number[] = [];
@@ -23,7 +23,7 @@ export class WaveSimulation{
     impulse(){
         let idx = Math.floor(this.MAX*Math.random());
 
-        let num=1+Math.floor(2*Math.random());
+        let num=4+Math.floor(2*Math.random());
         let value = this.impulseStrength * Math.sign(Math.random()-0.5);
         for(let i=-num;i<=num;i++){
             if(idx+i>=0 && idx+i<this.MAX){

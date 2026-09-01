@@ -7,14 +7,17 @@ export class ErrorDiffusionMain extends WorkBase{
     private _edP5: ErrorDiffusionP5;
 
     constructor(){
+        
         super(InfoData.E)
+        this.showTitle();
+
     }
 
     init(){
         
         this._edP5 = new ErrorDiffusionP5();
         this._edP5.start(()=>{
-
+            
         });
 
     }

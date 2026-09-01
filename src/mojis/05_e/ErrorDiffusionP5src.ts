@@ -43,9 +43,12 @@ export class ErrorDiffusionP5src{
                 if(!Params.isStation){
                     this._os = 0.7 + Math.random() * 0.1;
                 }
+                let letter = Params.alphabet;
+                if(letter=="") letter = "E";
+                console.log("letter = ",letter);
 
                 this._fontManager = new FontManager();
-                this._fontManager.init("E",(path)=>{   
+                this._fontManager.init(letter,(path)=>{
                     this._path = path;  
                     this.setUp(p);
                     
@@ -165,13 +168,16 @@ export class ErrorDiffusionP5src{
     }
 
     setImage(img:p5.Image){
-        
+
+        //get()/set()をピクセル数分呼ぶと非常に重い(内部でColor生成やcanvas読み出しが走る)ため、
+        //pixels[]配列を直接コピーする。imgとこのcanvasは常に同じ幅・高さで作られている前提
+        this._p5.loadPixels();
         img.loadPixels();
 
-        for(let j=0;j<this._height;j++){
-            for(let i=0;i<this._width;i++){
-                img.set(i,j,this._p5.get(i,j) );
-            }
+        const src = this._p5.pixels;
+        const dst = img.pixels;
+        for(let i=0;i<src.length;i++){
+            dst[i] = src[i];
         }
 
         img.updatePixels();

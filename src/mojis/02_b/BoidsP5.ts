@@ -9,6 +9,7 @@ import { p5Base } from "../00_base/p5Base";
 import { Params } from "../../data/Params";
 import { TitleView } from "../../html/TitleView";
 import { Stage } from "../../data/Stage";
+import { InfoView } from "../../html/InfoView";
 
 
 export class BoidsP5 extends p5Base{
@@ -44,9 +45,15 @@ export class BoidsP5 extends p5Base{
             /** 初期化処理 */
             p.setup = ()=>{
                 this._p5 = p;
-                this.loadFont("B",()=>{
+                let letter = Params.alphabet;
+                if(letter=="") letter = "B";
+
+                console.log("letter = ",letter);
+                this.loadFont(letter,()=>{
                     this.setUp(p);
+                    
                 });
+                this._callback();
                 
             }
             /** フレームごとの描画処理 */
@@ -55,7 +62,7 @@ export class BoidsP5 extends p5Base{
             }
 
             p.mouseClicked = ()=>{
-                this.click();
+                //this.click();
             }
 
             p.windowResized = ()=>{
@@ -87,7 +94,7 @@ export class BoidsP5 extends p5Base{
     }
 
     click(){
-        this.reset();
+        //this.reset();
     }
 
     reset(){
@@ -105,7 +112,6 @@ export class BoidsP5 extends p5Base{
            this._p5.width, this._p5.height, this._os, this._ox, this._oy
        );
 
-
         for (let i = 0; i < this._boidCount; i++) {
             //開始位置
 
@@ -114,10 +120,16 @@ export class BoidsP5 extends p5Base{
             const x = pp[0];
             const y = pp[1];
 
-
-
             this._boids.push(new Boid(this._p5, x, y));
         }
+
+        Params.mojiCenterX = this._ox;
+        Params.mojiCenterY = this._oy;
+
+        if(!InfoView.showing){
+            TitleView.setCenter(this._ox, this._oy);
+        }
+
     }
 
     draw(){
@@ -137,9 +149,6 @@ export class BoidsP5 extends p5Base{
         this._p5.noFill();
         this._p5.stroke(this.strokeColor);
 
-        Params.mojiCenterX = this._ox;
-        Params.mojiCenterY = this._oy;
-        TitleView.setCenter(this._ox, this._oy);
 
         if(this._boids[0].count<=1){
             this.drawFont(
@@ -151,7 +160,7 @@ export class BoidsP5 extends p5Base{
             );
         }
         if(this._boids[0].count>30*11){
-            this.reset();
+            //this.reset();
         }
 
     }

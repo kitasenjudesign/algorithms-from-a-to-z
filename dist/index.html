@@ -5,6 +5,16 @@
     <!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
     <title>Algorithms from A to Z</title>
     
+    <link rel="stylesheet" href="./index.css?ver=1">
+
+    <meta property="og:title" content="Algorithms from A to Z">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://kitasenjudesign.com/atoz/ogp/ogp01.png">
+    <meta property="og:url" content="https://kitasenjudesign.com/atoz/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name=”twitter:image” content="https://kitasenjudesign.com/atoz/ogp/ogp01.png" />
+
     <script>
       window.isStation = false;
       window.noEntryAreaWidth = 3455;
@@ -12,191 +22,39 @@
       //3840x2160(4K)
     </script>
 
-  <style type="text/css">
-
-    #noEntryArea{
-      background-color: #00f8;
-      position: absolute;
-      z-index: 10003;
-      display: none;
-      pointer-events: none;
-    }
-
-    :root {
-      --fontSizeL: 33px;
-      --fontSizeLja: 30px;
-      --fontSizeM: 24px;
-      --fontSizeS: 18px;
-      --fontSizeSja: 16px;
-    }
-    body{
-      margin:0;
-      padding:0;
-      color: #fff;
-      background-color: #000;
-      overflow: hidden;
-      font-size: var(--fontSizeL);
-      font-family: "Helvetica Neue", Arial, sans-serif;
-    }
-    canvas{
-      position: absolute;
-      display: block;
-    }
-    #cover{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      z-index: 999;
-      animation: anim 1s linear 1 forwards;
-      pointer-events: none;
-    }
-
-    @keyframes anim {
-      0%,10%{
-        opacity: 100%;
-      }
-      100%{
-        opacity: 0;
-      }
-      
-    }
-    #ascii{
-      font-family: monospace;
-      pointer-events: none;
-      /*font-size: 33px;*/
-    }
-
-    #info{
-      z-index: 99999;
-      position: absolute;
-      top: 100px;
-      left: 100px;
-      display: inline-block;
-      background-color: #8880;
-    }
-    #title{
-      font-size: var(--fontSizeS);
-    }
-    
-    #subtitle{
-      font-weight: bold;
-    }
-    #year{
-      margin-top: 2px;
-      display: block;
-      font-size: var(--fontSizeS);
-    }
-    .shadow{
-      text-shadow: 0px 0px 5px #000;
-    }
-
-    #center,#center2,#center3{
-      width: 30px;
-      height: 30px;
-      border: #f00 1px solid;
-      position: absolute;
-      z-index: 20000;
-      font-size: 8px;
-      display: none;
-    }
-
-    #center2{}    
-    #center3{}
-
-
-
-    #about{
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      z-index: 20000;
-      display: none;
-      /*display: flex;           左右に並べる */
-    }
-
-    .aboutCon {
-      flex: 1;                /* 50% + 50% */
-      height: 100%;
-      display: flex;
-      flex-direction: column; /* 縦に並べる */
-      justify-content: center;/* 縦方向センター */
-      align-items: left;    /* 横方向センター（不要なら消す） */
-      box-sizing: border-box;
-      background: #000;
-    }
-
-    
-
-    .shibuya2{
-      font-size: var(--fontSizeS);
-      display: inline-block;
-    }
-    .shibuya1{
-      font-size: var(--fontSizeS);
-      display: inline-block;
-    }
-    .title2{
-      font-size: var(--fontSizeLja);
-      font-weight: bold;
-      height: 45px;
-      position: relative;
-      top: -2px;
-
-    }    
-
-    .title1{
-      font-size: var(--fontSizeL);
-      font-weight: bold;
-      height: 45px;
-      position: relative;
-      top: -1px;
-    }
-    
-    .name2{
-      font-size: var(--fontSizeSja);
-      height: 30px;
-      position: relative;
-      top: -1px;            
-    }
-    .name1{
-      font-size: var(--fontSizeS);
-      height: 30px;
-      position: relative;
-      top: 0px;      
-    }
-
-    c{
-      margin-right:3px;
-    }
-    z{
-      margin-right: 3px;
-      margin-left: 3px;
-    }
-  </style>
+  
   </head>
 
   <body>
     <div id="noEntryArea"></div>
 
+    <!-- footer -->
+    <div id="bottomBar">
+
+      <div id="infoBtn">info</div>
+
+      <div id="alphabetInput">
+        <input type="text" id="alphabetInputField" maxlength="20" autocomplete="off" spellcheck="false" placeholder="">
+      </div>
+
+    </div>
+
+
+    <div id="prevBtn"><img src="./data/yaji.svg" alt="prev" style="Width:25px"></div>
+    <div id="nextBtn"><img src="./data/yaji2.svg" alt="prev" style="Width:25px"></div>
+
+
     <div id="about">
 
       <div class="aboutCon">
-        <div id="centerCon1">
-          <div class="shibuya2" id="a1">DIG SHIBUYA 2026: SCREENS CONTEXTUALIZED</div>
-          <div class="title2" id="a2"><c>A</c>から<z>Z</z>までのアルゴリズム</div>
-          <div class="name2" id="a3">北千住デザイン</div>
-        </div>
-      </div>
-      <div class="aboutCon">
         <div id="centerCon2">
-          <div class="shibuya1" id="b1">DIG SHIBUYA 2026: SCREENS CONTEXTUALIZED</div>
+          <div class="shibuya1" id="b1"></div>
           <div class="title1" id="b2">Algorithms from A to Z</div>
           <div class="name1" id="b3">Kitasenju Design</div>
         </div>
       </div>
-
     </div>
+
 
 
     <div id="cover"></div>
@@ -205,15 +63,81 @@
     <div id="center2"></div>
     <div id="center3">center</div>
 
-    <div id="info">
-      <div id="title" class="shadow"></div>
-      <div id="subtitle" class="shadow"></div>
+    <div id="title">
+      <div id="mainTitle" class="shadow"></div>
+      <div id="subTitle" class="shadow"></div>
       <div id="year" class="shadow"></div>
     </div>
 
     <script src="./bundle.js"></script>
     <canvas id="webgl"></canvas>
     <div id="ascii"></div>
+
+
+
+    <div id="infomation">
+      <div id="infoContainer">
+        <div id="infoHeader">
+          <div id="atozIndex">
+            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+          </div>
+
+          <div id="infoTitle">
+            <div id="infoMainTitle" class="shadow"></div>
+            <div id="infoSubtitle" class="shadow"></div>
+            <div id="infoYear" class="shadow"></div>
+          </div>
+        </div>
+
+        <div id="explanationClose">close</div>
+
+        <div id="explanation">
+
+        </div>
+
+        <table id="atozTable">
+          <thead>
+              <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Primary Inventor</th>
+              <th>Year</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr><td>A</td><td>Ascii Art</td><td>Kenneth Knowlton</td><td>1966</td></tr>
+              <tr><td>B</td><td>Boids</td><td>Craig Reynolds</td><td>1986</td></tr>
+              <tr><td>C</td><td>Cellular Automaton (Wolfram Code)</td><td>Stephen Wolfram</td><td>1983</td></tr>
+              <tr><td>D</td><td>Differential Growth</td><td>Andy Lomas</td><td>2014</td></tr>
+              <tr><td>E</td><td>Error Diffusion (Floyd-Steinberg)</td><td>Robert W. Floyd and Louis Steinberg</td><td>1976</td></tr>
+              <tr><td>F</td><td>Fourier Transform</td><td>Joseph Fourier</td><td>1807</td></tr>
+              <tr><td>G</td><td>Game of Life</td><td>John Conway</td><td>1970</td></tr>
+              <tr><td>H</td><td>Hilbert Curve</td><td>David Hilbert</td><td>1891</td></tr>
+              <tr><td>I</td><td>Invert kinematics</td><td>Michael Girard and Anthony Maciejewski</td><td>1985</td></tr>
+              <tr><td>J</td><td>Jarvis March (Convex Hull)</td><td>R. A. Jarvis</td><td>1973</td></tr>
+              <tr><td>K</td><td>K-d Tree</td><td>Jon Louis Bentley</td><td>1975</td></tr>
+              <tr><td>L</td><td>L-system</td><td>Aristid Lindenmayer</td><td>1968</td></tr>
+              <tr><td>M</td><td>Maze Generation (Recursive Backtracker)</td><td>Charles Pierre Trémaux</td><td>1882</td></tr>
+              <tr><td>N</td><td>Navier-Stokes Equations</td><td>Claude-Louis Navier and George Gabriel Stokes</td><td>1845</td></tr>
+              <tr><td>O</td><td>Opentypejs</td><td>Frederik De Bleser</td><td>2014</td></tr>
+              <tr><td>P</td><td>Perlin Noise</td><td>Ken Perlin</td><td>1982</td></tr>
+              <tr><td>Q</td><td>Quadtree</td><td>Raphael Finkel and J.L. Bentley</td><td>1974</td></tr>
+              <tr><td>R</td><td>Reaction Diffusion (Gray-Scott Model)</td><td>Peter Gray and Stephen K. Scott</td><td>1984</td></tr>
+              <tr><td>S</td><td>Sprirograph</td><td>Denys Fisher</td><td>1960</td></tr>
+              <tr><td>T</td><td>Ten Print (10 Print)</td><td>Unknown</td><td>1982</td></tr>
+              <tr><td>U</td><td>Unsharp Mask</td><td>Unknown</td><td>1930s</td></tr>
+              <tr><td>V</td><td>Verlet Integration</td><td>Loup Verlet</td><td>1967</td></tr>
+              <tr><td>W</td><td>Wave Equation</td><td>Jean le Rond d'Alembert</td><td>1747</td></tr>
+              <tr><td>X</td><td>XOR Blending</td><td>Thomas Porter and Tom Duff</td><td>1982</td></tr>
+              <tr><td>Y</td><td>YUV Color Space</td><td>Walter Bruch</td><td>1960s</td></tr>
+              <tr><td>Z</td><td>Z-fighting</td><td>Unknown</td><td>1980s</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+
+
+    
 
   </body>
 </html>

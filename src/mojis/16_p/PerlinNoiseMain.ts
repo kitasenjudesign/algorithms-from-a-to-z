@@ -7,6 +7,7 @@ export class PerlinNoiseMain extends WorkBase{
  
     constructor(){
         super(InfoData.P);
+        this.showTitle();
     }
 
     init(){

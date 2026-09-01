@@ -39,8 +39,12 @@ export class UnsharpMaskP5src{
                 this._oy=(Math.random()-0.5)*this._height*0.2;
                 this._os=1.8;//+Math.random()*0.2;
 
+                let letter = Params.alphabet;
+                if(letter=="") letter = "U";
+                console.log("letter = ",letter);
+
                 this._fontManager = new FontManager();
-                this._fontManager.init("U",(path)=>{   
+                this._fontManager.init(letter,(path)=>{   
                     this._path = path;  
                     this.setUp(p);
                     

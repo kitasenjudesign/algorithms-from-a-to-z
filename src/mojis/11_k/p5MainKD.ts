@@ -6,6 +6,7 @@ import { KDTreeData } from "./kdtree/KDTreeData";
 import { AnimKD } from "./anim/AnimKD";
 import { TitleView } from "../../html/TitleView";
 import { Stage } from "../../data/Stage";
+import { Params } from "../../data/Params";
 
 export class p5MainKD{
 
@@ -19,10 +20,10 @@ export class p5MainKD{
     private _kdTree: KDTree;
     //private _animations:Animations;
     private _anim:AnimKD
-    private _kdText: p5.Image;
+    private _font!: p5.Font;
 
     constructor(){
-      
+
 
 
     }
@@ -34,12 +35,13 @@ export class p5MainKD{
         new p5((p: p5)=>{
 
             p.preload = ()=>{
-                this._kdText=p.loadImage("./data/kd.png");
+                this._font=p.loadFont("./data/8xx8.ttf");
             }
 
             /** 初期化処理 */
             p.setup = ()=>{
-                this.setUp();                
+                this.setUp();         
+                this._callback();       
             }
             /** フレームごとの描画処理 */
             p.draw = ()=> {
@@ -70,8 +72,9 @@ export class p5MainKD{
     setUp(){
         //Params.init();
 
-        TitleView.setPosition(Stage.width/2, Stage.height/16);
-
+        TitleView.setBasePosition(Stage.width/2, Stage.height/16);
+        TitleView.setPosition();
+        
         this._kdTree=new KDTree();
 
         let r = this._p5.createCanvas(
@@ -94,16 +97,19 @@ export class p5MainKD{
         Params.gui.add(this,"breakRects");
         */
        
-        this._anim = new AnimKD(this._p5);     
-        this._anim.start(this._kdText);
-        this._anim.update(this._kdText);
+        let letter = Params.alphabet;
+        if(letter=="") letter = "Kd";
+
+        this._anim = new AnimKD(this._p5);
+        this._anim.start(this._font, letter);
+        this._anim.update();
     }
 
-  
+
 
     draw(){
 
-        this._anim.update(this._kdText);
+        this._anim.update();
 
     }
         

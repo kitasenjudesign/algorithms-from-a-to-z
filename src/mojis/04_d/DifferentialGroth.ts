@@ -9,6 +9,7 @@ export class DifferentialGrowth extends WorkBase{
 
     constructor(){
         super(InfoData.D);
+        this.showTitle();
         //this.init();
     }
 
@@ -26,6 +27,7 @@ export class DifferentialGrowth extends WorkBase{
         this.growthP5 = new DifferentialGrothP5();
         this.growthP5.init(()=>{
             console.log("D2");
+            
         });
 
     }

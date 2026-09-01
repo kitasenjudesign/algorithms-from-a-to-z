@@ -17,6 +17,16 @@ export class LSystemTree{
     private lengthDecay:number;
     private type:string;
 
+    //生成アニメーション用(0~1でsentenceの描画範囲を広げる)
+    private progress:number = 0;
+    private delay:number = Math.floor(Math.random()*30);//frames
+    private growSpeed:number = 0.008 + Math.random()*0.008;
+
+    //grow:先端に向かって生える / hold:全体表示のまま待機 / shrink:根っこ側から消える
+    private phase:string = "grow";
+    private holdTimer:number = 0;
+    private static readonly HOLD_FRAMES:number = 200;//約10秒(20fps)
+
     constructor(startX:number,startY:number,angle:number, type?: string){
         this.startX = startX;
         this.startY = startY;
@@ -116,6 +126,24 @@ export class LSystemTree{
         this.baseStepLength*=lenRatio;
         // decay length each generation similar to reference
         this.lengthDecay = 0.6 + Math.random()*0.15;
+
+        //bambooなどswitch内でaxiomを変えたケースにも対応
+        this.sentence = this.axiom;
+    }
+
+    //消滅後、新しい木として再生成する
+    private regenerate(){
+
+        this.type = this.randomType();
+        this.createSystem(this.type);
+        this.generate();
+        this.stepLength = this.baseStepLength * Math.pow(this.lengthDecay, this.iterations);
+
+        this.progress = 0;
+        this.delay = Math.floor(Math.random()*30);
+        this.growSpeed = 0.008 + Math.random()*0.008;
+        this.phase = "grow";
+
     }
 
     private generate(){
@@ -136,7 +164,42 @@ export class LSystemTree{
     draw(p: p5, degree: number){
         if (!p) return;
 
-        
+        //生成アニメーション:delayフレーム待ってからprogressを進める
+        if(this.delay > 0){
+            this.delay--;
+            return;
+        }
+
+        //drawStart~drawEndの範囲だけ線を描く
+        let drawStart = 0;
+        let drawEnd = this.sentence.length;
+
+        if(this.phase == "grow"){
+            //先端に向かって生える
+            this.progress = Math.min(1, this.progress + this.growSpeed);
+            drawEnd = Math.floor(this.sentence.length * this.progress);
+            if(this.progress >= 1){
+                this.phase = "hold";
+                this.holdTimer = LSystemTree.HOLD_FRAMES;
+            }
+        }else if(this.phase == "hold"){
+            //全体表示のまま待機
+            this.holdTimer--;
+            if(this.holdTimer <= 0){
+                this.phase = "shrink";
+                this.progress = 0;
+            }
+        }else if(this.phase == "shrink"){
+            //根っこ側から消えていく
+            this.progress = Math.min(1, this.progress + this.growSpeed);
+            drawStart = Math.floor(this.sentence.length * this.progress);
+            if(this.progress >= 1){
+                //消え切ったら新しい木として再生成
+                this.regenerate();
+                return;
+            }
+        }
+
         p.push();
         p.translate(this.startX, this.startY);
         // initial orientation: angleDeg is treated as radians (LSystemP5 passes radians)
@@ -151,11 +214,21 @@ export class LSystemTree{
         const lenStack: number[] = [];
         let len = this.stepLength;
 
+        //途中でbreakしたときにpush/popのバランスを取るための深さカウント
+        let pushDepth = 0;
+        let charIndex = 0;
+
         for (const ch of this.sentence) {
+            if (charIndex >= drawEnd) break;
+            //根っこ側が消えても枝先の位置がずれないよう、非表示でも変形は適用する
+            const visible = charIndex >= drawStart;
+            charIndex++;
             if (ch === 'F' || ch === 'G') {
-                const sw = Math.max(0.5, Math.min(6, len / 18));
-                p.strokeWeight(sw);
-                p.line(0, 0, 0, -len);
+                if (visible) {
+                    const sw = Math.max(0.5, Math.min(6, len / 18));
+                    p.strokeWeight(sw);
+                    p.line(0, 0, 0, -len);
+                }
                 p.translate(0, -len);
 
                 if (this.type === 'weeping') p.rotate(-Math.PI/180 * 0.5);
@@ -168,13 +241,20 @@ export class LSystemTree{
                 p.rotate(-this.angleIncDeg);
             } else if (ch === '[') {
                 p.push();
+                pushDepth++;
                 lenStack.push(len);
                 len = len * this.lengthDecay;
             } else if (ch === ']') {
                 p.pop();
+                pushDepth--;
                 const last = lenStack.pop();
                 if (last !== undefined) len = last;
             }
+        }
+
+        //break時に閉じられていないpushを戻す
+        for(let i=0;i<pushDepth;i++){
+            p.pop();
         }
 
         p.pop();

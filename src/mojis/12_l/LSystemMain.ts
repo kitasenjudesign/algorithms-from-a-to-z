@@ -7,13 +7,14 @@ export class LSystemMain extends WorkBase{
 
     constructor(){
         super(InfoData.L);
+        this.showTitle();
     }
 
     init(){
 
         let lSystem = new LSystemP5();
         lSystem.start(()=>{
-
+            
         });
 
     }
